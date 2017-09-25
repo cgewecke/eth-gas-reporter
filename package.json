@@ -1,0 +1,26 @@
+{
+  "name": "eth-gas-reporter",
+  "version": "0.0.1",
+  "description": "Mocha reporter which shows gas used per unit test.",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cgewecke/eth-gas-reporter.git"
+  },
+  "keywords": [
+    "Ethereum",
+    "solidity",
+    "unit-testing",
+    "truffle",
+    "gas."
+  ],
+  "author": "cgewecke <github.com/cgewecke>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cgewecke/eth-gas-reporter/issues"
+  },
+  "homepage": "https://github.com/cgewecke/eth-gas-reporter#readme"
+}
