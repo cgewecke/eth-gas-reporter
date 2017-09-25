@@ -1,13 +1,20 @@
 # eth-gas-reporter
 
-Gas....
+...Gas....
+
+![metacoingas2](https://user-images.githubusercontent.com/7332026/30790579-874eccc6-a161-11e7-90f9-3a08de72b1c7.png)
+
 
 ### Install
 ```
+// Mocha installed globally
+npm install -g eth-gas-reporter
+
+// Mocha installed locally
 npm install --save-dev eth-gas-reporter
 ```
 
-### Configure
+### Configure for truffle
 ```javascript
 module.exports = {
   networks: {
@@ -23,7 +30,7 @@ module.exports = {
 };
 ```
 
-### Outside of truffle
+### Run without truffle
 ```
 mocha --reporter eth-gas-reporter
 ```
