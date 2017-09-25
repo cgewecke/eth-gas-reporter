@@ -85,4 +85,4 @@ function Gas (runner) {
 /**
  * Inherit from `Base.prototype`.
  */
-inherits(Spec, Base);
+inherits(Gas, Base);
