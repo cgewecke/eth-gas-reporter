@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "./mock/test.sh",
-    "install": "./scripts/install.sh"
+    "postinstall": "cd mock && npm install" 
   },
   "repository": {
     "type": "git",

@@ -18,7 +18,7 @@ testrpc_running() {
 }
 
 start_testrpc() {
-  node_modules/.bin/testrpc "${accounts[@]}" > /dev/null &
+  ./mock/node_modules/.bin/testrpc "${accounts[@]}" > /dev/null &
   testrpc_pid=$!
 }
 
