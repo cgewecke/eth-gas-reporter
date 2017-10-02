@@ -23,5 +23,13 @@
   "bugs": {
     "url": "https://github.com/cgewecke/eth-gas-reporter/issues"
   },
-  "homepage": "https://github.com/cgewecke/eth-gas-reporter#readme"
+  "homepage": "https://github.com/cgewecke/eth-gas-reporter#readme",
+  "dependencies": {
+    "abi-decoder": "^1.0.8",
+    "cli-table2": "^0.2.0",
+    "colors": "^1.1.2",
+    "lodash": "^4.17.4",
+    "request-promise-native": "^1.0.5",
+    "shelljs": "^0.7.8"
+  }
 }
