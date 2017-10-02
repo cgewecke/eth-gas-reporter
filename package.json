@@ -1,11 +1,11 @@
 {
   "name": "eth-gas-reporter",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Mocha reporter which shows gas used per unit test.",
   "main": "index.js",
   "scripts": {
     "test": "./mock/test.sh",
-    "postinstall": "cd mock && npm install" 
+    "postinstall": "cd mock && npm install"
   },
   "repository": {
     "type": "git",
