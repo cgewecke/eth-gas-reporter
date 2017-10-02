@@ -13,12 +13,23 @@ function Gas (runner) {
   var indents = 0;
   var n = 0;
   var startBlock;
-  var endBlock;
-  var gasUsed = 0;
 
   function indent () {
     return Array(indents).join('  ');
   }
+
+  function calculateGasUsed(){
+    let gasUsed = 0;
+    const endBlock = web3.eth.blockNumber;
+    while(startBlock <= endBlock){
+      let block = web3.eth.getBlock(startBlock);
+      if (block) 
+        gasUsed += block.gasUsed;
+      
+      startBlock++;
+    }
+    return gasUsed;
+  };
 
   runner.on('start', function () {
     console.log();
@@ -36,9 +47,11 @@ function Gas (runner) {
     }
   });
 
-  runner.on('test', function() {
+  runner.on('hook end', function () {
     startBlock = web3.eth.blockNumber + 1;
-  });
+  })
+
+  runner.on('test', function() {});
 
   runner.on('pending', function (test) {
     var fmt = indent() + color('pending', '  - %s');
@@ -46,18 +59,8 @@ function Gas (runner) {
   });
 
   runner.on('pass', function (test) {
-    var fmt;
-
-    gasUsed = 0;
-    endBlock = web3.eth.blockNumber;
-    while(startBlock <= endBlock){
-      var block = web3.eth.getBlock(startBlock);
-      
-      if (block)
-        gasUsed += block.gasUsed;
-
-      startBlock++;
-    }
+    let fmt;
+    let gasUsed = calculateGasUsed();
     
     if (test.speed === 'fast') {
       fmt = indent() +
@@ -76,7 +79,13 @@ function Gas (runner) {
   });
 
   runner.on('fail', function (test) {
-    console.log(indent() + color('fail', '  %d) %s'), ++n, test.title);
+    let gasUsed = calculateGasUsed();
+    let fmt = indent() +
+      color('fail', '  %d) %s') +
+      color('pass', ' (%d gas)');
+      console.log()
+
+    console.log(fmt, ++n, test.title, gasUsed);
   });
 
   runner.on('end', self.epilogue.bind(self));
