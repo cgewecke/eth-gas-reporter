@@ -4,7 +4,8 @@
   "description": "Mocha reporter which shows gas used per unit test.",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "./mock/test.sh",
+    "install": "./scripts/install.sh"
   },
   "repository": {
     "type": "git",
