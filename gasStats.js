@@ -106,26 +106,28 @@ function mapMethodsToContracts(truffleArtifacts){
   const contractMethodMap = [];
   const abis = [];
   
-  // REFACTOR so the map is methodKeys[0xfjdkd] = {contract: <string> ,method: <string>}
   names.forEach(name => {
-    
-    let contract, methodIDMap, IDs = {};
-
     // Get all artifacts, make a list of abi s
     name = name.split('.sol')[0];
-    contract = truffleArtifacts.require(name);
+    const contract = truffleArtifacts.require(name);
     abis.push(contract._json.abi);
 
     // Decode, getMethodIDs 
     abiDecoder.addABI(contract._json.abi);
-    methodIDMap = abiDecoder.getMethodIDs();
+    const methodIDs = abiDecoder.getMethodIDs();
     
-    Object.keys(methodIDMap)
-      .forEach(key => key.name ? IDs[key] = key.name)
-
     // Create Map;
-    contractMethodMap.push({name: contract.contract_name, ids: IDs});
-
+    const methodMap = {};
+    Object.keys(methodIDs).forEach(key => {
+       if (key.name){
+         methodMap[key] = {
+           contract: name,
+           method: key.name,
+           gasData: []
+         }
+       }
+    };
+    
     // Cleanup
     abiDecoder.removeABI(contract._json.abi);
   };
@@ -136,5 +138,4 @@ function mapMethodsToContracts(truffleArtifacts){
 
 function getContractAndMethodName(code){
   const id = code.slice(2, 10);
-
 }
