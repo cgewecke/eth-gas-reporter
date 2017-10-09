@@ -14,19 +14,30 @@ function Gas (runner) {
   let indents = 0
   let n = 0
   let startBlock
+  let methodMap
 
   // ------------------------------------  Helpers -------------------------------------------------
   const indent = () => Array(indents).join('  ')
 
-  const calculateGasUsed = () => {
+  const gasAnalytics = (methodMap) => {
     let gasUsed = 0
     const endBlock = web3.eth.blockNumber
     while (startBlock <= endBlock) {
       let block = web3.eth.getBlock(startBlock)
       if (block) {
+        // Add to running tally for this test
         gasUsed += block.gasUsed
-      }
 
+        // Compile per method stats
+        methodMap && block.transactions.forEach(tx => {
+          const input = web3.eth.getTransaction(tx).input;
+          const receipt = web3.eth.getTransactionReceipt(tx);
+          const id = stats.getMethodID( input );
+          if (methodMap[id]){
+            methodMap[id].gasData.push(receipt.gasUsed);
+          }
+        })
+      }
       startBlock++
     }
     return gasUsed
@@ -34,8 +45,7 @@ function Gas (runner) {
 
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
-    const mapping = stats.mapMethodsToContracts(artifacts)
-    stats.pretty('Mapping', mapping)
+    methodMap = stats.mapMethodsToContracts(artifacts)
     log()
   })
 
@@ -61,14 +71,15 @@ function Gas (runner) {
   runner.on('pass', test => {
     let fmt
     let limitString
-    let gasUsed = calculateGasUsed()
+    let gasUsed = gasAnalytics(methodMap)
     //let percent = 0
     let percent = stats.gasToPercentOfLimit(gasUsed);
 
-    if (percent >= 100)
+    if (percent >= 100){
       limitString = color('fail', ' (%d% of limit) ')
-    else
+    } else {
       limitString = color('pass', ' (%d% of limit) ')
+    }
 
     fmt = indent() +
       color('checkmark', '  ' + Base.symbols.ok) +
@@ -80,7 +91,7 @@ function Gas (runner) {
   })
 
   runner.on('fail', test => {
-    let gasUsed = calculateGasUsed()
+    let gasUsed = gasAnalytics()
     let fmt = indent() +
       color('fail', '  %d) %s') +
       color('pass', ' (%d gas)')
@@ -90,6 +101,8 @@ function Gas (runner) {
 
   runner.on('end', () => {
     self.epilogue.bind(self)
+    stats.pretty('Mapping post run', methodMap)
+    stats.generateGasStatsReport (methodMap)
   })
 }
 

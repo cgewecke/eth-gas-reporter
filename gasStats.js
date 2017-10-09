@@ -21,11 +21,12 @@ function gasToPercentOfLimit(gasUsed, blockLimit = 6718946){
 }
 
 async function generateGasStatsReport (methodMap) {
-  const {
+  /*const {
     currency,
     ethPrice,
     gasPrice
-  } = getGasAndPriceRates()
+  } = getGasAndPriceRates()*/
+  let currency = 'eur';
 
   const table = new Table({
     head: [
@@ -38,23 +39,30 @@ async function generateGasStatsReport (methodMap) {
     ]
   })
 
-  _.forEach(methodMap, (contractData, contractName) => {
-    if (!contractData) return
-    let section = {}
-    section[contractName] = []
+  let section = {}
 
-    _.forEach(contractData, (fnData, fnName) => {
-      fnData.averageGasUsed = fnData.data.reduce((acc, datum) => acc + datum.gasUsed, 0) / fnData.data.length
-      const sortedData = _.sortBy(fnData.data, 'gasUsed')
-      fnData.min = sortedData[0]
-      fnData.max = sortedData[sortedData.length - 1]
-      fnData.median = sortedData[(sortedData.length / 2) | 0]
-      section[contractName].push(fnName)
-      section[contractName].push(fnData.min.gasUsed)
-      section[contractName].push(fnData.max.gasUsed)
-      section[contractName].push(fnData.averageGasUsed)
-      section[contractName].push(0)
-    })
+  _.forEach(methodMap, (data, methodId) => {
+    //pretty('data', data);
+    //pretty('methodId', methodId);
+
+    if (!data) return
+
+    if (!section[data.contract]){
+      section[data.contract] = []
+    }
+
+    let stats = {};
+    stats.averageGasUsed = data.gasData.reduce((acc, datum) => acc + datum, 0) / data.gasData.length
+    const sortedData = data.gasData.sort();
+    stats.min = sortedData[0]
+    stats.max = sortedData[sortedData.length - 1]
+    stats.median = sortedData[(sortedData.length / 2) | 0]
+    section[data.contract].push(data.method)
+    section[data.contract].push(stats.min)
+    section[data.contract].push(stats.max)
+    section[data.contract].push(stats.averageGasUsed)
+    section[data.contract].push(0)
+
     table.push(section)
   })
   console.log(table.toString())
@@ -103,8 +111,8 @@ async function getGasAndPriceRates () {
   }
 }
 
-function getMethodName (code) {
-  const id = code.slice(2, 10)
+function getMethodID (code) {
+  return code.slice(2, 10)
 }
 
 function mapMethodsToContracts (truffleArtifacts) {
@@ -125,15 +133,17 @@ function mapMethodsToContracts (truffleArtifacts) {
     // Decode, getMethodIDs
     abiDecoder.addABI(contract._json.abi)
     const methodIDs = abiDecoder.getMethodIDs()
-    pretty('methodIDs', methodIDs);
+
     // Create Map;
     Object.keys(methodIDs).forEach(key => {
-      if (methodIDs[key].name) {
+      const isConstant = methodIDs[key].constant
+      const isEvent = methodIDs[key].type === 'event'
+      const hasName = methodIDs[key].name
+
+      if (hasName && !isConstant && !isEvent){
         methodMap[key] = {
           contract: name.split('.sol')[0],
           method: methodIDs[key].name,
-          isConstant: methodIDs[key].constant,
-          isEvent: methodIDs[key].type === 'event',
           gasData: []
         }
       }
@@ -147,7 +157,7 @@ function mapMethodsToContracts (truffleArtifacts) {
 
 module.exports = {
   mapMethodsToContracts: mapMethodsToContracts,
-  getMethodName: getMethodName,
+  getMethodID: getMethodID,
   getGasAndPriceRates: getGasAndPriceRates,
   gasToPercentOfLimit: gasToPercentOfLimit,
   generateGasStatsReport: generateGasStatsReport,
