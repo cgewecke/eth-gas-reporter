@@ -1,12 +1,12 @@
 module.exports = {
   networks: {
     development: {
-      host: "localhost",
+      host: 'localhost',
       port: 8545,
-      network_id: "*", // Match any network id
+      network_id: '*' // Match any network id
     }
   },
   mocha: {
     reporter: 'eth-gas-reporter'
   }
-};
+}

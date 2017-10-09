@@ -29,6 +29,7 @@
     "colors": "^1.1.2",
     "lodash": "^4.17.4",
     "req-cwd": "^2.0.0",
+    "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "shelljs": "^0.7.8"
   },

@@ -1,25 +1,25 @@
-const Wallet = artifacts.require('./Wallet.sol');
+const Wallet = artifacts.require('./Wallet.sol')
 
 contract('Wallet', accounts => {
-  let walletA;
-  let walletB;
+  let walletA
+  let walletB
 
-  beforeEach( async function(){
-    walletA = await Wallet.new();
-    walletB = await Wallet.new();
-  });
+  beforeEach(async function () {
+    walletA = await Wallet.new()
+    walletB = await Wallet.new()
+  })
 
   it('should should allow transfers and sends', async () => {
     await walletA.sendTransaction({
-      value: web3.toBigNumber(100), from: accounts[0],
-    });
+      value: web3.toBigNumber(100), from: accounts[0]
+    })
     await walletA.sendPayment(50, walletB.address, {
-      from: accounts[0],
-    });
+      from: accounts[0]
+    })
     await walletA.transferPayment(50, walletB.address, {
-      from: accounts[0],
-    });
-    const balance = await walletB.getBalance();
-    assert.equal(balance.toNumber(), 100);
-  });
-});
+      from: accounts[0]
+    })
+    const balance = await walletB.getBalance()
+    assert.equal(balance.toNumber(), 100)
+  })
+})
