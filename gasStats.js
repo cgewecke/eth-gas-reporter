@@ -59,7 +59,6 @@ async function generateGasStatsReport(methodMap){
     table.push(section);
 
   })
-  shell.rm(gasStatsFile);
   console.log(table.toString());
 }
 
@@ -108,9 +107,11 @@ async function getGasAndPriceRates(){
 }
 
 function mapMethodsToContracts(truffleArtifacts){
-  const names = shell.ls('./contracts/**/*.sol');
   const methodMap = {};
   const abis = [];
+
+  const names = shell.ls('./contracts/**/*.sol');
+  // sort names alpha
 
   names.forEach(name => {
     // Get all artifacts, make a list of abi s
@@ -136,10 +137,17 @@ function mapMethodsToContracts(truffleArtifacts){
   };
 
   abis.forEach(abi => abiDecoder.addABI(abi));
-  // TODO: Sort alphabetically by contract name.
   return methodMap;
 }
 
-function getContractAndMethodName(code){
+function getMethodName(code){
   const id = code.slice(2, 10);
 }
+
+module.exports = {
+  mapMethodsToContracts: mapMethodsToContracts,
+  getMethodName: getMethodName,
+  getGasAndPriceRates: getGasAndPriceRates,
+  generateGasStatsReport: generateGasStatsReport,0
+}
+
