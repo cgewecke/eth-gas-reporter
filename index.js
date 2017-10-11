@@ -100,8 +100,7 @@ function Gas (runner) {
   })
 
   runner.on('end', () => {
-    self.epilogue.bind(self)
-    stats.pretty('Mapping post run', methodMap)
+    self.epilogue();
     stats.generateGasStatsReport (methodMap)
   })
 }
