@@ -53,7 +53,7 @@ async function generateGasStatsReport (methodMap) {
   } = await getGasAndPriceRates()
 
   const table = new Table({style:{head:[], border:[]}});
-  const title = [{hAlign: 'center', colSpan: 6, content: '✜✜✜✜✜   GAS STATS  ✜✜✜✜✜'.rainbow.bold,}]
+  const title = [{hAlign: 'center', colSpan: 6, content: 'Gas Usage And Cost by Method'.green.bold,}]
   const header = [
       'Contract'.bold,
       'Method'.bold,
@@ -74,13 +74,13 @@ async function generateGasStatsReport (methodMap) {
     stats.average = data.gasData.reduce((acc, datum) => acc + datum, 0) / data.gasData.length
     stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : '-'.grey
 
-    const sortedData = data.gasData.sort();
+    const sortedData = data.gasData.sort((a,b) => a - b);
     stats.min = sortedData[0]
     stats.max = sortedData[sortedData.length - 1]
 
     const uniform = (stats.min === stats.max);
-    stats.min = (uniform) ? '-'.yellow : stats.min;
-    stats.max = (uniform) ? '-'.red : stats.max;
+    stats.min = (uniform) ? '-' : stats.min.toString().yellow;
+    stats.max = (uniform) ? '-' : stats.max.toString().red;
 
     section = [];
     section.push(data.contract.grey);
