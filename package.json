@@ -1,6 +1,6 @@
 {
   "name": "eth-gas-reporter",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "Mocha reporter which shows gas used per unit test.",
   "main": "index.js",
   "scripts": {
