@@ -1,8 +1,6 @@
 # eth-gas-reporter
 
-:construction: **This project is in early development. Under construction.** :construction:
-
-![metacoingas2](https://user-images.githubusercontent.com/7332026/30790579-874eccc6-a161-11e7-90f9-3a08de72b1c7.png)
+![screen shot 2017-10-12 at 8 02 57 pm](https://user-images.githubusercontent.com/7332026/31528529-b0d52178-af88-11e7-9c58-004ba4a7b360.png)
 
 
 ### Install
