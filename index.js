@@ -1,97 +1,111 @@
-var mocha = require('mocha');
-var inherits = require('util').inherits;
-var Base = mocha.reporters.Base;
-var color = Base.color;
+const mocha = require('mocha')
+const inherits = require('util').inherits
+const stats = require('./gasStats.js')
+const Base = mocha.reporters.Base
+const color = Base.color
+const log = console.log
+module.exports = Gas
 
-module.exports = Gas;
-
-// Based on 'Spec'. Please smoke outside while running your suite. For safety.
+// Based on the 'Spec' reporter
 function Gas (runner) {
-  Base.call(this, runner);
+  Base.call(this, runner)
 
-  var self = this;
-  var indents = 0;
-  var n = 0;
-  var startBlock;
+  const self = this
+  let indents = 0
+  let n = 0
+  let startBlock
+  let methodMap
 
-  function indent () {
-    return Array(indents).join('  ');
+  // ------------------------------------  Helpers -------------------------------------------------
+  const indent = () => Array(indents).join('  ')
+
+  const gasAnalytics = (methodMap) => {
+    let gasUsed = 0
+    const endBlock = web3.eth.blockNumber
+    while (startBlock <= endBlock) {
+      let block = web3.eth.getBlock(startBlock)
+      if (block) {
+        // Add to running tally for this test
+        gasUsed += block.gasUsed
+
+        // Compile per method stats
+        methodMap && block.transactions.forEach(tx => {
+          const input = web3.eth.getTransaction(tx).input;
+          const receipt = web3.eth.getTransactionReceipt(tx);
+          const id = stats.getMethodID( input );
+          if (methodMap[id]){
+            methodMap[id].gasData.push(receipt.gasUsed);
+          }
+        })
+      }
+      startBlock++
+    }
+    return gasUsed
   }
 
-  function calculateGasUsed(){
-    let gasUsed = 0;
-    const endBlock = web3.eth.blockNumber;
-    while(startBlock <= endBlock){
-      let block = web3.eth.getBlock(startBlock);
-      if (block) 
-        gasUsed += block.gasUsed;
-      
-      startBlock++;
-    }
-    return gasUsed;
-  };
-
-  runner.on('start', function () {
-    console.log();
-  });
-
-  runner.on('suite', function (suite) {
-    ++indents;
-    console.log(color('suite', '%s%s'), indent(), suite.title);
-  });
-
-  runner.on('suite end', function () {
-    --indents;
-    if (indents === 1) {
-      console.log();
-    }
-  });
-
-  runner.on('hook end', function () {
-    startBlock = web3.eth.blockNumber + 1;
+  // ------------------------------------  Runners -------------------------------------------------
+  runner.on('start', () => {
+    methodMap = stats.mapMethodsToContracts(artifacts)
+    log()
   })
 
-  runner.on('test', function() {});
+  runner.on('suite', suite => {
+    ++indents
+    log(color('suite', '%s%s'), indent(), suite.title)
+  })
 
-  runner.on('pending', function (test) {
-    var fmt = indent() + color('pending', '  - %s');
-    console.log(fmt, test.title);
-  });
-
-  runner.on('pass', function (test) {
-    let fmt;
-    let gasUsed = calculateGasUsed();
-    
-    if (test.speed === 'fast') {
-      fmt = indent() +
-        color('checkmark', '  ' + Base.symbols.ok) +
-        color('pass', ' %s')+
-        color('checkmark', ' (%d gas)');
-      console.log(fmt, test.title, gasUsed);
-    } else {
-      fmt = indent() +
-        color('checkmark', '  ' + Base.symbols.ok) +
-        color('pass', ' %s') +
-        color(test.speed, ' (%dms)') +
-        color('checkmark', ' (%d gas)');
-      console.log(fmt, test.title, test.duration, gasUsed);
+  runner.on('suite end', () => {
+    --indents
+    if (indents === 1) {
+      log()
     }
-  });
+  })
 
-  runner.on('fail', function (test) {
-    let gasUsed = calculateGasUsed();
+  runner.on('pending', test => {
+    let fmt = indent() + color('pending', '  - %s')
+    log(fmt, test.title)
+  })
+
+  runner.on('hook end', () => { startBlock = web3.eth.blockNumber + 1 })
+
+  runner.on('pass', test => {
+    let fmt
+    let limitString
+    let gasUsed = gasAnalytics(methodMap)
+    //let percent = 0
+    let percent = stats.gasToPercentOfLimit(gasUsed);
+
+    if (percent >= 100){
+      limitString = color('fail', ' (%d% of limit) ')
+    } else {
+      limitString = color('pass', ' (%d% of limit) ')
+    }
+
+    fmt = indent() +
+      color('checkmark', '  ' + Base.symbols.ok) +
+      color('pass', ' %s') +
+      color('checkmark', ' (%d gas)') +
+      limitString
+
+    log(fmt, test.title, gasUsed, percent)
+  })
+
+  runner.on('fail', test => {
+    let gasUsed = gasAnalytics()
     let fmt = indent() +
       color('fail', '  %d) %s') +
-      color('pass', ' (%d gas)');
-      console.log()
+      color('pass', ' (%d gas)')
+    log()
+    log(fmt, ++n, test.title, gasUsed)
+  })
 
-    console.log(fmt, ++n, test.title, gasUsed);
-  });
-
-  runner.on('end', self.epilogue.bind(self));
+  runner.on('end', () => {
+    self.epilogue();
+    stats.generateGasStatsReport (methodMap)
+  })
 }
 
 /**
  * Inherit from `Base.prototype`.
  */
-inherits(Gas, Base);
+inherits(Gas, Base)

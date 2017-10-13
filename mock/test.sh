@@ -18,10 +18,24 @@ testrpc_running() {
 }
 
 start_testrpc() {
-  ./mock/node_modules/.bin/testrpc "${accounts[@]}" > /dev/null &
+  node_modules/.bin/testrpc "${accounts[@]}" > /dev/null &
   testrpc_pid=$!
 }
 
+# Copy over the package and install
+cp package.json mock/package.json
+cd mock && npm install
+
+# Copy over eth-gas-reporter
+if [ ! -e node_modules/eth-gas-reporter ]; then
+  mkdir node_modules/eth-gas-reporter
+fi
+
+cp ./../index.js node_modules/eth-gas-reporter/index.js
+cp ./../gasStats.js node_modules/eth-gas-reporter/gasStats.js
+cp ./../package.json node_modules/eth-gas-reporter/package.json
+
+# Start testrpc
 if testrpc_running; then
   echo "Using existing testrpc instance"
 else
@@ -29,6 +43,5 @@ else
   start_testrpc
 fi
 
-cp index.js mock/node_modules/eth-gas-reporter/index.js 
-cd mock
-./node_modules/.bin/truffle test --network development "$@"
+# Start truffle test
+node_modules/.bin/truffle test --network development "$@"

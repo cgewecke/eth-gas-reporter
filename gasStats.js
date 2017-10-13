@@ -1,141 +1,233 @@
-const fs = require('fs');
-const _ = require('lodash');
-var request = require('request-promise-native');
-const shell = require('shelljs');
-const colors = require('colors');
-const gasStatsFile = 'gas-stats.json'
-const Table = require('cli-table2');
-let abiDecoder = require('abi-decoder');
+/**
+ * Methods to generate gas data.
+ */
 
+const colors = require('colors')
+const _ = require('lodash')
+const path = require('path')
+const request = require('request-promise-native')
+const shell = require('shelljs')
+const Table = require('cli-table2')
+const reqCwd = require('req-cwd')
+const abiDecoder = require('abi-decoder')
 
-function getPrice(data){
-  return data.price.usd;
-}
-
-function gasToCost(gas, price, gwei){
-  return (((gwei * 1e-9) * gas) * price).toFixed(2);
-}
-
-async function generateGasStatsReport(){
-  
-  try {
-    marketData = await request.get('https://coinmarketcap-nexuist.rhcloud.com/api/eth');
-    (!marketData.error)
-      ? price = getPrice(marketData)
-      : price = null;
-  
-  } catch (error) {
-    price = null;
-  }
-
-  let gasStats;
-
-  try {
-    gasStats = JSON.parse(fs.readFileSync(gasStatsFile))
-  } catch (e) {
-    return;
-  }
-
-  var table = new Table({ head: ["✜✜✜ GAS STATS ✜✜✜".bold, 'Method', 'Min', 'Max', 'Avg', 'USD (avg)']});
-  
-  _.forEach(gasStats, (contractData, contractName) => {
-    if(!contractData) return
-    let section = {};
-    section[contractName] = [];  
-  
-    _.forEach(contractData, (fnData, fnName) => {
-      fnData.averageGasUsed = fnData.data.reduce((acc, datum) => acc + datum.gasUsed, 0) / fnData.data.length
-      const sortedData = _.sortBy(fnData.data, 'gasUsed')
-      fnData.min = sortedData[0]
-      fnData.max = sortedData[sortedData.length - 1]
-      fnData.median = sortedData[(sortedData.length / 2) | 0]
-      section[contractName].push(fnName);
-      section[contractName].push(fnData.min.gasUsed);
-      section[contractName].push(fnData.max.gasUsed);
-      section[contractName].push(fnData.averageGasUsed);
-      section[contractName].push(0); 
-    })
-    table.push(section);
-    
-  })
-  shell.rm(gasStatsFile);
-  console.log(table.toString());
-  
-}
-
-function pretty(msg, obj){
-  console.log(`<------ ${msg} ------>\n` + JSON.stringify(obj, null, ' '));
-  console.log(`<------- END -------->\n`);
+/**
+ * Expresses gas usage as a nation-state currency price
+ * @param  {Number} gas      gas used
+ * @param  {Number} ethPrice e.g chf/eth
+ * @param  {Number} gasPrice in wei e.g 5000000000 (5 gwei)
+ * @return {Number}          cost of gas used (0.00)
+ */
+function gasToCost (gas, ethPrice, gasPrice) {
+  return ((gasPrice / 1e18) * gas * ethPrice).toFixed(2)
 }
 
 /**
- * Procedure:
- * 1. List all the contracts in the project and artifact.require them into an array;
- * produces an array that looks like:
-    [{
-      name: "MetaCoin"
-      ids: {
-       "7bd703e8": {
-        "constant": false,
-        "inputs": [
-         {
-          "name": "addr",
-          "type": "address"
-         }
-        ],
-        "name": "getBalanceInEth",
-        "outputs": [
-         {
-          "name": "",
-          "type": "uint256"
-         }
-        ],
-        "payable": false,
-        "type": "function"
-       },
-       "90b98a11": {
-        ...etc...
-       },
-       ...etc
-    }]
+ * Expresses gas usage as a % of the block gasLimit. Source: NeuFund (see issues)
+ * @param  {Number} gasUsed    gas value
+ * @param  {Number} blockLimit gas limit of a block
+ * @return {Number}            percent (0.0)
+ */
+function gasToPercentOfLimit(gasUsed, blockLimit = 6718946){
+  return Math.round(1000 * gasUsed / blockLimit) / 10;
+}
+
+/**
+ * Extracts the method identifier from the input field of obj returned by web3.eth.getTransaction
+ * @param  {String} code hex data
+ * @return {String}      method identifier (used by abi-decoder)
+ */
+function getMethodID (code) {
+  return code.slice(2, 10)
+}
+
+/**
+ * Prints a gas stats table to stdout. Source: Gnosis / Alan Lu (see issues)
+ * @param  {Object} methodMap methods and their gas usage (from mapMethodToContracts)
+ */
+async function generateGasStatsReport (methodMap) {
+  const {
+    currency,
+    ethPrice,
+    gasPrice
+  } = await getGasAndPriceRates()
+
+  const table = new Table({
+    style:{head:[], border:[], 'padding-left': 2, 'padding-right': 2},
+    chars: {'mid': '·', 'top-mid': '·', 'left-mid': '·', 'mid-mid': '·', 'right-mid': '·',
+            'top-left': '·', 'top-right': '·', 'bottom-left': '·', 'bottom-right': '·',
+            'middle': '·', 'top': '-', 'bottom': '-', 'bottom-mid': '-'}
+  });
+
+  const title = [{hAlign: 'center', colSpan: 6, content: 'Gas Usage / Cost by Method'.green.bold,}]
+  const header = [
+      'Contract'.bold,
+      'Method'.bold,
+      'Min'.green,
+      'Max'.green,
+      'Avg'.green,
+      `${currency.toUpperCase()} (avg)`.bold
+    ]
+
+  table.push(title);
+  table.push(header);
+
+  _.forEach(methodMap, (data, methodId) => {
+    if (!data) return
+
+    let stats = {};
+
+    stats.average = data.gasData.reduce((acc, datum) => acc + datum, 0) / data.gasData.length
+    stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : '-'.grey
+
+    const sortedData = data.gasData.sort((a,b) => a - b);
+    stats.min = sortedData[0]
+    stats.max = sortedData[sortedData.length - 1]
+
+    const uniform = (stats.min === stats.max);
+    stats.min = (uniform) ? '-' : stats.min.toString().yellow;
+    stats.max = (uniform) ? '-' : stats.max.toString().red;
+
+    section = [];
+    section.push(data.contract.grey);
+    section.push(data.method)
+    section.push(stats.min)
+    section.push(stats.max)
+    section.push(stats.average.toString().grey)
+    section.push({hAlign: 'right', content: stats.cost.toString().green})
+
+    table.push(section)
+  })
+  console.log(table.toString())
+}
+
+/**
+ * Async method that fetches gasPrices from blockcypher.com (default to the lowest safe
+ * gas price) and current market value of eth in currency specified by the config from
+ * coinmarketcap (defaults to euros).
+ * @return {Object}
+ * @example
+ *   const {
+ *     currency, // 'eur'
+ *     gasPrice, // '5000000000'
+ *     ethPrice, // '212.02'
+ *   } = await getGasAndPriceRates()
  *
  */
-function mapMethodsToContracts(truffleArtifacts){
+async function getGasAndPriceRates () {
+  let ethPrice
+  let gasPrice
+  const defaultGasPrice = 5000000000
 
-  const names = shell.ls('./contracts/**/*.sol');
-  const contractMethodMap = [];
-  const abis = [];
-  
+  // Load config
+  const config = reqCwd.silent('.ethgas.js') || {}
+  const currency = config.currency || 'eur'
+
+  ethPrice = config.ethPrice || null
+  gasPrice = config.gasPrice || null
+
+  const currencyPath = `https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=${currency.toUpperCase()}`
+  const currencyKey = `price_${currency.toLowerCase()}`
+  const gasPricePath = `https://api.blockcypher.com/v1/eth/main`
+
+  // Currency market data: coinmarketcap
+  if (!ethPrice) {
+    try {
+      let response = await request.get(currencyPath)
+      response = JSON.parse(response)
+      ethPrice = response[0][currencyKey]
+    } catch (error) {
+      ethPrice = null
+    }
+  }
+
+  // Gas price data: blockcypher
+  if (!gasPrice) {
+    try {
+      let response = await request.get(gasPricePath)
+      response = JSON.parse(response)
+      gasPrice = response['low_gas_price']
+    } catch (error) {
+      gasPrice = defaultGasPrice
+    }
+  }
+
+  return {
+    currency: currency,
+    ethPrice: ethPrice,
+    gasPrice: gasPrice
+  }
+}
+
+/**
+ * Generates a complete mapping of method data ids to their contract and method names.
+ * Map also initialised w/ an empty `gasData` array that the gas value of each matched transaction
+ * is pushed to. Expects a`contracts` folder in the cwd.
+ * @param  {Object} truffleArtifacts the `artifacts` of `artifacts.require('MetaCoin.sol')
+ * @return {Object}                  mapping
+ * @example output
+ *   {
+ *    "90b98a11": {
+ *     "contract": "MetaCoin",
+ *     "method": "sendCoin",
+ *     "gasData": []
+ *    },
+ *   }
+ */
+function mapMethodsToContracts (truffleArtifacts) {
+  const methodMap = {}
+  const abis = []
+
+  const names = shell.ls('./contracts/**/*.sol')
+  names.sort();
+
   names.forEach(name => {
-    // Get all artifacts, make a list of abi s
-    name = name.split('.sol')[0];
-    const contract = truffleArtifacts.require(name);
-    abis.push(contract._json.abi);
+    name = path.basename(name);
 
-    // Decode, getMethodIDs 
-    abiDecoder.addABI(contract._json.abi);
-    const methodIDs = abiDecoder.getMethodIDs();
-    
+    if (name === 'Migrations.sol') return
+
+    // Load all the artifacts
+    const contract = truffleArtifacts.require(name)
+    abis.push(contract._json.abi)
+
+    // Decode, getMethodIDs
+    abiDecoder.addABI(contract._json.abi)
+    const methodIDs = abiDecoder.getMethodIDs()
+
     // Create Map;
-    const methodMap = {};
     Object.keys(methodIDs).forEach(key => {
-       if (key.name){
-         methodMap[key] = {
-           contract: name,
-           method: key.name,
-           gasData: []
-         }
-       }
-    };
-    
-    // Cleanup
-    abiDecoder.removeABI(contract._json.abi);
-  };
+      const isConstant = methodIDs[key].constant
+      const isEvent = methodIDs[key].type === 'event'
+      const hasName = methodIDs[key].name
 
-  abis.forEach(abi => abiDecoder.addABI(abi));
-  return contractMethodMap;
+      if (hasName && !isConstant && !isEvent){
+        methodMap[key] = {
+          contract: name.split('.sol')[0],
+          method: methodIDs[key].name,
+          gasData: []
+        }
+      }
+    })
+    abiDecoder.removeABI(contract._json.abi)
+  })
+
+  abis.forEach(abi => abiDecoder.addABI(abi))
+  return methodMap
 }
 
-function getContractAndMethodName(code){
-  const id = code.slice(2, 10);
+// Debugging helper
+function pretty (msg, obj) {
+  console.log(`<------ ${msg} ------>\n` + JSON.stringify(obj, null, ' '))
+  console.log(`<------- END -------->\n`)
 }
+
+module.exports = {
+  mapMethodsToContracts: mapMethodsToContracts,
+  getMethodID: getMethodID,
+  getGasAndPriceRates: getGasAndPriceRates,
+  gasToPercentOfLimit: gasToPercentOfLimit,
+  generateGasStatsReport: generateGasStatsReport,
+  pretty: pretty
+}
+
+
