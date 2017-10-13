@@ -52,8 +52,14 @@ async function generateGasStatsReport (methodMap) {
     gasPrice
   } = await getGasAndPriceRates()
 
-  const table = new Table({style:{head:[], border:[]}});
-  const title = [{hAlign: 'center', colSpan: 6, content: 'Gas Usage And Cost by Method'.green.bold,}]
+  const table = new Table({
+    style:{head:[], border:[], 'padding-left': 2, 'padding-right': 2},
+    chars: {'mid': '·', 'top-mid': '·', 'left-mid': '·', 'mid-mid': '·', 'right-mid': '·',
+            'top-left': '·', 'top-right': '·', 'bottom-left': '·', 'bottom-right': '·',
+            'middle': '·', 'top': '-', 'bottom': '-', 'bottom-mid': '-'}
+  });
+
+  const title = [{hAlign: 'center', colSpan: 6, content: 'Gas Usage / Cost by Method'.green.bold,}]
   const header = [
       'Contract'.bold,
       'Method'.bold,
@@ -88,7 +94,7 @@ async function generateGasStatsReport (methodMap) {
     section.push(stats.min)
     section.push(stats.max)
     section.push(stats.average.toString().grey)
-    section.push({hAlign: 'right', content: stats.cost.toString()})
+    section.push({hAlign: 'right', content: stats.cost.toString().green})
 
     table.push(section)
   })
