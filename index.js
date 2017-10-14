@@ -80,7 +80,7 @@ function Gas (runner) {
       if (percent >= 100){
         limitString = color('fail', ' (%d% of limit) ')
       } else {
-        limitString = color('pass', ' (%d% of limit) ')
+        limitString = ' (%d% of limit) '
       }
       fmt = indent() +
       color('checkmark', '  ' + Base.symbols.ok) +
@@ -107,8 +107,8 @@ function Gas (runner) {
   })
 
   runner.on('end', () => {
-    self.epilogue();
     stats.generateGasStatsReport (methodMap)
+    self.epilogue()
   })
 }
 
