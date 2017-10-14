@@ -124,18 +124,13 @@ async function generateGasStatsReport (methodMap) {
   table.push(title);
   table.push(header);
 
-  // Sort rows and push
+  // Sort rows by contract, then method and push
   rows.sort((a,b) => {
-    if( a[0] < b[0]) return -1;
-    if( a[0] === b[0]) return 0;
-    if( a[0] > b[0]) return 1;
+    const contractName = a[0].localeCompare(b[0]);
+    const methodName = a[1].localeCompare(b[1]);
+    return contractName || methodName;
   });
 
-  rows.sort((a,b) => {
-    if(a[0] !== b[0]) return 0;
-    if(a[1] < b[1]) return -1;
-    if(a[1] > b[1]) return 1;
-  });
   rows.forEach(row => table.push(row));
 
   // Print
