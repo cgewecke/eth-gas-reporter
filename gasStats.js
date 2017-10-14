@@ -19,6 +19,8 @@ const abiDecoder = require('abi-decoder')
  * @return {Number}          cost of gas used (0.00)
  */
 function gasToCost (gas, ethPrice, gasPrice) {
+  ethPrice = parseFloat(ethPrice);
+  gasPrice = parseInt(gasPrice);
   return ((gasPrice / 1e18) * gas * ethPrice).toFixed(2)
 }
 
@@ -52,33 +54,22 @@ async function generateGasStatsReport (methodMap) {
     gasPrice
   } = await getGasAndPriceRates()
 
-  const table = new Table({
-    style:{head:[], border:[], 'padding-left': 2, 'padding-right': 2},
-    chars: {'mid': '·', 'top-mid': '·', 'left-mid': '·', 'mid-mid': '·', 'right-mid': '·',
-            'top-left': '·', 'top-right': '·', 'bottom-left': '·', 'bottom-right': '·',
-            'middle': '·', 'top': '-', 'bottom': '-', 'bottom-mid': '-'}
-  });
-
-  const title = [{hAlign: 'center', colSpan: 6, content: 'Gas Usage / Cost by Method'.green.bold,}]
-  const header = [
-      'Contract'.bold,
-      'Method'.bold,
-      'Min'.green,
-      'Max'.green,
-      'Avg'.green,
-      `${currency.toUpperCase()} (avg)`.bold
-    ]
-
-  table.push(title);
-  table.push(header);
+  // Compose rows
+  const rows = [];
 
   _.forEach(methodMap, (data, methodId) => {
     if (!data) return
 
     let stats = {};
 
-    stats.average = data.gasData.reduce((acc, datum) => acc + datum, 0) / data.gasData.length
-    stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : '-'.grey
+    if (data.gasData.length){
+      const total = data.gasData.reduce((acc, datum) => acc + datum, 0)
+      stats.average =  Math.round(total / data.gasData.length)
+      stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : '-'.grey
+    } else {
+      stats.average = '-'.grey;
+      stats.cost = '-'.grey;
+    }
 
     const sortedData = data.gasData.sort((a,b) => a - b);
     stats.min = sortedData[0]
@@ -91,13 +82,63 @@ async function generateGasStatsReport (methodMap) {
     section = [];
     section.push(data.contract.grey);
     section.push(data.method)
-    section.push(stats.min)
-    section.push(stats.max)
-    section.push(stats.average.toString().grey)
+    section.push({hAlign: 'right', content: stats.min})
+    section.push({hAlign: 'right', content: stats.max})
+    section.push({hAlign: 'right', content: stats.average})
     section.push({hAlign: 'right', content: stats.cost.toString().green})
 
-    table.push(section)
+    rows.push(section);
   })
+
+  // Format table
+  const table = new Table({
+    style:{head:[], border:[], 'padding-left': 2, 'padding-right': 2},
+    chars: {'mid': '·', 'top-mid': '·', 'left-mid': '·', 'mid-mid': '·', 'right-mid': '·',
+            'top-left': '·', 'top-right': '·', 'bottom-left': '·', 'bottom-right': '·',
+            'middle': '·', 'top': '-', 'bottom': '-', 'bottom-mid': '-'}
+  });
+
+  let title;
+  if (ethPrice && gasPrice){
+    const gwei = parseInt(gasPrice) * 1e-9;
+    const rate = parseFloat(ethPrice).toFixed(2);
+
+    title = [
+      {hAlign: 'center', colSpan: 2, content: 'Gas Usage Analysis'.green.bold},
+      {hAlign: 'center', colSpan: 2, content: `${rate} ${currency.toLowerCase()}/eth`.red},
+      {hAlign: 'center', colSpan: 2, content: `${gwei} gwei/gas`.grey},
+    ];
+  } else {
+    title = [{hAlign: 'center', colSpan: 6, content: 'Gas Analytics'.green.bold}];
+  }
+
+  const header = [
+      'Contract'.bold,
+      'Method'.bold,
+      'Min'.green,
+      'Max'.green,
+      'Avg'.green,
+      `${currency.toLowerCase()} (avg)`.bold
+    ]
+
+  table.push(title);
+  table.push(header);
+
+  // Sort rows and push
+  rows.sort((a,b) => {
+    if( a[0] < b[0]) return -1;
+    if( a[0] === b[0]) return 0;
+    if( a[0] > b[0]) return 1;
+  });
+
+  rows.sort((a,b) => {
+    if(a[0] !== b[0]) return 0;
+    if(a[1] < b[1]) return -1;
+    if(a[1] > b[1]) return 1;
+  });
+  rows.forEach(row => table.push(row));
+
+  // Print
   console.log(table.toString())
 }
 

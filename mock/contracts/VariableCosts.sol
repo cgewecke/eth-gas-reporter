@@ -13,4 +13,8 @@ contract VariableCosts {
     for(uint i = 0; i < dels.length; i++)
       delete map[dels[i]];
   }
+
+  function unusedMethod(address a) public {
+    map[1000] = a;
+  }
 }

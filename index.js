@@ -71,32 +71,39 @@ function Gas (runner) {
   runner.on('pass', test => {
     let fmt
     let limitString
+    let gasUsedString
     let gasUsed = gasAnalytics(methodMap)
-    //let percent = 0
     let percent = stats.gasToPercentOfLimit(gasUsed);
 
-    if (percent >= 100){
-      limitString = color('fail', ' (%d% of limit) ')
-    } else {
-      limitString = color('pass', ' (%d% of limit) ')
-    }
-
-    fmt = indent() +
+    if (gasUsed){
+      gasUsedString = color('checkmark', ' (%d gas)');
+      if (percent >= 100){
+        limitString = color('fail', ' (%d% of limit) ')
+      } else {
+        limitString = color('pass', ' (%d% of limit) ')
+      }
+      fmt = indent() +
       color('checkmark', '  ' + Base.symbols.ok) +
       color('pass', ' %s') +
-      color('checkmark', ' (%d gas)') +
+      gasUsedString +
       limitString
 
-    log(fmt, test.title, gasUsed, percent)
+      log(fmt, test.title, gasUsed, percent)
+    } else {
+
+      fmt = indent() +
+        color('checkmark', '  ' + Base.symbols.ok) +
+        color('pass', ' %s')
+
+      log(fmt, test.title)
+    }
   })
 
   runner.on('fail', test => {
     let gasUsed = gasAnalytics()
-    let fmt = indent() +
-      color('fail', '  %d) %s') +
-      color('pass', ' (%d gas)')
+    let fmt = indent() + color('fail', '  %d) %s')
     log()
-    log(fmt, ++n, test.title, gasUsed)
+    log(fmt, ++n, test.title)
   })
 
   runner.on('end', () => {
