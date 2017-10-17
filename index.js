@@ -35,6 +35,7 @@ function Gas (runner) {
           const id = stats.getMethodID( input );
           if (methodMap[id]){
             methodMap[id].gasData.push(receipt.gasUsed);
+            methodMap[id].numberOfCalls++;
           }
         })
       }
