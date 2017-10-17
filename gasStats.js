@@ -79,12 +79,15 @@ async function generateGasStatsReport (methodMap) {
     stats.min = (uniform) ? '-' : stats.min.toString().yellow;
     stats.max = (uniform) ? '-' : stats.max.toString().red;
 
+    stats.numberOfCalls = data.numberOfCalls.toString().grey;
+
     section = [];
     section.push(data.contract.grey);
     section.push(data.method)
     section.push({hAlign: 'right', content: stats.min})
     section.push({hAlign: 'right', content: stats.max})
     section.push({hAlign: 'right', content: stats.average})
+    section.push({hAlign: 'right', content: stats.numberOfCalls})
     section.push({hAlign: 'right', content: stats.cost.toString().green})
 
     rows.push(section);
@@ -104,7 +107,7 @@ async function generateGasStatsReport (methodMap) {
     const rate = parseFloat(ethPrice).toFixed(2);
 
     title = [
-      {hAlign: 'center', colSpan: 2, content: 'Gas Usage Analysis'.green.bold},
+      {hAlign: 'center', colSpan: 3, content: 'Gas Usage Analysis'.green.bold},
       {hAlign: 'center', colSpan: 2, content: `${rate} ${currency.toLowerCase()}/eth`.red},
       {hAlign: 'center', colSpan: 2, content: `${gwei} gwei/gas`.grey},
     ];
@@ -118,6 +121,7 @@ async function generateGasStatsReport (methodMap) {
       'Min'.green,
       'Max'.green,
       'Avg'.green,
+      '# calls'.bold,
       `${currency.toLowerCase()} (avg)`.bold
     ]
 
@@ -240,7 +244,8 @@ function mapMethodsToContracts (truffleArtifacts) {
         methodMap[key] = {
           contract: name.split('.sol')[0],
           method: methodIDs[key].name,
-          gasData: []
+          gasData: [],
+          numberOfCalls: 0
         }
       }
     })
