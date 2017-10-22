@@ -1,5 +1,11 @@
 ## Changelog: eth-gas-reporter
 
+0.0.8 / 2017-10-22
+=================
+  * Filter method calls that throw from the stats
+  * Add deployment stats
+  * Add number of calls column
+
 0.0.6 / 2017-10-14
 ================
 
