@@ -14,12 +14,14 @@ function Gas (runner) {
   let indents = 0
   let n = 0
   let startBlock
+  let deployStartBlock
   let methodMap
+  let deployMap
 
   // ------------------------------------  Helpers -------------------------------------------------
   const indent = () => Array(indents).join('  ')
 
-  const gasAnalytics = (methodMap) => {
+  const methodAnalytics = (methodMap) => {
     let gasUsed = 0
     const endBlock = web3.eth.blockNumber
     while (startBlock <= endBlock) {
@@ -44,9 +46,28 @@ function Gas (runner) {
     return gasUsed
   }
 
+  const deployAnalytics = (deployMap) => {
+    const endBlock = web3.eth.blockNumber
+
+    while(deployStartBlock <= endBlock){
+      const block = web3.eth.getBlock(deployStartBlock)
+
+      block && block.transactions.forEach(tx => {
+        const transaction = web3.eth.getTransaction(tx)
+        const receipt = web3.eth.getTransactionReceipt(tx);
+
+        if (receipt.contractAddress){
+          const match = deployMap.filter(contract => contract.binary === transaction.input)[0];
+          match && match.gasData.push(receipt.gasUsed);
+        }
+      });
+      deployStartBlock++
+    }
+  }
+
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
-    methodMap = stats.mapMethodsToContracts(artifacts)
+    ({ methodMap, deployMap } = stats.mapMethodsToContracts(artifacts));
     log()
   })
 
@@ -67,31 +88,27 @@ function Gas (runner) {
     log(fmt, test.title)
   })
 
+  runner.on('test', () => { deployStartBlock = web3.eth.blockNumber })
   runner.on('hook end', () => { startBlock = web3.eth.blockNumber + 1 })
 
   runner.on('pass', test => {
     let fmt
     let limitString
     let gasUsedString
-    let gasUsed = gasAnalytics(methodMap)
-    let percent = stats.gasToPercentOfLimit(gasUsed);
+
+    deployAnalytics(deployMap);
+    let gasUsed = methodAnalytics(methodMap)
 
     if (gasUsed){
       gasUsedString = color('checkmark', ' (%d gas)');
-      if (percent >= 100){
-        limitString = color('fail', ' (%d% of limit) ')
-      } else {
-        limitString = ' (%d% of limit) '
-      }
+
       fmt = indent() +
       color('checkmark', '  ' + Base.symbols.ok) +
       color('pass', ' %s') +
-      gasUsedString +
-      limitString
+      gasUsedString;
 
-      log(fmt, test.title, gasUsed, percent)
+      log(fmt, test.title, gasUsed)
     } else {
-
       fmt = indent() +
         color('checkmark', '  ' + Base.symbols.ok) +
         color('pass', ' %s')
@@ -101,14 +118,13 @@ function Gas (runner) {
   })
 
   runner.on('fail', test => {
-    let gasUsed = gasAnalytics()
     let fmt = indent() + color('fail', '  %d) %s')
     log()
     log(fmt, ++n, test.title)
   })
 
   runner.on('end', () => {
-    stats.generateGasStatsReport (methodMap)
+    stats.generateGasStatsReport (methodMap, deployMap)
     self.epilogue()
   })
 }
