@@ -1,16 +1,20 @@
 # eth-gas-reporter
 
-Gas usage per unit test. Average gas usage per method. A mocha reporter. 
+A mocha reporter for Truffle.
++ Gas usage per unit test. 
++ Average gas usage per method. 
++ Contract deployment costs.
++ Real currency costs.
 
-![screen shot 2017-10-12 at 8 02 57 pm](https://user-images.githubusercontent.com/7332026/31528529-b0d52178-af88-11e7-9c58-004ba4a7b360.png)
+![screen shot 2017-10-22 at 4 03 57 pm](https://user-images.githubusercontent.com/7332026/31867351-c45a5a80-b742-11e7-98dd-49051684e5fd.png)
 
 
 ### Install
 ```javascript
-// Truffle/mocha installed globally
+// Truffle installed globally
 npm install -g eth-gas-reporter
 
-// Truffle/mocha installed locally
+// Truffle installed locally (ProTip: This always works.)
 npm install --save-dev eth-gas-reporter
 ```
 
@@ -21,7 +25,7 @@ module.exports = {
     development: {
       host: "localhost",
       port: 8545,
-      network_id: "*" // Match any network id
+      network_id: "*" 
     }
   },
   mocha: {
@@ -29,9 +33,14 @@ module.exports = {
   }
 };
 ```
-### Thanks
 
-Everything here has been cannibalized from elsewhere and dropped into mocha's reporter facility. Many thanks to:
-+ [@maurelian](https://github.com/maurelian) - once posted a slack picture of mocha reporting gas output instead time. Idea from him.
-+ [@cag](https://github.com/cag) - wrote a really nice gas stats utility for the Gnosis suites. The table borrows from / is based his work. 
-+ [Neufund](https://github.com/Neufund/ico-contracts) - expressing gas usage as a ratio of the block limit in their ico suite. That comes from them.
+### Usage Notes
++ Method calls that throw are filtered from the stats.
++ Contracts that link to libraries are not shown in the deployments table.
++ The table is not generated if any of your tests fail.
+
+### Credits
+All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
++ [@maurelian](https://github.com/maurelian) - Mocha reporting gas instead of time is his idea.
++ [@cag](https://github.com/cag) - The table borrows from / is based his gas statistics work for the Gnosis contracts. 
++ [Neufund](https://github.com/Neufund/ico-contracts) - Block limit size ratios for contract deployments is borrowed from their `ico-contracts` test suite.
