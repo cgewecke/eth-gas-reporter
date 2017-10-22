@@ -32,10 +32,13 @@ function Gas (runner) {
 
         // Compile per method stats
         methodMap && block.transactions.forEach(tx => {
-          const input = web3.eth.getTransaction(tx).input;
+          const transaction = web3.eth.getTransaction(tx);
           const receipt = web3.eth.getTransactionReceipt(tx);
-          const id = stats.getMethodID( input );
-          if (methodMap[id]){
+
+          const id = stats.getMethodID( transaction.input );
+          const threw = receipt.gasUsed === transaction.gas;  // Change this @ Byzantium
+
+          if (methodMap[id] && !threw){
             methodMap[id].gasData.push(receipt.gasUsed);
             methodMap[id].numberOfCalls++;
           }
@@ -57,7 +60,10 @@ function Gas (runner) {
         const receipt = web3.eth.getTransactionReceipt(tx);
 
         if (receipt.contractAddress){
-          const match = deployMap.filter(contract => contract.binary === transaction.input)[0];
+          const match = deployMap.filter(contract => {
+            return (transaction.input.indexOf(contract.binary) === 0)
+          })[0];
+
           match && match.gasData.push(receipt.gasUsed);
         }
       });

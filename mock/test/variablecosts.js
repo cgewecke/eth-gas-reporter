@@ -37,4 +37,13 @@ contract('VariableCosts', accounts => {
     await instance.addToMap(five);
     await instance.removeFromMap(one);
   })
+
+  it('methods that do not throw', async() => {
+    await instance.methodThatThrows(false);
+  });
+
+  it('methods that throw', async() => {
+    try {await instance.methodThatThrows(true)}
+    catch(e){}
+  });
 })
