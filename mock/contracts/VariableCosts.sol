@@ -19,4 +19,8 @@ contract VariableCosts is Wallet {
   function unusedMethod(address a) public {
     map[1000] = a;
   }
+
+  function methodThatThrows(bool err) public {
+    require(!err);
+  }
 }
