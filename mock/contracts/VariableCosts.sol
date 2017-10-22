@@ -1,6 +1,8 @@
 pragma solidity ^0.4.15;
 
-contract VariableCosts {
+import "./Wallets/Wallet.sol";
+
+contract VariableCosts is Wallet {
 
   mapping(uint => address) map;
 
