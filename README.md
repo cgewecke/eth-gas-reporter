@@ -45,6 +45,7 @@ module.exports = {
 + Not currently shown in the `deployments` table:
   + Contracts that link to libraries
   + Contracts that never get instantiated within the tests (e.g: only deployed in migrations)
++ Tests that make assumptions about the value of `block.timestamp` sometimes fail using this utility.
 
 ### Credits
 All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
