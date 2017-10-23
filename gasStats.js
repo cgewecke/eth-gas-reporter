@@ -279,13 +279,15 @@ function mapMethodsToContracts (truffleArtifacts) {
     if (name === 'Migrations.sol') return
 
     // Create Deploy Map:
-    const contract = truffleArtifacts.require(name)
+    let contract;
+    try {  contract = truffleArtifacts.require(name) }
+    catch( error ){ return }
+
     const contractInfo = {
       name: name.split('.sol')[0],
       binary: contract.unlinked_binary,
       gasData: []
     }
-
     deployMap.push(contractInfo)
     abis.push(contract._json.abi)
 
