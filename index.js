@@ -58,8 +58,9 @@ function Gas (runner) {
       block && block.transactions.forEach(tx => {
         const transaction = web3.eth.getTransaction(tx)
         const receipt = web3.eth.getTransactionReceipt(tx);
+        const threw = receipt.gasUsed === transaction.gas;  // Change this @ Byzantium
 
-        if (receipt.contractAddress){
+        if (receipt.contractAddress && !threw){
           const match = deployMap.filter(contract => {
             return (transaction.input.indexOf(contract.binary) === 0)
           })[0];
