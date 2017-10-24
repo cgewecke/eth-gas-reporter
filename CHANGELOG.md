@@ -1,5 +1,11 @@
 ## Changelog: eth-gas-reporter
 
+0.0.11 / 2017-10-23
+==================
+
+  * Add Travis CI
+  * Fix bug that crashed reported when truffle could not find required file
+
 0.0.10 / 2017-10-22
 ==================
 
