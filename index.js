@@ -32,15 +32,15 @@ function Gas (runner) {
 
         // Compile per method stats
         methodMap && block.transactions.forEach(tx => {
-          const transaction = web3.eth.getTransaction(tx);
-          const receipt = web3.eth.getTransactionReceipt(tx);
+          const transaction = web3.eth.getTransaction(tx)
+          const receipt = web3.eth.getTransactionReceipt(tx)
 
-          const id = stats.getMethodID( transaction.input );
-          const threw = receipt.gasUsed === transaction.gas;  // Change this @ Byzantium
+          const id = stats.getMethodID(transaction.input)
+          const threw = receipt.gasUsed === transaction.gas  // Change this @ Byzantium
 
-          if (methodMap[id] && !threw){
-            methodMap[id].gasData.push(receipt.gasUsed);
-            methodMap[id].numberOfCalls++;
+          if (methodMap[id] && !threw) {
+            methodMap[id].gasData.push(receipt.gasUsed)
+            methodMap[id].numberOfCalls++
           }
         })
       }
@@ -52,29 +52,29 @@ function Gas (runner) {
   const deployAnalytics = (deployMap) => {
     const endBlock = web3.eth.blockNumber
 
-    while(deployStartBlock <= endBlock){
+    while (deployStartBlock <= endBlock) {
       const block = web3.eth.getBlock(deployStartBlock)
 
       block && block.transactions.forEach(tx => {
         const transaction = web3.eth.getTransaction(tx)
-        const receipt = web3.eth.getTransactionReceipt(tx);
-        const threw = receipt.gasUsed === transaction.gas;  // Change this @ Byzantium
+        const receipt = web3.eth.getTransactionReceipt(tx)
+        const threw = receipt.gasUsed === transaction.gas  // Change this @ Byzantium
 
-        if (receipt.contractAddress && !threw){
+        if (receipt.contractAddress && !threw) {
           const match = deployMap.filter(contract => {
             return (transaction.input.indexOf(contract.binary) === 0)
-          })[0];
+          })[0]
 
-          match && match.gasData.push(receipt.gasUsed);
+          match && match.gasData.push(receipt.gasUsed)
         }
-      });
+      })
       deployStartBlock++
     }
   }
 
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
-    ({ methodMap, deployMap } = stats.mapMethodsToContracts(artifacts));
+    ({ methodMap, deployMap } = stats.mapMethodsToContracts(artifacts))
     log()
   })
 
@@ -100,19 +100,18 @@ function Gas (runner) {
 
   runner.on('pass', test => {
     let fmt
-    let limitString
     let gasUsedString
 
-    deployAnalytics(deployMap);
+    deployAnalytics(deployMap)
     let gasUsed = methodAnalytics(methodMap)
 
-    if (gasUsed){
-      gasUsedString = color('checkmark', ' (%d gas)');
+    if (gasUsed) {
+      gasUsedString = color('checkmark', ' (%d gas)')
 
       fmt = indent() +
       color('checkmark', '  ' + Base.symbols.ok) +
       color('pass', ' %s') +
-      gasUsedString;
+      gasUsedString
 
       log(fmt, test.title, gasUsed)
     } else {
@@ -131,7 +130,7 @@ function Gas (runner) {
   })
 
   runner.on('end', () => {
-    stats.generateGasStatsReport (methodMap, deployMap)
+    stats.generateGasStatsReport(methodMap, deployMap)
     self.epilogue()
   })
 }

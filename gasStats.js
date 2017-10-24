@@ -11,7 +11,7 @@ const Table = require('cli-table2')
 const reqCwd = require('req-cwd')
 const abiDecoder = require('abi-decoder')
 
-const blockLimit = 6718946;
+const blockLimit = 6718946
 /**
  * Expresses gas usage as a nation-state currency price
  * @param  {Number} gas      gas used
@@ -20,8 +20,8 @@ const blockLimit = 6718946;
  * @return {Number}          cost of gas used (0.00)
  */
 function gasToCost (gas, ethPrice, gasPrice) {
-  ethPrice = parseFloat(ethPrice);
-  gasPrice = parseInt(gasPrice);
+  ethPrice = parseFloat(ethPrice)
+  gasPrice = parseInt(gasPrice)
   return ((gasPrice / 1e18) * gas * ethPrice).toFixed(2)
 }
 
@@ -31,8 +31,8 @@ function gasToCost (gas, ethPrice, gasPrice) {
  * @param  {Number} blockLimit gas limit of a block
  * @return {Number}            percent (0.0)
  */
-function gasToPercentOfLimit(gasUsed){
-  return Math.round(1000 * gasUsed / blockLimit) / 10;
+function gasToPercentOfLimit (gasUsed) {
+  return Math.round(1000 * gasUsed / blockLimit) / 10
 }
 
 /**
@@ -56,34 +56,34 @@ async function generateGasStatsReport (methodMap, deployMap) {
   } = await getGasAndPriceRates()
 
   // Compose rows
-  const methodRows = [];
+  const methodRows = []
 
   _.forEach(methodMap, (data, methodId) => {
     if (!data) return
 
-    let stats = {};
+    let stats = {}
 
-    if (data.gasData.length){
+    if (data.gasData.length) {
       const total = data.gasData.reduce((acc, datum) => acc + datum, 0)
-      stats.average =  Math.round(total / data.gasData.length)
+      stats.average = Math.round(total / data.gasData.length)
       stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : '-'.grey
     } else {
-      stats.average = '-'.grey;
-      stats.cost = '-'.grey;
+      stats.average = '-'.grey
+      stats.cost = '-'.grey
     }
 
-    const sortedData = data.gasData.sort((a,b) => a - b);
+    const sortedData = data.gasData.sort((a, b) => a - b)
     stats.min = sortedData[0]
     stats.max = sortedData[sortedData.length - 1]
 
-    const uniform = (stats.min === stats.max);
-    stats.min = (uniform) ? '-' : stats.min.toString().yellow;
-    stats.max = (uniform) ? '-' : stats.max.toString().red;
+    const uniform = (stats.min === stats.max)
+    stats.min = (uniform) ? '-' : stats.min.toString().yellow
+    stats.max = (uniform) ? '-' : stats.max.toString().red
 
-    stats.numberOfCalls = data.numberOfCalls.toString().grey;
+    stats.numberOfCalls = data.numberOfCalls.toString().grey
 
-    const section = [];
-    section.push(data.contract.grey);
+    const section = []
+    section.push(data.contract.grey)
     section.push(data.method)
     section.push({hAlign: 'right', content: stats.min})
     section.push({hAlign: 'right', content: stats.max})
@@ -91,68 +91,69 @@ async function generateGasStatsReport (methodMap, deployMap) {
     section.push({hAlign: 'right', content: stats.numberOfCalls})
     section.push({hAlign: 'right', content: stats.cost.toString().green})
 
-    methodRows.push(section);
+    methodRows.push(section)
   })
 
-  const deployRows = [];
+  const deployRows = []
 
-  deployMap.sort((a,b) => a.name.localeCompare(b.name));
+  deployMap.sort((a, b) => a.name.localeCompare(b.name))
 
   deployMap.forEach(contract => {
-    let stats = {};
-    if (!contract.gasData.length) return;
+    let stats = {}
+    if (!contract.gasData.length) return
 
     const total = contract.gasData.reduce((acc, datum) => acc + datum, 0)
-    stats.average =  Math.round(total / contract.gasData.length)
-    stats.percent = gasToPercentOfLimit(stats.average);
-    stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : '-'.grey;
+    stats.average = Math.round(total / contract.gasData.length)
+    stats.percent = gasToPercentOfLimit(stats.average)
+    stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : '-'.grey
 
-
-    const sortedData = contract.gasData.sort((a,b) => a - b);
+    const sortedData = contract.gasData.sort((a, b) => a - b)
     stats.min = sortedData[0]
     stats.max = sortedData[sortedData.length - 1]
 
-    const uniform = (stats.min === stats.max);
-    stats.min = (uniform) ? '-' : stats.min.toString().yellow;
-    stats.max = (uniform) ? '-' : stats.max.toString().red;
+    const uniform = (stats.min === stats.max)
+    stats.min = (uniform) ? '-' : stats.min.toString().yellow
+    stats.max = (uniform) ? '-' : stats.max.toString().red
 
-    section = [];
-    section.push({hAlign: 'left', colSpan: 2, content: contract.name});
+    const section = []
+    section.push({hAlign: 'left', colSpan: 2, content: contract.name})
     section.push({hAlign: 'right', content: stats.min})
     section.push({hAlign: 'right', content: stats.max})
     section.push({hAlign: 'right', content: stats.average})
     section.push({hAlign: 'right', content: `${stats.percent} %`.grey})
     section.push({hAlign: 'right', content: stats.cost.toString().green})
 
-    deployRows.push(section);
-  });
+    deployRows.push(section)
+  })
 
   // Format table
   const table = new Table({
-    style:{head:[], border:[], 'padding-left': 2, 'padding-right': 2},
-    chars: {'mid': '·', 'top-mid': '·', 'left-mid': '·', 'mid-mid': '·', 'right-mid': '·',
-            'top-left': '·', 'top-right': '·', 'bottom-left': '·', 'bottom-right': '·',
-            'middle': '·', 'top': '-', 'bottom': '-', 'bottom-mid': '-'}
-  });
+    style: {head: [], border: [], 'padding-left': 2, 'padding-right': 2},
+    chars: {
+      'mid': '·', 'top-mid': '·', 'left-mid': '·', 'mid-mid': '·', 'right-mid': '·',
+      'top-left': '·', 'top-right': '·', 'bottom-left': '·', 'bottom-right': '·',
+      'middle': '·', 'top': '-', 'bottom': '-', 'bottom-mid': '-'
+    }
+  })
 
   // Format and load methods metrics
   let title = [
     {hAlign: 'center', colSpan: 5, content: 'Gas Usage Metrics'.green.bold},
     {hAlign: 'center', colSpan: 2, content: `Block limit: ${blockLimit} gas`.grey }
-  ];
+  ]
 
-  let methodSubtitle;
-  if (ethPrice && gasPrice){
-    const gwei = parseInt(gasPrice) * 1e-9;
-    const rate = parseFloat(ethPrice).toFixed(2);
+  let methodSubtitle
+  if (ethPrice && gasPrice) {
+    const gwei = parseInt(gasPrice) * 1e-9
+    const rate = parseFloat(ethPrice).toFixed(2)
 
     methodSubtitle = [
       {hAlign: 'left', colSpan: 2, content: 'Methods'.green.bold},
       {hAlign: 'center', colSpan: 3, content: `${gwei} gwei/gas`.grey},
-      {hAlign: 'center', colSpan: 2, content: `${rate} ${currency.toLowerCase()}/eth`.red},
-    ];
+      {hAlign: 'center', colSpan: 2, content: `${rate} ${currency.toLowerCase()}/eth`.red}
+    ]
   } else {
-    methodSubtitle = [{hAlign: 'left', colSpan: 7, content: 'Methods'.green.bold}];
+    methodSubtitle = [{hAlign: 'left', colSpan: 7, content: 'Methods'.green.bold}]
   }
 
   const header = [
@@ -165,27 +166,27 @@ async function generateGasStatsReport (methodMap, deployMap) {
     `${currency.toLowerCase()} (avg)`.bold
   ]
 
-  table.push(title);
-  table.push(methodSubtitle);
-  table.push(header);
+  table.push(title)
+  table.push(methodSubtitle)
+  table.push(header)
 
   // Sort rows by contract, then method and push
-  methodRows.sort((a,b) => {
-    const contractName = a[0].localeCompare(b[0]);
-    const methodName = a[1].localeCompare(b[1]);
-    return contractName || methodName;
-  });
+  methodRows.sort((a, b) => {
+    const contractName = a[0].localeCompare(b[0])
+    const methodName = a[1].localeCompare(b[1])
+    return contractName || methodName
+  })
 
-  methodRows.forEach(row => table.push(row));
+  methodRows.forEach(row => table.push(row))
 
-  if (deployRows.length){
+  if (deployRows.length) {
     const deploymentsSubtitle = [
       {hAlign: 'left', colSpan: 2, content: 'Deployments'.green.bold},
       {hAlign: 'right', colSpan: 3, content: '' },
       {hAlign: 'left', colSpan: 1, content: `% of limit`.bold}
-    ];
-    table.push(deploymentsSubtitle);
-    deployRows.forEach(row => table.push(row));
+    ]
+    table.push(deploymentsSubtitle)
+    deployRows.forEach(row => table.push(row))
   }
 
   // Print
@@ -271,17 +272,16 @@ function mapMethodsToContracts (truffleArtifacts) {
   const abis = []
 
   const names = shell.ls('./contracts/**/*.sol')
-  names.sort();
+  names.sort()
 
   names.forEach(name => {
-    name = path.basename(name);
+    name = path.basename(name)
 
     if (name === 'Migrations.sol') return
 
     // Create Deploy Map:
-    let contract;
-    try {  contract = truffleArtifacts.require(name) }
-    catch( error ){ return }
+    let contract
+    try { contract = truffleArtifacts.require(name) } catch (error) { return }
 
     const contractInfo = {
       name: name.split('.sol')[0],
@@ -301,7 +301,7 @@ function mapMethodsToContracts (truffleArtifacts) {
       const isEvent = methodIDs[key].type === 'event'
       const hasName = methodIDs[key].name
 
-      if (hasName && !isConstant && !isEvent){
+      if (hasName && !isConstant && !isEvent) {
         methodMap[key] = {
           contract: name.split('.sol')[0],
           method: methodIDs[key].name,
@@ -335,5 +335,4 @@ module.exports = {
   mapMethodsToContracts: mapMethodsToContracts,
   pretty: pretty
 }
-
 
