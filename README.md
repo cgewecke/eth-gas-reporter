@@ -12,7 +12,7 @@ A mocha reporter for Truffle.
 
 
 ### Install
-```
+```javascript
 // Truffle installed globally
 npm install -g eth-gas-reporter
 
