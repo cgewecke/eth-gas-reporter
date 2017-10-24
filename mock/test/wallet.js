@@ -10,8 +10,8 @@ contract('Wallet', accounts => {
   })
 
   it('should be very expensive to deploy', async() => {
-    await Wallet.new();
-  });
+    await Wallet.new()
+  })
 
   it('should should allow transfers and sends', async () => {
     await walletA.sendTransaction({
