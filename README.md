@@ -1,6 +1,6 @@
 # eth-gas-reporter
 
-[![Build Status](https://travis-ci.org/cgewecke/eth-gas-reporter.svg?branch=add-travis)](https://travis-ci.org/cgewecke/eth-gas-reporter)
+[![Build Status](https://travis-ci.org/cgewecke/eth-gas-reporter.svg?branch=master)](https://travis-ci.org/cgewecke/eth-gas-reporter)
 
 A mocha reporter for Truffle.
 + Gas usage per unit test.
