@@ -218,7 +218,7 @@ async function getGasAndPriceRates () {
   const defaultGasPrice = 5000000000
 
   // Load config
-  const config = reqCwd.silent('.ethgas.js') || {}
+  const config = reqCwd.silent('./.ethgas.js') || {}
   const currency = config.currency || 'eur'
 
   ethPrice = config.ethPrice || null

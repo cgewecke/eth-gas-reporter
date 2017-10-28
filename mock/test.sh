@@ -44,4 +44,11 @@ else
 fi
 
 # Start truffle test
+echo "Visual test"
 node_modules/.bin/truffle test --network development "$@"
+
+# Run with config
+echo "Visual test with config"
+cp ./config-template.js ./.ethgas.js
+node_modules/.bin/truffle test --network development "$@"
+rm ./.ethgas.js
