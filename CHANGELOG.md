@@ -1,5 +1,12 @@
 ## Changelog: eth-gas-reporter
 
+0.0.12 / 2017-10-28
+===================
+
+  * Add config. Add gasPrice and currency code options
+  * Improve table clarity
+  * Derive block.gasLimit from rpc
+
 0.0.11 / 2017-10-23
 ==================
 
