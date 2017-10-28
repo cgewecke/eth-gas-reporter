@@ -11,7 +11,13 @@ const Table = require('cli-table2')
 const reqCwd = require('req-cwd')
 const abiDecoder = require('abi-decoder')
 
-const blockLimit = 6718946
+/**
+ * block.gasLimit. Set to a default at declaration but set to the rpc's declared limit
+ * at `mapMethodsToContracts`
+ * @type {Number}
+ */
+let blockLimit = 6718946
+
 /**
  * Expresses gas usage as a nation-state currency price
  * @param  {Number} gas      gas used
@@ -256,8 +262,9 @@ async function getGasAndPriceRates () {
  * Map also initialised w/ an empty `gasData` array that the gas value of each matched transaction
  * is pushed to. Expects a`contracts` folder in the cwd.
  * @param  {Object} truffleArtifacts the `artifacts` of `artifacts.require('MetaCoin.sol')
- * @return {Object}                  mapping
+ * @return {Object}                  { methodMap: <Object>, deployMap: <array> }
  * @example output
+ * methodMap {
  *   {
  *    "90b98a11": {
  *     "contract": "MetaCoin",
@@ -265,15 +272,26 @@ async function getGasAndPriceRates () {
  *     "gasData": []
  *    },
  *   }
+ *   ...
+ * },
+ * deployMap [
+ *   {
+ *    name: "Metacoin",
+ *    binary: "0x56484152.......",
+ *    gasData: []
+ *   },
+ *   ....
+ * ]
  */
 function mapMethodsToContracts (truffleArtifacts) {
   const methodMap = {}
   const deployMap = []
   const abis = []
 
-  const names = shell.ls('./contracts/**/*.sol')
-  names.sort()
+  const block = web3.eth.getBlock('latest');
+  blockLimit = block.gasLimit;
 
+  const names = shell.ls('./contracts/**/*.sol')
   names.forEach(name => {
     name = path.basename(name)
 
