@@ -22,15 +22,11 @@ npm install -g eth-gas-reporter
 npm install --save-dev eth-gas-reporter
 ```
 
-### Configure for truffle
+### Truffle config
 ```javascript
 module.exports = {
   networks: {
-    development: {
-      host: "localhost",
-      port: 8545,
-      network_id: "*"
-    }
+    ...etc...
   },
   mocha: {
     reporter: 'eth-gas-reporter'
@@ -38,18 +34,30 @@ module.exports = {
 };
 ```
 
+### Options
+
+You can also create a `.ethgas.js` config in the root directory of your project to set
+`gasPrice` and `currency` options. Available currency codes can be found [here]().
+
+```javascript
+module.exports = {
+  currency: "CHF",    // Default: "EUR" (value loaded at run-time from the `coinmarketcap` api)
+  gasPrice: 21 * 1e9  // Default: (~5 gwei, loaded at run-time from the `blockcypher` api)
+}
+```
+
 ### Examples
 + [gnosis/gnosis-contracts](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/gnosis.md)
 + [windingtree/LifToken](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/lifToken.md)
 
 ### Usage Notes
-+ Euro/ETH rates are loaded at run-time from the `coinmarketcap` api
-+ Gas prices are `safe-low` and loaded at run-time from the `blockcypher` api
++ Table will not print if any tests fail (this is a bug, possibly rooted in `truffle`).
 + Method calls that throw are filtered from the stats.
 + Not currently shown in the `deployments` table:
   + Contracts that link to libraries
   + Contracts that never get instantiated within the tests (e.g: only deployed in migrations)
 + Tests that make assumptions about the value of `block.timestamp` sometimes fail using this utility.
++ Tests run slower.
 
 ### Credits
 All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
