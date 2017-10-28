@@ -9,7 +9,8 @@ A mocha reporter for Truffle.
 + Contract deployment costs.
 + Real currency costs.
 
-![screen shot 2017-10-22 at 4 03 57 pm](https://user-images.githubusercontent.com/7332026/31867351-c45a5a80-b742-11e7-98dd-49051684e5fd.png)
+![screen shot 2017-10-28 at 1 29 52 pm](https://user-images.githubusercontent.com/7332026/32138588-db1d56e0-bbe9-11e7-820e-511d6e36c846.png)
+
 
 
 ### Install
