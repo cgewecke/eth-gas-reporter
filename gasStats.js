@@ -77,7 +77,7 @@ async function generateGasStatsReport (methodMap, deployMap) {
     stats.max = sortedData[sortedData.length - 1]
 
     const uniform = (stats.min === stats.max)
-    stats.min = (uniform) ? '-' : stats.min.toString().yellow
+    stats.min = (uniform) ? '-' : stats.min.toString().cyan
     stats.max = (uniform) ? '-' : stats.max.toString().red
 
     stats.numberOfCalls = data.numberOfCalls.toString().grey
@@ -112,7 +112,7 @@ async function generateGasStatsReport (methodMap, deployMap) {
     stats.max = sortedData[sortedData.length - 1]
 
     const uniform = (stats.min === stats.max)
-    stats.min = (uniform) ? '-' : stats.min.toString().yellow
+    stats.min = (uniform) ? '-' : stats.min.toString().cyan
     stats.max = (uniform) ? '-' : stats.max.toString().red
 
     const section = []
@@ -130,15 +130,15 @@ async function generateGasStatsReport (methodMap, deployMap) {
   const table = new Table({
     style: {head: [], border: [], 'padding-left': 2, 'padding-right': 2},
     chars: {
-      'mid': '·', 'top-mid': '·', 'left-mid': '·', 'mid-mid': '·', 'right-mid': '·',
+      'mid': '·', 'top-mid': '|', 'left-mid': '·', 'mid-mid': '|', 'right-mid': '·',
       'top-left': '·', 'top-right': '·', 'bottom-left': '·', 'bottom-right': '·',
-      'middle': '·', 'top': '-', 'bottom': '-', 'bottom-mid': '-'
+      'middle': '·', 'top': '-', 'bottom': '-', 'bottom-mid': '|'
     }
   })
 
   // Format and load methods metrics
   let title = [
-    {hAlign: 'center', colSpan: 5, content: 'Gas Usage Metrics'.green.bold},
+    {hAlign: 'center', colSpan: 5, content: 'Gas'.green.bold},
     {hAlign: 'center', colSpan: 2, content: `Block limit: ${blockLimit} gas`.grey }
   ]
 

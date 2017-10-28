@@ -130,8 +130,9 @@ function Gas (runner) {
   })
 
   runner.on('end', () => {
-    stats.generateGasStatsReport(methodMap, deployMap)
-    self.epilogue()
+    stats
+      .generateGasStatsReport(methodMap, deployMap)
+      .then(() => self.epilogue());
   })
 }
 
