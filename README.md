@@ -37,11 +37,11 @@ module.exports = {
 ### Options
 
 You can also create a `.ethgas.js` config in the root directory of your project to set
-`gasPrice` and `currency` options. Available currency codes can be found [here]().
+`gasPrice` and `currency` options. Available currency codes can be found [here](https://coinmarketcap.com/api/).
 
 ```javascript
 module.exports = {
-  currency: "CHF",    // Default: "EUR" (value loaded at run-time from the `coinmarketcap` api)
+  currency: "CHF",    // Default: "EUR" (loaded at run-time from the `coinmarketcap` api)
   gasPrice: 21 * 1e9  // Default: (~5 gwei, loaded at run-time from the `blockcypher` api)
 }
 ```
