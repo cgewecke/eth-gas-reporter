@@ -34,7 +34,7 @@
     "shelljs": "^0.7.8"
   },
   "devDependencies": {
-    "ethereumjs-testrpc": "^4.1.3",
-    "truffle": "^4.0.0-beta.2"
+    "ethereumjs-testrpc": "4.1.3",
+    "truffle": "4.0.0-beta.2"
   }
 }
