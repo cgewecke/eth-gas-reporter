@@ -1,5 +1,11 @@
 ## Changelog: eth-gas-reporter
 
+0.0.13 / 2017-11-15
+===================
+
+  * Filter throws by receipt.status if possible
+  * Use testrpc 6.0.2 in tests, add view and pure methods to tests.
+
 0.0.12 / 2017-10-28
 ===================
 
