@@ -1,4 +1,4 @@
-pragma solidity ^0.4.4;
+pragma solidity ^0.4.17;
 
 contract Wallet {
 
@@ -16,7 +16,7 @@ contract Wallet {
     function getBalance() constant returns(uint){
         return address(this).balance;
     }
-    
+
     function() payable
     {
         if (msg.value > 0)

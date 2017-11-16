@@ -36,7 +36,14 @@ function Gas (runner) {
           const receipt = web3.eth.getTransactionReceipt(tx)
 
           const id = stats.getMethodID(transaction.input)
-          const threw = receipt.gasUsed === transaction.gas  // Change this @ Byzantium
+
+          // Pre/Post byzantium error filtering
+          let threw = false
+          if (receipt.status === 0){
+            threw = true
+          } else {
+            threw = receipt.gasUsed === transaction.gas
+          }
 
           if (methodMap[id] && !threw) {
             methodMap[id].gasData.push(receipt.gasUsed)
