@@ -1,5 +1,10 @@
 ## Changelog: eth-gas-reporter
 
+0.0.14 / 2017-11-30
+===================
+
+  * Fix bug that caused the error report at the end of test run not to be printed.
+
 0.0.13 / 2017-11-15
 ===================
 
