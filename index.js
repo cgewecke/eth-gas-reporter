@@ -13,6 +13,7 @@ function Gas (runner) {
   const self = this
   let indents = 0
   let n = 0
+  let failed = false;
   let startBlock
   let deployStartBlock
   let methodMap
@@ -131,17 +132,24 @@ function Gas (runner) {
   })
 
   runner.on('fail', test => {
+    failed = true;
     let fmt = indent() + color('fail', '  %d) %s')
     log()
     log(fmt, ++n, test.title)
   })
 
   runner.on('end', () => {
-    stats
-      .generateGasStatsReport(methodMap, deployMap)
-      .then(() => self.epilogue());
-  })
+    if (!failed){
+      stats
+        .generateGasStatsReport(methodMap, deployMap)
+        .then(() => self.epilogue() );
+    } else {
+      self.epilogue();
+    }
+  });
 }
+
+
 
 /**
  * Inherit from `Base.prototype`.
