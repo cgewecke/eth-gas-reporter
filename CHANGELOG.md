@@ -1,5 +1,10 @@
 ## Changelog: eth-gas-reporter
 
+0.0.15 / 2017-12-09
+===================
+
+  * Fix ascii colorization bug that caused crashed during table generation. (Use colors/safe).
+
 0.0.14 / 2017-11-30
 ===================
 
