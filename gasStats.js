@@ -2,7 +2,7 @@
  * Methods to generate gas data.
  */
 
-const colors = require('colors')
+const colors = require('colors/safe')
 const _ = require('lodash')
 const path = require('path')
 const request = require('request-promise-native')
@@ -72,10 +72,10 @@ async function generateGasStatsReport (methodMap, deployMap) {
     if (data.gasData.length) {
       const total = data.gasData.reduce((acc, datum) => acc + datum, 0)
       stats.average = Math.round(total / data.gasData.length)
-      stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : '-'.grey
+      stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : colors.grey('-')
     } else {
-      stats.average = '-'.grey
-      stats.cost = '-'.grey
+      stats.average = colors.grey('-')
+      stats.cost = colors.grey('-')
     }
 
     const sortedData = data.gasData.sort((a, b) => a - b)
@@ -83,19 +83,19 @@ async function generateGasStatsReport (methodMap, deployMap) {
     stats.max = sortedData[sortedData.length - 1]
 
     const uniform = (stats.min === stats.max)
-    stats.min = (uniform) ? '-' : stats.min.toString().cyan
-    stats.max = (uniform) ? '-' : stats.max.toString().red
+    stats.min = (uniform) ? '-' : colors.cyan(stats.min.toString())
+    stats.max = (uniform) ? '-' : colors.red(stats.max.toString())
 
-    stats.numberOfCalls = data.numberOfCalls.toString().grey
+    stats.numberOfCalls = colors.grey(data.numberOfCalls.toString())
 
     const section = []
-    section.push(data.contract.grey)
+    section.push(colors.grey(data.contract))
     section.push(data.method)
     section.push({hAlign: 'right', content: stats.min})
     section.push({hAlign: 'right', content: stats.max})
     section.push({hAlign: 'right', content: stats.average})
     section.push({hAlign: 'right', content: stats.numberOfCalls})
-    section.push({hAlign: 'right', content: stats.cost.toString().green})
+    section.push({hAlign: 'right', content: colors.green(stats.cost.toString())})
 
     methodRows.push(section)
   })
@@ -111,23 +111,23 @@ async function generateGasStatsReport (methodMap, deployMap) {
     const total = contract.gasData.reduce((acc, datum) => acc + datum, 0)
     stats.average = Math.round(total / contract.gasData.length)
     stats.percent = gasToPercentOfLimit(stats.average)
-    stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : '-'.grey
+    stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : colors.grey('-')
 
     const sortedData = contract.gasData.sort((a, b) => a - b)
     stats.min = sortedData[0]
     stats.max = sortedData[sortedData.length - 1]
 
     const uniform = (stats.min === stats.max)
-    stats.min = (uniform) ? '-' : stats.min.toString().cyan
-    stats.max = (uniform) ? '-' : stats.max.toString().red
+    stats.min = (uniform) ? '-' : colors.cyan(stats.min.toString())
+    stats.max = (uniform) ? '-' : colors.red(stats.max.toString())
 
     const section = []
     section.push({hAlign: 'left', colSpan: 2, content: contract.name})
     section.push({hAlign: 'right', content: stats.min})
     section.push({hAlign: 'right', content: stats.max})
     section.push({hAlign: 'right', content: stats.average})
-    section.push({hAlign: 'right', content: `${stats.percent} %`.grey})
-    section.push({hAlign: 'right', content: stats.cost.toString().green})
+    section.push({hAlign: 'right', content: colors.grey(`${stats.percent} %`)})
+    section.push({hAlign: 'right', content: colors.green(stats.cost.toString())})
 
     deployRows.push(section)
   })
@@ -144,8 +144,8 @@ async function generateGasStatsReport (methodMap, deployMap) {
 
   // Format and load methods metrics
   let title = [
-    {hAlign: 'center', colSpan: 5, content: 'Gas'.green.bold},
-    {hAlign: 'center', colSpan: 2, content: `Block limit: ${blockLimit} gas`.grey }
+    {hAlign: 'center', colSpan: 5, content: colors.green.bold('Gas')},
+    {hAlign: 'center', colSpan: 2, content: colors.grey(`Block limit: ${blockLimit} gas`)}
   ]
 
   let methodSubtitle
@@ -154,22 +154,22 @@ async function generateGasStatsReport (methodMap, deployMap) {
     const rate = parseFloat(ethPrice).toFixed(2)
 
     methodSubtitle = [
-      {hAlign: 'left', colSpan: 2, content: 'Methods'.green.bold},
-      {hAlign: 'center', colSpan: 3, content: `${gwei} gwei/gas`.grey},
-      {hAlign: 'center', colSpan: 2, content: `${rate} ${currency.toLowerCase()}/eth`.red}
+      {hAlign: 'left', colSpan: 2, content: colors.green.bold('Methods')},
+      {hAlign: 'center', colSpan: 3, content: colors.grey(`${gwei} gwei/gas`)},
+      {hAlign: 'center', colSpan: 2, content: colors.red(`${rate} ${currency.toLowerCase()}/eth`)}
     ]
   } else {
-    methodSubtitle = [{hAlign: 'left', colSpan: 7, content: 'Methods'.green.bold}]
+    methodSubtitle = [{hAlign: 'left', colSpan: 7, content: colors.green.bold('Methods')}]
   }
 
   const header = [
-    'Contract'.bold,
-    'Method'.bold,
-    'Min'.green,
-    'Max'.green,
-    'Avg'.green,
-    '# calls'.bold,
-    `${currency.toLowerCase()} (avg)`.bold
+    colors.bold('Contract'),
+    colors.bold('Method'),
+    colors.green('Min'),
+    colors.green('Max'),
+    colors.green('Avg'),
+    colors.bold('# calls'),
+    colors.bold(`${currency.toLowerCase()} (avg)`)
   ]
 
   table.push(title)
@@ -187,9 +187,9 @@ async function generateGasStatsReport (methodMap, deployMap) {
 
   if (deployRows.length) {
     const deploymentsSubtitle = [
-      {hAlign: 'left', colSpan: 2, content: 'Deployments'.green.bold},
+      {hAlign: 'left', colSpan: 2, content: colors.green.bold('Deployments')},
       {hAlign: 'right', colSpan: 3, content: '' },
-      {hAlign: 'left', colSpan: 1, content: `% of limit`.bold}
+      {hAlign: 'left', colSpan: 1, content: colors.bold(`% of limit`)}
     ]
     table.push(deploymentsSubtitle)
     deployRows.forEach(row => table.push(row))
