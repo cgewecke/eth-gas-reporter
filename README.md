@@ -41,8 +41,8 @@ You can also create a `.ethgas.js` config in the root directory of your project 
 
 ```javascript
 module.exports = {
-  currency: "CHF",    // Default: "EUR" (loaded at run-time from the `coinmarketcap` api)
-  gasPrice: 21 * 1e9  // Default: (~5 gwei, loaded at run-time from the `blockcypher` api)
+  currency: "CHF",    // code: default is "EUR" (loaded at run-time from the `coinmarketcap` api)
+  gasPrice: 21        // gwei: default varies, loaded at run-time from the `eth gas station` api)
 }
 ```
 

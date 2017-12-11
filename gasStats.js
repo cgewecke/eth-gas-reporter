@@ -37,7 +37,7 @@ let blockLimit = 6718946
 function gasToCost (gas, ethPrice, gasPrice) {
   ethPrice = parseFloat(ethPrice)
   gasPrice = parseInt(gasPrice)
-  return ((gasPrice / 1e18) * gas * ethPrice).toFixed(2)
+  return ((gasPrice / 1e9) * gas * ethPrice).toFixed(2)
 }
 
 /**
@@ -152,7 +152,7 @@ function generateGasStatsReport (methodMap, deployMap) {
 
   let methodSubtitle
   if (ethPrice && gasPrice) {
-    const gwei = parseInt(gasPrice) * 1e-9
+    const gwei = parseInt(gasPrice)
     const rate = parseFloat(ethPrice).toFixed(2)
 
     methodSubtitle = [
@@ -216,7 +216,7 @@ function generateGasStatsReport (methodMap, deployMap) {
  */
 async function getGasAndPriceRates () {
 
-  const defaultGasPrice = 5000000000
+  const defaultGasPrice = 5
 
   // Load config
   const config = reqCwd.silent('./.ethgas.js') || {}
@@ -228,7 +228,7 @@ async function getGasAndPriceRates () {
 
   const currencyPath = `https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=${currency.toUpperCase()}`
   const currencyKey = `price_${currency.toLowerCase()}`
-  const gasPricePath = `https://api.blockcypher.com/v1/eth/main`
+  const gasPricePath = `https://ethgasstation.info/json/ethgasAPI.json`
 
   // Currency market data: coinmarketcap
   if (!ethPrice) {
@@ -246,7 +246,7 @@ async function getGasAndPriceRates () {
     try {
       let response = await request.get(gasPricePath)
       response = JSON.parse(response)
-      gasPrice = response['low_gas_price']
+      gasPrice = Math.round(response.safeLow / 10);
     } catch (error) {
       gasPrice = defaultGasPrice
     }
