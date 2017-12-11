@@ -4,7 +4,9 @@ const stats = require('./gasStats.js')
 const Base = mocha.reporters.Base
 const color = Base.color
 const log = console.log
-module.exports = Gas
+
+// Start getting this data when the reporter loads.
+stats.getGasAndPriceRates();
 
 // Based on the 'Spec' reporter
 function Gas (runner) {
@@ -139,19 +141,14 @@ function Gas (runner) {
   })
 
   runner.on('end', () => {
-    if (!failed){
-      stats
-        .generateGasStatsReport(methodMap, deployMap)
-        .then(() => self.epilogue() );
-    } else {
-      self.epilogue();
-    }
+    stats.generateGasStatsReport(methodMap, deployMap)
+    self.epilogue()
   });
 }
-
-
 
 /**
  * Inherit from `Base.prototype`.
  */
 inherits(Gas, Base)
+
+module.exports = Gas

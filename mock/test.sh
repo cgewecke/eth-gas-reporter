@@ -52,3 +52,4 @@ echo "Visual test with config"
 cp ./config-template.js ./.ethgas.js
 node_modules/.bin/truffle test --network development "$@"
 rm ./.ethgas.js
+0
