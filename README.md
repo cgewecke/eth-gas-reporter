@@ -51,12 +51,10 @@ module.exports = {
 + [windingtree/LifToken](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/lifToken.md)
 
 ### Usage Notes
-+ Table will not print if any tests fail (this is a bug, possibly rooted in `truffle`).
 + Method calls that throw are filtered from the stats.
 + Not currently shown in the `deployments` table:
   + Contracts that link to libraries
   + Contracts that never get instantiated within the tests (e.g: only deployed in migrations)
-+ Tests that make assumptions about the value of `block.timestamp` sometimes fail using this utility.
 + Tests run slower.
 
 ### Credits
