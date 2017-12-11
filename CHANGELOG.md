@@ -1,5 +1,12 @@
 ## Changelog: eth-gas-reporter
 
+0.1.0 / 2017-12-10
+==================
+
+  * Require config gas price to be expressed in gwei (breaking change)
+  * Use eth gas station API for gas price (it's more accurate)
+  * Fix bug that caused table not to print if any test failed.
+
 0.0.15 / 2017-12-09
 ===================
 
