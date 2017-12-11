@@ -11,6 +11,15 @@ const Table = require('cli-table2')
 const reqCwd = require('req-cwd')
 const abiDecoder = require('abi-decoder')
 
+
+/**
+ * We fetch these async from remote sources / config when the reporter loads because
+ * for unknown reasons mocha exits prematurely if any of the tests fail.
+ */
+let currency;
+let gasPrice;
+let ethPrice;
+
 /**
  * block.gasLimit. Set to a default at declaration but set to the rpc's declared limit
  * at `mapMethodsToContracts`
@@ -54,14 +63,7 @@ function getMethodID (code) {
  * Prints a gas stats table to stdout. Based on Alan Lu's stats for Gnosis
  * @param  {Object} methodMap methods and their gas usage (from mapMethodToContracts)
  */
-async function generateGasStatsReport (methodMap, deployMap) {
-  const {
-    currency,
-    ethPrice,
-    gasPrice
-  } = await getGasAndPriceRates()
-
-  // Compose rows
+function generateGasStatsReport (methodMap, deployMap) {
   const methodRows = []
 
   _.forEach(methodMap, (data, methodId) => {
@@ -213,14 +215,14 @@ async function generateGasStatsReport (methodMap, deployMap) {
  *
  */
 async function getGasAndPriceRates () {
-  let ethPrice
-  let gasPrice
+
   const defaultGasPrice = 5000000000
 
   // Load config
   const config = reqCwd.silent('./.ethgas.js') || {}
-  const currency = config.currency || 'eur'
 
+  // Global to this file...
+  currency = config.currency || 'eur'
   ethPrice = config.ethPrice || null
   gasPrice = config.gasPrice || null
 
@@ -248,12 +250,6 @@ async function getGasAndPriceRates () {
     } catch (error) {
       gasPrice = defaultGasPrice
     }
-  }
-
-  return {
-    currency: currency,
-    ethPrice: ethPrice,
-    gasPrice: gasPrice
   }
 }
 
