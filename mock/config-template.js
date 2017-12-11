@@ -1,4 +1,4 @@
 module.exports = {
   currency: "chf",
-  gasPrice: 21 * 1e9
+  gasPrice: 21
 }
