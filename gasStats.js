@@ -90,7 +90,6 @@ function generateGasStatsReport (methodMap, deployMap) {
 
     stats.numberOfCalls = colors.grey(data.numberOfCalls.toString())
 
-    console.log(stats.numberOfCalls);
     if (!onlyCalledMethods || data.numberOfCalls > 0) {
       const section = []
       section.push(colors.grey(data.contract))
