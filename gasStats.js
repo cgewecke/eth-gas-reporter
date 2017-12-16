@@ -10,6 +10,7 @@ const shell = require('shelljs')
 const Table = require('cli-table2')
 const reqCwd = require('req-cwd')
 const abiDecoder = require('abi-decoder')
+const fs = require('fs');
 
 
 /**
@@ -197,8 +198,17 @@ function generateGasStatsReport (methodMap, deployMap) {
     deployRows.forEach(row => table.push(row))
   }
 
-  // Print
-  console.log(table.toString())
+  // export to preferred output
+  if (outputFile) {
+    fs.writeFile(outputFile, table.toString(), (err) => {
+      if (err) {
+        console.log('Writing to %s failed', outputFile);
+        console.log(table.toString());
+      }
+    });
+  } else {
+    console.log(table.toString())
+  }
 }
 
 /**
@@ -225,6 +235,8 @@ async function getGasAndPriceRates () {
   currency = config.currency || 'eur'
   ethPrice = config.ethPrice || null
   gasPrice = config.gasPrice || null
+  outputFile = config.outputFile || null
+  colored = config.colored || true;
 
   const currencyPath = `https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=${currency.toUpperCase()}`
   const currencyKey = `price_${currency.toLowerCase()}`
@@ -349,4 +361,3 @@ module.exports = {
   mapMethodsToContracts: mapMethodsToContracts,
   pretty: pretty
 }
-
