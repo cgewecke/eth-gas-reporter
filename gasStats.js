@@ -236,7 +236,6 @@ async function getGasAndPriceRates () {
   ethPrice = config.ethPrice || null
   gasPrice = config.gasPrice || null
   outputFile = config.outputFile || null
-  colored = config.colored || true;
 
   const currencyPath = `https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=${currency.toUpperCase()}`
   const currencyKey = `price_${currency.toLowerCase()}`
