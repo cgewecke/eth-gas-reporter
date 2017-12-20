@@ -1,5 +1,13 @@
 ## Changelog: eth-gas-reporter
 
+0.1.1 / 2017-12-19
+==================
+
+  * Use mochas own reporter options instead of .ethgas (still supported)
+  * Add onlyCalledMethods option
+  * Add outputFile option
+  * Add noColors option
+
 0.1.0 / 2017-12-10
 ==================
 
