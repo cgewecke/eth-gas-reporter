@@ -91,16 +91,19 @@ function generateGasStatsReport (methodMap, deployMap) {
 
     stats.numberOfCalls = colors.grey(data.numberOfCalls.toString())
 
-    const section = []
-    section.push(colors.grey(data.contract))
-    section.push(data.method)
-    section.push({hAlign: 'right', content: stats.min})
-    section.push({hAlign: 'right', content: stats.max})
-    section.push({hAlign: 'right', content: stats.average})
-    section.push({hAlign: 'right', content: stats.numberOfCalls})
-    section.push({hAlign: 'right', content: colors.green(stats.cost.toString())})
+    if (!onlyCalledMethods || data.numberOfCalls > 0) {
+      const section = []
+      section.push(colors.grey(data.contract))
+      section.push(data.method)
+      section.push({hAlign: 'right', content: stats.min})
+      section.push({hAlign: 'right', content: stats.max})
+      section.push({hAlign: 'right', content: stats.average})
+      section.push({hAlign: 'right', content: stats.numberOfCalls})
+      section.push({hAlign: 'right', content: colors.green(stats.cost.toString())})
 
-    methodRows.push(section)
+      methodRows.push(section)
+    }
+
   })
 
   const deployRows = []
@@ -235,6 +238,7 @@ async function getGasAndPriceRates () {
   currency = config.currency || 'eur'
   ethPrice = config.ethPrice || null
   gasPrice = config.gasPrice || null
+  onlyCalledMethods = config.onlyCalledMethods || false
   outputFile = config.outputFile || null
 
   const currencyPath = `https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=${currency.toUpperCase()}`
