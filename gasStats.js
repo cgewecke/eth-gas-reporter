@@ -12,7 +12,6 @@ const reqCwd = require('req-cwd')
 const abiDecoder = require('abi-decoder')
 const fs = require('fs');
 
-
 /**
  * We fetch these async from remote sources / config when the reporter loads because
  * for unknown reasons mocha exits prematurely if any of the tests fail.
@@ -20,6 +19,8 @@ const fs = require('fs');
 let currency;
 let gasPrice;
 let ethPrice;
+let onlyCalledMethods;
+let outputFile;
 
 /**
  * block.gasLimit. Set to a default at declaration but set to the rpc's declared limit
@@ -240,6 +241,7 @@ async function getGasAndPriceRates () {
   gasPrice = config.gasPrice || null
   onlyCalledMethods = config.onlyCalledMethods || false
   outputFile = config.outputFile || null
+  colors.enabled = !config.noColors || false
 
   const currencyPath = `https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=${currency.toUpperCase()}`
   const currencyKey = `price_${currency.toLowerCase()}`
