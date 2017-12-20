@@ -228,12 +228,17 @@ function generateGasStatsReport (methodMap, deployMap) {
  *   } = await getGasAndPriceRates()
  *
  */
-async function getGasAndPriceRates () {
+async function getGasAndPriceRates (options=null) {
 
   const defaultGasPrice = 5
 
-  // Load config
-  const config = reqCwd.silent('./.ethgas.js') || {}
+  // Load config / keep .ethgas.js for backward compatibility
+  let config;
+  if (options && options.reporterOptions){
+    config = options.reporterOptions
+  } else {
+    config = reqCwd.silent('./.ethgas.js') || {}
+  }
 
   // Global to this file...
   currency = config.currency || 'eur'
