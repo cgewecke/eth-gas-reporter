@@ -5,11 +5,8 @@ const Base = mocha.reporters.Base
 const color = Base.color
 const log = console.log
 
-// Start getting this data when the reporter loads.
-stats.getGasAndPriceRates();
-
 // Based on the 'Spec' reporter
-function Gas (runner) {
+function Gas (runner, options) {
   Base.call(this, runner)
 
   const self = this
@@ -20,6 +17,9 @@ function Gas (runner) {
   let deployStartBlock
   let methodMap
   let deployMap
+
+  // Start getting this data when the reporter loads.
+  stats.getGasAndPriceRates(options);
 
   // ------------------------------------  Helpers -------------------------------------------------
   const indent = () => Array(indents).join('  ')

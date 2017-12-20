@@ -29,22 +29,16 @@ module.exports = {
     ...etc...
   },
   mocha: {
-    reporter: 'eth-gas-reporter'
+    reporter: 'eth-gas-reporter',
+    reporterOptions : {
+      currency: 'CHF',
+      gasPrice: 21
+    }
   }
 };
 ```
 
 ### Options
-
-You can also create a `.ethgas.js` config in the root directory of your project to set various options.
-
-```javascript
-module.exports = {
-  currency: "CHF",
-  gasPrice: 21,
-  ...etc...
-}
-```
 
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |

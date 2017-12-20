@@ -49,6 +49,8 @@ node_modules/.bin/truffle test --network development "$@"
 
 # Run with config
 echo "Visual test with config"
-cp ./config-template.js ./.ethgas.js
+cp ./truffle.js ./safe_truffle.js
+cp ./config-template.js ./truffle.js
 node_modules/.bin/truffle test --network development "$@"
-rm ./.ethgas.js
+cp ./safe_truffle.js ./truffle.js
+rm ./safe_truffle.js
