@@ -36,15 +36,24 @@ module.exports = {
 
 ### Options
 
-You can also create a `.ethgas.js` config in the root directory of your project to set
-`gasPrice` and `currency` options. Available currency codes can be found [here](https://coinmarketcap.com/api/).
+You can also create a `.ethgas.js` config in the root directory of your project to set various options.
 
 ```javascript
 module.exports = {
-  currency: "CHF",    // code: default is "EUR" (loaded at run-time from the `coinmarketcap` api)
-  gasPrice: 21        // gwei: default varies, loaded at run-time from the `eth gas station` api)
+  currency: "CHF",
+  gasPrice: 21,
+  ...etc...
 }
 ```
+
+| Option | Type | Default | Description |
+| ------ | ---- | ------- | ----------- |
+| currency | *String* | 'EUR' | National currency to represent gas costs in. Exchange rates loaded at runtime from the `coinmarketcap` api. Available currency codes can be found [here](https://coinmarketcap.com/api/). |
+| gasPrice | *Number* | (varies) | Default is loaded at runtime from the `eth gas station` api |
+| outputFile | *String* | stdout | File path to write report output to |
+| noColors | *Boolean* | false | Suppress report color. Useful if you are printing to file b/c terminal colorization corrupts the text. |
+| onlyCalledMethods | *Boolean* | false | Omit methods that are never called from report. |
+
 
 ### Examples
 + [gnosis/gnosis-contracts](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/gnosis.md)
@@ -62,3 +71,7 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 + [@maurelian](https://github.com/maurelian) - Mocha reporting gas instead of time is his idea.
 + [@cag](https://github.com/cag) - The table borrows from / is based his gas statistics work for the Gnosis contracts.
 + [Neufund](https://github.com/Neufund/ico-contracts) - Block limit size ratios for contract deployments and euro pricing are borrowed from their `ico-contracts` test suite.
+
+### Contributors
++ [@cgewecke](https://github.com/cgewecke)
++ [@rmuslimov](https://github.com/rmuslimov)
