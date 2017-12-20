@@ -49,7 +49,7 @@ module.exports = {
 | Option | Type | Default | Description |
 | ------ | ---- | ------- | ----------- |
 | currency | *String* | 'EUR' | National currency to represent gas costs in. Exchange rates loaded at runtime from the `coinmarketcap` api. Available currency codes can be found [here](https://coinmarketcap.com/api/). |
-| gasPrice | *Number* | (varies) | Default is loaded at runtime from the `eth gas station` api |
+| gasPrice | *Number* | (varies) | Denominated in `gwei`. Default is loaded at runtime from the `eth gas station` api |
 | outputFile | *String* | stdout | File path to write report output to |
 | noColors | *Boolean* | false | Suppress report color. Useful if you are printing to file b/c terminal colorization corrupts the text. |
 | onlyCalledMethods | *Boolean* | false | Omit methods that are never called from report. |
