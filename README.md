@@ -61,6 +61,7 @@ module.exports = {
 + Not currently shown in the `deployments` table:
   + Contracts that link to libraries
   + Contracts that never get instantiated within the tests (e.g: only deployed in migrations)
+  + Contracts that are only ever created by other contracts within Solidity.
 + Tests run slower.
 
 ### Credits
