@@ -11,7 +11,7 @@ const Table = require('cli-table2')
 const reqCwd = require('req-cwd')
 const abiDecoder = require('abi-decoder')
 const fs = require('fs');
-
+var syncRequest = require('sync-request');
 /**
  * We fetch these async from remote sources / config when the reporter loads because
  * for unknown reasons mocha exits prematurely if any of the tests fail.
@@ -305,8 +305,10 @@ function mapMethodsToContracts (truffleArtifacts) {
   const methodMap = {}
   const deployMap = []
   const abis = []
-
-  const block = web3.eth.getBlock('latest');
+  var res = syncRequest('POST', web3.currentProvider.host, {
+      json: {"jsonrpc":"2.0","method":"eth_getBlockByNumber","params":["latest", false],"id":1}
+  });
+  const block = JSON.parse(res.getBody('utf8')).result;
   blockLimit = block.gasLimit;
 
   const names = shell.ls('./contracts/**/*.sol')
@@ -350,7 +352,6 @@ function mapMethodsToContracts (truffleArtifacts) {
   })
 
   abis.forEach(abi => abiDecoder.addABI(abi))
-
   return {
     methodMap: methodMap,
     deployMap: deployMap
