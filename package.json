@@ -31,7 +31,8 @@
     "req-cwd": "^2.0.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
-    "shelljs": "^0.7.8"
+    "shelljs": "^0.7.8",
+    "sync-request": "^6.0.0"
   },
   "devDependencies": {
     "ethereumjs-testrpc": "6.0.2",
