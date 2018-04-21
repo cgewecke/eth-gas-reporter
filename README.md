@@ -73,3 +73,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 ### Contributors
 + [@cgewecke](https://github.com/cgewecke)
 + [@rmuslimov](https://github.com/rmuslimov)
++ [@area](https://github.com/area)
