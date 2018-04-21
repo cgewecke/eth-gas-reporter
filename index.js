@@ -1,17 +1,10 @@
 const mocha = require('mocha')
 const inherits = require('util').inherits
+const sync = require('./sync')
 const stats = require('./gasStats.js')
 const Base = mocha.reporters.Base
 const color = Base.color
 const log = console.log
-const syncRequest = require('sync-request');
-
-function request(method, params){
-  var res = syncRequest('POST', web3.currentProvider.host, {
-      json: {"jsonrpc":"2.0","method":method,"params":params,"id":1}
-  });
-  return JSON.parse(res.getBody('utf8')).result;
-}
 
 // Based on the 'Spec' reporter
 function Gas (runner, options) {
@@ -35,26 +28,22 @@ function Gas (runner, options) {
 
   const methodAnalytics = (methodMap) => {
     let gasUsed = 0
-    const endBlockWhole = request('eth_getBlockByNumber', ["latest", false]);
-    const endBlock = parseInt(endBlockWhole.number, 16);
+    const endBlock = sync.blockNumber();
+
     while (startBlock <= endBlock) {
-      let block = request('eth_getBlockByNumber', [`0x${startBlock.toString(16)}`, false]);
+      let block = sync.getBlockByNumber(startBlock);
+
       if (block) {
         // Add to running tally for this test
         gasUsed += parseInt(block.gasUsed, 16);
 
         // Compile per method stats
         methodMap && block.transactions.forEach(tx => {
-          const transaction = request('eth_getTransactionByHash', [tx]);
-          const receipt = request('eth_getTransactionReceipt', [tx]);
+          const transaction = sync.getTransactionByHash(tx);
+          const receipt = sync.getTransactionReceipt(tx);
           const id = stats.getMethodID(transaction.input)
-          // Pre/Post byzantium error filtering
-          let threw = false
-          if (receipt.status === 0){
-            threw = true
-          } else {
-            threw = receipt.gasUsed === transaction.gas
-          }
+
+          let threw = parseInt(receipt.status) === 0;
 
           if (methodMap[id] && !threw) {
             methodMap[id].gasData.push(parseInt(receipt.gasUsed, 16))
@@ -68,17 +57,18 @@ function Gas (runner, options) {
   }
 
   const deployAnalytics = (deployMap) => {
-    const endBlockWhole = request('eth_getBlockByNumber', ["latest", false]);
-    const endBlock = parseInt(endBlockWhole.number, 16);
+    const endBlock = sync.blockNumber();
 
     while (deployStartBlock <= endBlock) {
-      let block = request('eth_getBlockByNumber', [`0x${deployStartBlock.toString(16)}`, false]);
+      let block = sync.getBlockByNumber(deployStartBlock);
 
       block && block.transactions.forEach(tx => {
-        const transaction = request('eth_getTransactionByHash', [tx]);
-        const receipt = request('eth_getTransactionReceipt', [tx]);
-        const threw = receipt.gasUsed === transaction.gas  // Change this @ Byzantium
+        const receipt = sync.getTransactionReceipt(tx);
+        const threw = parseInt(receipt.status) === 0;
+
         if (receipt.contractAddress && !threw) {
+          const transaction = sync.getTransactionByHash(tx)
+
           const match = deployMap.filter(contract => {
             return (transaction.input.indexOf(contract.binary) === 0)
           })[0]
@@ -93,10 +83,6 @@ function Gas (runner, options) {
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
     ({ methodMap, deployMap } = stats.mapMethodsToContracts(artifacts))
-    log()
-    // const res = stats.mapMethodsToContracts(artifacts);
-    // methodMap = res.methodMap;
-    // deployMap = res.deployMap;
   })
 
   runner.on('suite', suite => {
@@ -116,14 +102,9 @@ function Gas (runner, options) {
     log(fmt, test.title)
   })
 
-  runner.on('test', () => {
-    const deployStartBlockWhole = request('eth_getBlockByNumber', ["latest", false]);
-    deployStartBlock = parseInt(deployStartBlockWhole.number, 16);
-  })
-  runner.on('hook end', () => {
-    const startBlockWhole = request('eth_getBlockByNumber', ["latest", false]);
-    startBlock = parseInt(startBlockWhole.number, 16);
-  })
+  runner.on('test', () => { deployStartBlock = sync.blockNumber() })
+
+  runner.on('hook end', () => { startBlock = sync.blockNumber() })
 
   runner.on('pass', test => {
     let fmt

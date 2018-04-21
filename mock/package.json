@@ -1,6 +1,6 @@
 {
   "name": "eth-gas-reporter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Mocha reporter which shows gas used per unit test.",
   "main": "index.js",
   "scripts": {
@@ -28,13 +28,15 @@
     "cli-table2": "^0.2.0",
     "colors": "^1.1.2",
     "lodash": "^4.17.4",
+    "mocha": "^3.5.3",
     "req-cwd": "^2.0.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
-    "shelljs": "^0.7.8"
+    "shelljs": "^0.7.8",
+    "sync-request": "^6.0.0"
   },
   "devDependencies": {
-    "ethereumjs-testrpc": "6.0.2",
-    "truffle": "4.0.0-beta.2"
+    "ganache-cli": "^6.1.0",
+    "truffle": "^4.1.7"
   }
 }
