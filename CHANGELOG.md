@@ -1,5 +1,9 @@
 ## Changelog: eth-gas-reporter
 
+0.1.2 / 2018-04-20
+==================
+ * Make compatible with Web 1.0 by creating own sync RPC wrapper. (Contribution: @area)
+
 0.1.1 / 2017-12-19
 ==================
 
