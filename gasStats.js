@@ -308,7 +308,7 @@ function mapMethodsToContracts (truffleArtifacts) {
   const abis = []
 
   const block = sync.getLatestBlock()
-  blockLimit = block.gasLimit
+  blockLimit = parseInt(block.gasLimit, 16);
 
   const names = shell.ls('./contracts/**/*.sol')
   names.forEach(name => {
