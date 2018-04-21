@@ -4,7 +4,7 @@ import "./VariableCosts.sol";
 
 contract VariableConstructor is VariableCosts {
   string name;
-  function VariableConstructor(string _name){
+  constructor(string _name) public {
     name = _name;
   }
 }

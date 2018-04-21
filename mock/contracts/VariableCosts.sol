@@ -1,4 +1,4 @@
-pragma experimental "v0.5.0";
+pragma solidity ^0.4.23;
 
 import "./Wallets/Wallet.sol";
 
@@ -32,7 +32,7 @@ contract VariableCosts is Wallet {
     map[1000] = a;
   }
 
-  function methodThatThrows(bool err) public {
+  function methodThatThrows(bool err) public pure {
     require(!err);
   }
 }
