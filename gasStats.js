@@ -11,6 +11,7 @@ const Table = require('cli-table2')
 const reqCwd = require('req-cwd')
 const abiDecoder = require('abi-decoder')
 const fs = require('fs');
+const sync = require('./sync');
 
 /**
  * We fetch these async from remote sources / config when the reporter loads because
@@ -306,8 +307,8 @@ function mapMethodsToContracts (truffleArtifacts) {
   const deployMap = []
   const abis = []
 
-  const block = web3.eth.getBlock('latest');
-  blockLimit = block.gasLimit;
+  const block = sync.getLatestBlock()
+  blockLimit = parseInt(block.gasLimit, 16);
 
   const names = shell.ls('./contracts/**/*.sol')
   names.forEach(name => {
@@ -350,7 +351,6 @@ function mapMethodsToContracts (truffleArtifacts) {
   })
 
   abis.forEach(abi => abiDecoder.addABI(abi))
-
   return {
     methodMap: methodMap,
     deployMap: deployMap

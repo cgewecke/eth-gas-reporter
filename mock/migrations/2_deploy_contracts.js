@@ -10,5 +10,5 @@ module.exports = function (deployer) {
   deployer.deploy(MetaCoin)
   deployer.deploy(Wallet)
   deployer.deploy(VariableCosts)
-  deployer.deploy(VariableConstructor)
+  deployer.deploy(VariableConstructor, 'Exit Visa')
 }

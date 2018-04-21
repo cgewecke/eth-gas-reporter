@@ -1,9 +1,9 @@
-pragma experimental "v0.5.0";
+pragma solidity ^0.4.23;
 
 import "./Wallets/Wallet.sol";
 
 contract VariableCosts is Wallet {
-
+  uint q;
   mapping(uint => address) map;
 
   function pureFn(uint x) public pure returns (uint){
@@ -34,5 +34,6 @@ contract VariableCosts is Wallet {
 
   function methodThatThrows(bool err) public {
     require(!err);
+    q = 5;
   }
 }

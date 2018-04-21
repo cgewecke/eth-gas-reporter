@@ -1,5 +1,6 @@
 const mocha = require('mocha')
 const inherits = require('util').inherits
+const sync = require('./sync')
 const stats = require('./gasStats.js')
 const Base = mocha.reporters.Base
 const color = Base.color
@@ -7,6 +8,7 @@ const log = console.log
 
 // Based on the 'Spec' reporter
 function Gas (runner, options) {
+
   Base.call(this, runner)
 
   const self = this
@@ -26,30 +28,25 @@ function Gas (runner, options) {
 
   const methodAnalytics = (methodMap) => {
     let gasUsed = 0
-    const endBlock = web3.eth.blockNumber
+    const endBlock = sync.blockNumber();
+
     while (startBlock <= endBlock) {
-      let block = web3.eth.getBlock(startBlock)
+      let block = sync.getBlockByNumber(startBlock);
+
       if (block) {
         // Add to running tally for this test
-        gasUsed += block.gasUsed
+        gasUsed += parseInt(block.gasUsed, 16);
 
         // Compile per method stats
         methodMap && block.transactions.forEach(tx => {
-          const transaction = web3.eth.getTransaction(tx)
-          const receipt = web3.eth.getTransactionReceipt(tx)
-
+          const transaction = sync.getTransactionByHash(tx);
+          const receipt = sync.getTransactionReceipt(tx);
           const id = stats.getMethodID(transaction.input)
 
-          // Pre/Post byzantium error filtering
-          let threw = false
-          if (receipt.status === 0){
-            threw = true
-          } else {
-            threw = receipt.gasUsed === transaction.gas
-          }
+          let threw = parseInt(receipt.status) === 0;
 
           if (methodMap[id] && !threw) {
-            methodMap[id].gasData.push(receipt.gasUsed)
+            methodMap[id].gasData.push(parseInt(receipt.gasUsed, 16))
             methodMap[id].numberOfCalls++
           }
         })
@@ -60,22 +57,23 @@ function Gas (runner, options) {
   }
 
   const deployAnalytics = (deployMap) => {
-    const endBlock = web3.eth.blockNumber
+    const endBlock = sync.blockNumber();
 
     while (deployStartBlock <= endBlock) {
-      const block = web3.eth.getBlock(deployStartBlock)
+      let block = sync.getBlockByNumber(deployStartBlock);
 
       block && block.transactions.forEach(tx => {
-        const transaction = web3.eth.getTransaction(tx)
-        const receipt = web3.eth.getTransactionReceipt(tx)
-        const threw = receipt.gasUsed === transaction.gas  // Change this @ Byzantium
+        const receipt = sync.getTransactionReceipt(tx);
+        const threw = parseInt(receipt.status) === 0;
 
         if (receipt.contractAddress && !threw) {
+          const transaction = sync.getTransactionByHash(tx)
+
           const match = deployMap.filter(contract => {
             return (transaction.input.indexOf(contract.binary) === 0)
           })[0]
 
-          match && match.gasData.push(receipt.gasUsed)
+          match && match.gasData.push(parseInt(receipt.gasUsed, 16))
         }
       })
       deployStartBlock++
@@ -85,7 +83,6 @@ function Gas (runner, options) {
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
     ({ methodMap, deployMap } = stats.mapMethodsToContracts(artifacts))
-    log()
   })
 
   runner.on('suite', suite => {
@@ -105,16 +102,15 @@ function Gas (runner, options) {
     log(fmt, test.title)
   })
 
-  runner.on('test', () => { deployStartBlock = web3.eth.blockNumber })
-  runner.on('hook end', () => { startBlock = web3.eth.blockNumber + 1 })
+  runner.on('test', () => { deployStartBlock = sync.blockNumber() })
+
+  runner.on('hook end', () => { startBlock = sync.blockNumber() })
 
   runner.on('pass', test => {
     let fmt
     let gasUsedString
-
     deployAnalytics(deployMap)
     let gasUsed = methodAnalytics(methodMap)
-
     if (gasUsed) {
       gasUsedString = color('checkmark', ' (%d gas)')
 

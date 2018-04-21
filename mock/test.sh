@@ -18,7 +18,7 @@ testrpc_running() {
 }
 
 start_testrpc() {
-  node_modules/.bin/testrpc -l 6712388 "${accounts[@]}" > /dev/null &
+  node_modules/.bin/ganache-cli --gasLimit 8000000 "${accounts[@]}" > /dev/null &
   testrpc_pid=$!
 }
 
@@ -33,6 +33,7 @@ fi
 
 cp ./../index.js node_modules/eth-gas-reporter/index.js
 cp ./../gasStats.js node_modules/eth-gas-reporter/gasStats.js
+cp ./../sync.js node_modules/eth-gas-reporter/sync.js
 cp ./../package.json node_modules/eth-gas-reporter/package.json
 
 # Start testrpc
