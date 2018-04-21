@@ -3,7 +3,7 @@ pragma solidity ^0.4.23;
 import "./Wallets/Wallet.sol";
 
 contract VariableCosts is Wallet {
-
+  uint q;
   mapping(uint => address) map;
 
   function pureFn(uint x) public pure returns (uint){
@@ -32,7 +32,8 @@ contract VariableCosts is Wallet {
     map[1000] = a;
   }
 
-  function methodThatThrows(bool err) public pure {
+  function methodThatThrows(bool err) public {
     require(!err);
+    q = 5;
   }
 }
