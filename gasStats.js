@@ -63,6 +63,16 @@ function getMethodID (code) {
 }
 
 /**
+ * Return true if transaction input and binary are same, ignoring library link code.
+ * @param  {String} code
+ * @return {Bool}
+ */
+function matchBinaries (input, binary) {
+  const regExp = new RegExp(`^${binary.replace(/__.{38}|0{40}/g, ".{40}")}`);
+  return (input.match(regExp) !== null)
+}
+
+/**
  * Prints a gas stats table to stdout. Based on Alan Lu's stats for Gnosis
  * @param  {Object} methodMap methods and their gas usage (from mapMethodToContracts)
  */
@@ -369,5 +379,6 @@ module.exports = {
   getGasAndPriceRates: getGasAndPriceRates,
   getMethodID: getMethodID,
   mapMethodsToContracts: mapMethodsToContracts,
+  matchBinaries: matchBinaries,
   pretty: pretty
 }

@@ -70,7 +70,7 @@ function Gas (runner, options) {
           const transaction = sync.getTransactionByHash(tx)
 
           const match = deployMap.filter(contract => {
-            return (transaction.input.indexOf(contract.binary) === 0)
+            return stats.matchBinaries(transaction.input, contract.binary);
           })[0]
 
           match && match.gasData.push(parseInt(receipt.gasUsed, 16))
