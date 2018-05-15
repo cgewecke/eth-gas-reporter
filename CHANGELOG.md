@@ -1,5 +1,5 @@
 ## Changelog: eth-gas-reporter
-0.1.3 / 2018-05-14
+0.1.4 / 2018-05-14
 ==================
   * Try to work around web3 websocket provider by attempting connection over http://.
     `requestSync` doesn't support this otherwise.
