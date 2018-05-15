@@ -1,4 +1,8 @@
 ## Changelog: eth-gas-reporter
+0.1.5 / 2018-05-15
+==================
+  * Support multi-contract files by parsing files w/ solidity-parser-antlr
+
 0.1.4 / 2018-05-14
 ==================
   * Try to work around web3 websocket provider by attempting connection over http://.
