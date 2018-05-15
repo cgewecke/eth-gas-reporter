@@ -69,11 +69,14 @@ function Gas (runner, options) {
         if (receipt.contractAddress && !threw) {
           const transaction = sync.getTransactionByHash(tx)
 
-          const match = deployMap.filter(contract => {
+          const matches = deployMap.filter(contract => {
             return stats.matchBinaries(transaction.input, contract.binary);
-          })[0]
+          })
 
-          match && match.gasData.push(parseInt(receipt.gasUsed, 16))
+          if(matches && matches.length){
+            const match = matches.find(item => item.binary !== '0x');
+            match && match.gasData.push(parseInt(receipt.gasUsed, 16))
+          }
         }
       })
       deployStartBlock++
