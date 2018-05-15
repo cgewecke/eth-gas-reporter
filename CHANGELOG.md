@@ -1,4 +1,10 @@
 ## Changelog: eth-gas-reporter
+0.1.3 / 2018-05-14
+==================
+  * Try to work around web3 websocket provider by attempting connection over http://.
+    `requestSync` doesn't support this otherwise.
+  * Detect and identify binaries with library links, add to the deployments table
+  * Add scripts to run geth in CI (not enabled)
 
 0.1.2 / 2018-04-20
 ==================
