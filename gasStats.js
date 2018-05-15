@@ -68,7 +68,10 @@ function getMethodID (code) {
  * @return {Bool}
  */
 function matchBinaries (input, binary) {
-  const regExp = new RegExp(`^${binary.replace(/__.{38}|0{40}/g, ".{40}")}`);
+  binary = binary.replace(/__.{38}/g, ".{40}");
+  binary = binary.replace(/73f{40}/g, ".{42}");
+
+  const regExp = new RegExp(`^${binary}`);
   return (input.match(regExp) !== null)
 }
 
@@ -344,11 +347,12 @@ function mapMethodsToContracts (truffleArtifacts) {
 
     // Create Method Map;
     Object.keys(methodIDs).forEach(key => {
+      const isInterface = contract.unlinked_binary === '0x';
       const isConstant = methodIDs[key].constant
       const isEvent = methodIDs[key].type === 'event'
       const hasName = methodIDs[key].name
 
-      if (hasName && !isConstant && !isEvent) {
+      if (hasName && !isConstant && !isEvent && !isInterface) {
         methodMap[key] = {
           contract: name.split('.sol')[0],
           method: methodIDs[key].name,
