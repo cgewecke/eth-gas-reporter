@@ -5,12 +5,13 @@
 const colors = require('colors/safe')
 const _ = require('lodash')
 const path = require('path')
+const fs = require('fs')
 const request = require('request-promise-native')
 const shell = require('shelljs')
 const Table = require('cli-table2')
 const reqCwd = require('req-cwd')
 const abiDecoder = require('abi-decoder')
-const fs = require('fs');
+const parser = require('solidity-parser-antlr');
 const sync = require('./sync');
 
 /**
@@ -290,6 +291,25 @@ async function getGasAndPriceRates (options=null) {
 }
 
 /**
+ * Parses files for contract names
+ * @param  {String} filePath path to file
+ * @return {Array}           array of contract names
+ */
+function getContractNames(filePath){
+  const names = [];
+  const code = fs.readFileSync(filePath, 'utf-8');
+  const ast = parser.parse(code, {tolerant: true});
+
+  parser.visit(ast, {
+    ContractDefinition: function(node) {
+      names.push(node.name);
+    }
+  });
+
+  return names;
+}
+
+/**
  * Generates a complete mapping of method data ids to their contract and method names.
  * Map also initialised w/ an empty `gasData` array that the gas value of each matched transaction
  * is pushed to. Expects a`contracts` folder in the cwd.
@@ -323,46 +343,51 @@ function mapMethodsToContracts (truffleArtifacts) {
   const block = sync.getLatestBlock()
   blockLimit = parseInt(block.gasLimit, 16);
 
-  const names = shell.ls('./contracts/**/*.sol')
-  names.forEach(name => {
-    name = path.basename(name)
+  const files = shell.ls('./contracts/**/*.sol')
 
-    if (name === 'Migrations.sol') return
+  // For each file
+  files.forEach(file => {
+    names = getContractNames(file);
 
-    // Create Deploy Map:
-    let contract
-    try { contract = truffleArtifacts.require(name) } catch (error) { return }
+    // For each contract in file
+    names.forEach(name => {
+      if (name === 'Migrations') return
 
-    const contractInfo = {
-      name: name.split('.sol')[0],
-      binary: contract.unlinked_binary,
-      gasData: []
-    }
-    deployMap.push(contractInfo)
-    abis.push(contract._json.abi)
+      // Create Deploy Map:
+      let contract
+      try { contract = truffleArtifacts.require(name) } catch (error) { return }
 
-    // Decode, getMethodIDs
-    abiDecoder.addABI(contract._json.abi)
-    const methodIDs = abiDecoder.getMethodIDs()
-
-    // Create Method Map;
-    Object.keys(methodIDs).forEach(key => {
-      const isInterface = contract.unlinked_binary === '0x';
-      const isConstant = methodIDs[key].constant
-      const isEvent = methodIDs[key].type === 'event'
-      const hasName = methodIDs[key].name
-
-      if (hasName && !isConstant && !isEvent && !isInterface) {
-        methodMap[key] = {
-          contract: name.split('.sol')[0],
-          method: methodIDs[key].name,
-          gasData: [],
-          numberOfCalls: 0
-        }
+      const contractInfo = {
+        name: name,
+        binary: contract.unlinked_binary,
+        gasData: []
       }
+      deployMap.push(contractInfo)
+      abis.push(contract._json.abi)
+
+      // Decode, getMethodIDs
+      abiDecoder.addABI(contract._json.abi)
+      const methodIDs = abiDecoder.getMethodIDs()
+
+      // Create Method Map;
+      Object.keys(methodIDs).forEach(key => {
+        const isInterface = contract.unlinked_binary === '0x';
+        const isConstant = methodIDs[key].constant
+        const isEvent = methodIDs[key].type === 'event'
+        const hasName = methodIDs[key].name
+
+        if (hasName && !isConstant && !isEvent && !isInterface) {
+          methodMap[key] = {
+            contract: name,
+            method: methodIDs[key].name,
+            gasData: [],
+            numberOfCalls: 0
+          }
+        }
+      })
+      abiDecoder.removeABI(contract._json.abi)
     })
-    abiDecoder.removeABI(contract._json.abi)
-  })
+  });
 
   abis.forEach(abi => abiDecoder.addABI(abi))
   return {
