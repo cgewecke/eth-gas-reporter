@@ -40,7 +40,17 @@ const sync = {
         "id":1
       }
     };
-    const res = syncRequest('POST', web3.currentProvider.host, payload);
+
+    let host = web3.currentProvider.host;
+    if (!host){
+      host = web3
+        .currentProvider
+        .connection
+        .url
+        .replace('ws://', 'http://')
+    }
+
+    const res = syncRequest('POST', host, payload);
     return JSON.parse(res.getBody('utf8')).result;
   }
 }

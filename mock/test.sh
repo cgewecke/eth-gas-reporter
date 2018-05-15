@@ -52,6 +52,6 @@ node_modules/.bin/truffle test --network development "$@"
 echo "Visual test with config"
 cp ./truffle.js ./safe_truffle.js
 cp ./config-template.js ./truffle.js
-node_modules/.bin/truffle test --network development "$@"
+node_modules/.bin/darq-truffle test --network development "$@"
 cp ./safe_truffle.js ./truffle.js
 rm ./safe_truffle.js

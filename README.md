@@ -12,7 +12,6 @@ A mocha reporter for Truffle.
 ![screen shot 2017-10-28 at 1 29 52 pm](https://user-images.githubusercontent.com/7332026/32138588-db1d56e0-bbe9-11e7-820e-511d6e36c846.png)
 
 
-
 ### Install
 ```javascript
 // Requires mocha
@@ -57,12 +56,11 @@ module.exports = {
 + [windingtree/LifToken](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/lifToken.md)
 
 ### Usage Notes
++ Requires Node >= 8.
 + Method calls that throw are filtered from the stats.
 + Not currently shown in the `deployments` table:
-  + Contracts that link to libraries
   + Contracts that never get instantiated within the tests (e.g: only deployed in migrations)
   + Contracts that are only ever created by other contracts within Solidity.
-+ Tests run slower.
 
 ### Credits
 All the ideas in this utility have been borrowed from elsewhere. Many thanks to:

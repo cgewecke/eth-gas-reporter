@@ -26,10 +26,10 @@ contract('MetaCoin', function (accounts) {
       meta = instance
       return meta.getBalance.call(accounts[0])
     }).then(function (outCoinBalance) {
-      metaCoinBalance = outCoinBalance.toNumber()
+      metaCoinBalance = parseInt(outCoinBalance.toString())
       return meta.getBalanceInEth.call(accounts[0])
     }).then(function (outCoinBalanceEth) {
-      metaCoinEthBalance = outCoinBalanceEth.toNumber()
+      metaCoinEthBalance = parseInt(outCoinBalanceEth.toString())
     }).then(function () {
       assert.equal(metaCoinEthBalance, 2 * metaCoinBalance, 'Library function returned unexpected function, linkage may be broken')
     })
@@ -52,18 +52,18 @@ contract('MetaCoin', function (accounts) {
       meta = instance
       return meta.getBalance.call(account_one)
     }).then(function (balance) {
-      account_one_starting_balance = balance.toNumber()
+      account_one_starting_balance = parseInt(balance.toString())
       return meta.getBalance.call(account_two)
     }).then(function (balance) {
-      account_two_starting_balance = balance.toNumber()
+      account_two_starting_balance = parseInt(balance.toString())
       return meta.sendCoin(account_two, amount, {from: account_one})
     }).then(function () {
       return meta.getBalance.call(account_one)
     }).then(function (balance) {
-      account_one_ending_balance = balance.toNumber()
+      account_one_ending_balance = parseInt(balance.toString())
       return meta.getBalance.call(account_two)
     }).then(function (balance) {
-      account_two_ending_balance = balance.toNumber()
+      account_two_ending_balance = parseInt(balance.toString())
 
       assert.equal(account_one_ending_balance, account_one_starting_balance - amount, "Amount wasn't correctly taken from the sender")
       assert.equal(account_two_ending_balance, account_two_starting_balance + amount, "Amount wasn't correctly sent to the receiver")

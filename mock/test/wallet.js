@@ -15,7 +15,7 @@ contract('Wallet', accounts => {
 
   it('should should allow transfers and sends', async () => {
     await walletA.sendTransaction({
-      value: web3.toBigNumber(100), from: accounts[0]
+      value: 100, from: accounts[0]
     })
     await walletA.sendPayment(50, walletB.address, {
       from: accounts[0]
@@ -24,6 +24,6 @@ contract('Wallet', accounts => {
       from: accounts[0]
     })
     const balance = await walletB.getBalance()
-    assert.equal(balance.toNumber(), 100)
+    assert.equal(parseInt(balance.toString()), 100)
   })
 })
