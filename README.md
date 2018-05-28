@@ -49,6 +49,8 @@ module.exports = {
 | outputFile | *String* | stdout | File path to write report output to |
 | noColors | *Boolean* | false | Suppress report color. Useful if you are printing to file b/c terminal colorization corrupts the text. |
 | onlyCalledMethods | *Boolean* | false | Omit methods that are never called from report. |
+| rst | *Boolean* | false | Output with a reStructured text code-block directive. Useful if you want to include report in RTD |
+| rstTitle | *String* | '' | Title for reStructured text header (See Travis for example output) |
 
 
 ### Examples

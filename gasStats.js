@@ -23,6 +23,8 @@ let gasPrice;
 let ethPrice;
 let onlyCalledMethods;
 let outputFile;
+let rst;
+let rstTitle;
 
 /**
  * block.gasLimit. Set to a default at declaration but set to the rpc's declared limit
@@ -154,13 +156,16 @@ function generateGasStatsReport (methodMap, deployMap) {
     deployRows.push(section)
   })
 
+  const leftPad = (rst) ? '  ' : '';
+
   // Format table
   const table = new Table({
     style: {head: [], border: [], 'padding-left': 2, 'padding-right': 2},
     chars: {
-      'mid': '·', 'top-mid': '|', 'left-mid': '·', 'mid-mid': '|', 'right-mid': '·',
-      'top-left': '·', 'top-right': '·', 'bottom-left': '·', 'bottom-right': '·',
-      'middle': '·', 'top': '-', 'bottom': '-', 'bottom-mid': '|'
+      'mid': '·', 'top-mid': '|', 'left-mid': `${leftPad}·`, 'mid-mid': '|', 'right-mid': '·',
+      'left': `${leftPad}|`, 'top-left': `${leftPad}·`, 'top-right': '·',
+      'bottom-left': `${leftPad}·`, 'bottom-right': '·', 'middle': '·', 'top': '-',
+      'bottom': '-', 'bottom-mid': '|'
     }
   })
 
@@ -217,16 +222,20 @@ function generateGasStatsReport (methodMap, deployMap) {
     deployRows.forEach(row => table.push(row))
   }
 
+  let rstOutput = '';
+  if (rst) {
+    rstOutput += `${rstTitle}\n`;
+    rstOutput += `${'='.repeat(rstTitle.length)}\n\n`;
+    rstOutput += `.. code-block:: shell\n\n`;
+  }
+
+  let tableOutput = rstOutput + table.toString();
+
   // export to preferred output
   if (outputFile) {
-    fs.writeFile(outputFile, table.toString(), (err) => {
-      if (err) {
-        console.log('Writing to %s failed', outputFile);
-        console.log(table.toString());
-      }
-    });
+    fs.writeFileSync(outputFile, tableOutput)
   } else {
-    console.log(table.toString())
+    console.log(tableOutput)
   }
 }
 
@@ -261,6 +270,8 @@ async function getGasAndPriceRates (options=null) {
   gasPrice = config.gasPrice || null
   onlyCalledMethods = config.onlyCalledMethods || false
   outputFile = config.outputFile || null
+  rst = config.rst || false
+  rstTitle = config.rstTitle || '';
   colors.enabled = !config.noColors || false
 
   const currencyPath = `https://api.coinmarketcap.com/v1/ticker/ethereum/?convert=${currency.toUpperCase()}`
