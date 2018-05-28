@@ -1,4 +1,9 @@
 ## Changelog: eth-gas-reporter
+
+0.1.7 / 2018-05-27
+================
+  * Support reStructured text code-block output
+
 0.1.5 / 2018-05-15
 ==================
   * Support multi-contract files by parsing files w/ solidity-parser-antlr
