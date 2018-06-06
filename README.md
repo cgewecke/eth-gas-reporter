@@ -63,6 +63,11 @@ module.exports = {
 + Not currently shown in the `deployments` table:
   + Contracts that never get instantiated within the tests (e.g: only deployed in migrations)
   + Contracts that are only ever created by other contracts within Solidity.
++ Your ethereum client has to be run in separate process (e.g. reporter will not work if you connect 
+  to ganache through a `provider` in your `truffle.js`). This because mocha's reporter is sync
+  and we have to use sync methods to collect gas data from the client as your tests run. Sync requests 
+  fail with an in memory provider because they block the thread and prevent a 
+  response. (Pro-tip courtesy of [@fosgate29](https://github.com/fosgate29)
 
 ### Credits
 All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
