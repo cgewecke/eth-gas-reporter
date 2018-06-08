@@ -14,13 +14,6 @@ A mocha reporter for Truffle.
 
 ### Install
 ```javascript
-// Requires mocha
-npm install -g mocha
-
-// Truffle installed globally
-npm install -g eth-gas-reporter
-
-// Truffle installed locally (ProTip: This always works.)
 npm install --save-dev eth-gas-reporter
 ```
 
