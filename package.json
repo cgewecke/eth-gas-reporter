@@ -26,7 +26,7 @@
   "homepage": "https://github.com/cgewecke/eth-gas-reporter#readme",
   "dependencies": {
     "abi-decoder": "^1.0.8",
-    "cli-table2": "^0.2.0",
+    "cli-table3": "^0.5.0",
     "colors": "^1.1.2",
     "lodash": "^4.17.4",
     "mocha": "^3.5.3",
