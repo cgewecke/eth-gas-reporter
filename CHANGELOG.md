@@ -1,5 +1,10 @@
 ## Changelog: eth-gas-reporter
 
+0.1.8 / 2018-06-26
+=================
+  * Add showTimeSpent option to also show how long each test took (contribution @ldub)
+  * Update cli-table2 to cli-table3 (contribution @DanielRuf)
+
 0.1.7 / 2018-05-27
 ================
   * Support reStructured text code-block output
