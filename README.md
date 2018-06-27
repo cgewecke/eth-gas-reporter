@@ -63,6 +63,9 @@ module.exports = {
   fail with an in memory provider because they block the thread and prevent a 
   response. (Pro-tip courtesy of [@fosgate29](https://github.com/fosgate29)).
 
+### Contributions
+Please feel free to open a PR (or an issue) for anything. The units are an integration test and one of them is expected to fail, verifying that the table prints at the end of a suite even when there are errors. If you're adding an option, you can vaildate it in CI by adding it to the mock options config located [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/mock/config-template.js#L13-L19). 
+
 ### Credits
 All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 + [@maurelian](https://github.com/maurelian) - Mocha reporting gas instead of time is his idea.
@@ -73,3 +76,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 + [@cgewecke](https://github.com/cgewecke)
 + [@rmuslimov](https://github.com/rmuslimov)
 + [@area](https://github.com/area)
++ [@ldub](https://github.com/ldub)
