@@ -9,7 +9,6 @@ const fs = require('fs')
 const request = require('request-promise-native')
 const shell = require('shelljs')
 const Table = require('cli-table3')
-const reqCwd = require('req-cwd')
 const abiDecoder = require('abi-decoder')
 const parser = require('solidity-parser-antlr');
 const sync = require('./sync');
@@ -252,17 +251,9 @@ function generateGasStatsReport (methodMap, deployMap) {
  *   } = await getGasAndPriceRates()
  *
  */
-async function getGasAndPriceRates (options=null) {
+async function getGasAndPriceRates (config=null) {
 
   const defaultGasPrice = 5
-
-  // Load config / keep .ethgas.js for backward compatibility
-  let config;
-  if (options && options.reporterOptions){
-    config = options.reporterOptions
-  } else {
-    config = reqCwd.silent('./.ethgas.js') || {}
-  }
 
   // Global to this file...
   currency = config.currency || 'eur'

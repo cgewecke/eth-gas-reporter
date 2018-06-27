@@ -44,6 +44,7 @@ module.exports = {
 | onlyCalledMethods | *Boolean* | false | Omit methods that are never called from report. |
 | rst | *Boolean* | false | Output with a reStructured text code-block directive. Useful if you want to include report in RTD |
 | rstTitle | *String* | '' | Title for reStructured text header (See Travis for example output) |
+| showTimeSpent | *Boolean* | false | Show the amount of time spent as well as the gas consumed |
 
 
 ### Examples
