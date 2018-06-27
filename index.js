@@ -116,7 +116,7 @@ function Gas (runner, options) {
 
   runner.on('test', () => { deployStartBlock = sync.blockNumber() })
 
-  runner.on('hook end', () => { startBlock = sync.blockNumber() })
+  runner.on('hook end', () => { startBlock = sync.blockNumber() + 1 })
 
   runner.on('pass', test => {
     let fmt
