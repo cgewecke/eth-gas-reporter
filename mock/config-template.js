@@ -15,7 +15,8 @@ module.exports = {
       onlyCalledMethods: true,
       noColors: true,
       rst: true,
-      rstTitle: 'Gas Usage'
+      rstTitle: 'Gas Usage',
+      showTimeSpent: true
     }
   }
 }
