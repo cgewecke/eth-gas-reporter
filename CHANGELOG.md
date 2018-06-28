@@ -1,5 +1,9 @@
 ## Changelog: eth-gas-reporter
 
+0.1.9 / 2018-06-27
+==================
+  * Fix bug that caused test gas to include before hook gas consumption totals
+
 0.1.8 / 2018-06-26
 =================
   * Add showTimeSpent option to also show how long each test took (contribution @ldub)
