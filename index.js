@@ -35,7 +35,7 @@ function Gas (runner, options) {
   // ------------------------------------  Helpers -------------------------------------------------
   const indent = () => Array(indents).join('  ')
 
-  const methodAnalytics = (methodMap) => {
+  const methodAnalytics = (methodMap, deployMap) => {
     let gasUsed = 0
     const endBlock = sync.blockNumber();
 
@@ -53,10 +53,14 @@ function Gas (runner, options) {
           const id = stats.getMethodID(transaction.input)
 
           let threw = parseInt(receipt.status) === 0;
+          
+          const matchingContract = deployMap.filter(contract => {
+            return contract.addresses.includes(transaction.to)
+          });
 
-          if (methodMap[id] && !threw) {
-            methodMap[id].gasData.push(parseInt(receipt.gasUsed, 16))
-            methodMap[id].numberOfCalls++
+          if (matchingContract[0] && methodMap[matchingContract[0].name][id] && !threw) {
+            methodMap[matchingContract[0].name][id].gasData.push(parseInt(receipt.gasUsed, 16))
+            methodMap[matchingContract[0].name][id].numberOfCalls++
           }
         })
       }
@@ -84,6 +88,7 @@ function Gas (runner, options) {
 
           if(matches && matches.length){
             const match = matches.find(item => item.binary !== '0x');
+            match && match.addresses.push(receipt.contractAddress);
             match && match.gasData.push(parseInt(receipt.gasUsed, 16))
           }
         }
@@ -118,12 +123,12 @@ function Gas (runner, options) {
 
   runner.on('hook end', () => { startBlock = sync.blockNumber() + 1 })
 
-  runner.on('pass', test => {
+  runner.on('pass', async test => {
     let fmt
     let fmtArgs
     let gasUsedString
-    deployAnalytics(deployMap)
-    let gasUsed = methodAnalytics(methodMap)
+    await deployAnalytics(deployMap)
+    let gasUsed = methodAnalytics(methodMap, deployMap)
     let showTimeSpent = config.showTimeSpent || false
     let timeSpentString = color(test.speed, '%dms')
     let consumptionString

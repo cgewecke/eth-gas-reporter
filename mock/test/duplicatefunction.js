@@ -1,7 +1,7 @@
 const DuplicateFunctionA = artifacts.require('DuplicateFunctionA');
 const DuplicateFunctionB = artifacts.require('DuplicateFunctionB');
 
-contract.only('MultiContractFiles', accounts => {
+contract('MultiContractFiles', accounts => {
   let a
   let b
 
