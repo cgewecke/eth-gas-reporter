@@ -123,11 +123,11 @@ function Gas (runner, options) {
 
   runner.on('hook end', () => { startBlock = sync.blockNumber() + 1 })
 
-  runner.on('pass', async test => {
+  runner.on('pass', test => {
     let fmt
     let fmtArgs
     let gasUsedString
-    await deployAnalytics(deployMap)
+    deployAnalytics(deployMap)
     let gasUsed = methodAnalytics(methodMap, deployMap)
     let showTimeSpent = config.showTimeSpent || false
     let timeSpentString = color(test.speed, '%dms')
