@@ -84,43 +84,46 @@ function matchBinaries (input, binary) {
 function generateGasStatsReport (methodMap, deployMap) {
   const methodRows = []
 
-  _.forEach(methodMap, (data, methodId) => {
-    if (!data) return
+  _.forEach(methodMap, (contract, methodId) => {
+    const functions = Object.keys(contract).forEach(key => {
+      const data = contract[key];
+    
+      if (!data) return
 
-    let stats = {}
+      let stats = {}
 
-    if (data.gasData.length) {
-      const total = data.gasData.reduce((acc, datum) => acc + datum, 0)
-      stats.average = Math.round(total / data.gasData.length)
-      stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : colors.grey('-')
-    } else {
-      stats.average = colors.grey('-')
-      stats.cost = colors.grey('-')
-    }
+      if (data.gasData.length) {
+        const total = data.gasData.reduce((acc, datum) => acc + datum, 0)
+        stats.average = Math.round(total / data.gasData.length)
+        stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : colors.grey('-')
+      } else {
+        stats.average = colors.grey('-')
+        stats.cost = colors.grey('-')
+      }
 
-    const sortedData = data.gasData.sort((a, b) => a - b)
-    stats.min = sortedData[0]
-    stats.max = sortedData[sortedData.length - 1]
+      const sortedData = data.gasData.sort((a, b) => a - b)
+      stats.min = sortedData[0]
+      stats.max = sortedData[sortedData.length - 1]
+      
+      const uniform = (stats.min === stats.max)
+      stats.min = (uniform) ? '-' : colors.cyan(stats.min.toString())
+      stats.max = (uniform) ? '-' : colors.red(stats.max.toString())
+      
+      stats.numberOfCalls = colors.grey(data.numberOfCalls.toString())
 
-    const uniform = (stats.min === stats.max)
-    stats.min = (uniform) ? '-' : colors.cyan(stats.min.toString())
-    stats.max = (uniform) ? '-' : colors.red(stats.max.toString())
+      if (!onlyCalledMethods || data.numberOfCalls > 0) {
+        const section = []
+        section.push(colors.grey(data.contract))
+        section.push(data.method)
+        section.push({hAlign: 'right', content: stats.min})
+        section.push({hAlign: 'right', content: stats.max})
+        section.push({hAlign: 'right', content: stats.average})
+        section.push({hAlign: 'right', content: stats.numberOfCalls})
+        section.push({hAlign: 'right', content: colors.green(stats.cost.toString())})
 
-    stats.numberOfCalls = colors.grey(data.numberOfCalls.toString())
-
-    if (!onlyCalledMethods || data.numberOfCalls > 0) {
-      const section = []
-      section.push(colors.grey(data.contract))
-      section.push(data.method)
-      section.push({hAlign: 'right', content: stats.min})
-      section.push({hAlign: 'right', content: stats.max})
-      section.push({hAlign: 'right', content: stats.average})
-      section.push({hAlign: 'right', content: stats.numberOfCalls})
-      section.push({hAlign: 'right', content: colors.green(stats.cost.toString())})
-
-      methodRows.push(section)
-    }
-
+        methodRows.push(section)
+      }
+    })
   })
 
   const deployRows = []
@@ -362,6 +365,7 @@ function mapMethodsToContracts (truffleArtifacts) {
       const contractInfo = {
         name: name,
         binary: contract.unlinked_binary,
+        addresses: [],
         gasData: []
       }
       deployMap.push(contractInfo)
@@ -379,7 +383,10 @@ function mapMethodsToContracts (truffleArtifacts) {
         const hasName = methodIDs[key].name
 
         if (hasName && !isConstant && !isEvent && !isInterface) {
-          methodMap[key] = {
+          if (!methodMap.hasOwnProperty(name)) {
+            methodMap[name] = {}
+          }
+          methodMap[name][key] = {
             contract: name,
             method: methodIDs[key].name,
             gasData: [],
