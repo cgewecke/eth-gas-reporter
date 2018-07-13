@@ -70,12 +70,18 @@ function getMethodID (code) {
  * @return {Bool}
  */
 function matchBinaries (input, binary) {
-  binary = binary.replace(/__.{38}/g, ".{40}");
-  binary = binary.replace(/73f{40}/g, ".{42}");
-
-  const regExp = new RegExp(`^${binary}`);
-  return (input.match(regExp) !== null)
+  const regExp = bytecodeToBytecodeRegex(binary);
+  return (input.match(regExp) !== null);
 }
+
+function bytecodeToBytecodeRegex(bytecode) {
+    const bytecodeRegex = bytecode.replace(/__.{38}/g, ".{40}").replace(/73f{40}/g, ".{42}");
+
+    // HACK: Node regexes can't be longer that 32767 characters. Contracts bytecode can. We just truncate the regexes. It's safe in practice.
+    const MAX_REGEX_LENGTH = 32767;
+    const truncatedBytecodeRegex = bytecodeRegex.slice(0, MAX_REGEX_LENGTH);
+    return truncatedBytecodeRegex;
+  }
 
 /**
  * Prints a gas stats table to stdout. Based on Alan Lu's stats for Gnosis
