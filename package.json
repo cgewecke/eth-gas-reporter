@@ -38,8 +38,7 @@
     "sync-request": "^6.0.0"
   },
   "devDependencies": {
-    "darq-truffle": "4.1.4-next.8",
     "ganache-cli": "6.1.0",
-    "truffle": "4.1.7"
+    "truffle": "^5.0.0-next.3"
   }
 }
