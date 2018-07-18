@@ -77,3 +77,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 + [@rmuslimov](https://github.com/rmuslimov)
 + [@area](https://github.com/area)
 + [@ldub](https://github.com/ldub)
++ [@ben-kaufman](https://github.com/ben-kaufman)
