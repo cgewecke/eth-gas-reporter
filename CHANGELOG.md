@@ -1,5 +1,11 @@
 ## Changelog: eth-gas-reporter
 
+0.1.10 / 2018-07-18
+===================
+  * Update mocha from 3.5.3 to 4.10.0 (contribution ldub)
+  * Update truffle to  truffle@next to fix mocha issues (contribution ldub)
+  * Modify binary checking to allow very long bytecodes / large contracts (contribution ben-kaufman)
+
 0.1.9 / 2018-06-27
 ==================
   * Fix bug that caused test gas to include before hook gas consumption totals
