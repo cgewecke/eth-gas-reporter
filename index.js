@@ -24,7 +24,11 @@ function Gas (runner, options) {
   // Load config / keep .ethgas.js for backward compatibility
   let config;
   if (options && options.reporterOptions){
-    config = options.reporterOptions
+    const argv = require('minimist')(process.argv.slice(2))
+    config = {
+      ...options.reporterOptions,
+      ...argv
+    }
   } else {
     config = reqCwd.silent('./.ethgas.js') || {}
   }
@@ -94,7 +98,7 @@ function Gas (runner, options) {
 
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
-    ({ methodMap, deployMap } = stats.mapMethodsToContracts(artifacts))
+    ({ methodMap, deployMap } = stats.mapMethodsToContracts(config, artifacts))
   })
 
   runner.on('suite', suite => {
