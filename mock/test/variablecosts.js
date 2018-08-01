@@ -45,6 +45,10 @@ contract('VariableCosts', accounts => {
     try { await instance.methodThatThrows(true) } catch (e) {}
   })
 
+  it('methods that call methods in other contracts', async() => {
+    await instance.otherContractMethod();
+  })
+
   it('prints a table at end of test suites with failures', async() => {
     assert(false);
   })

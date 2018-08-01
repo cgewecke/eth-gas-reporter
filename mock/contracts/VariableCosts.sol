@@ -1,10 +1,16 @@
 pragma solidity ^0.4.23;
 
 import "./Wallets/Wallet.sol";
+import "./MultiContractFile.sol";
 
 contract VariableCosts is Wallet {
   uint q;
   mapping(uint => address) map;
+  MultiContractFileA multi;
+
+  constructor() public {
+    multi = new MultiContractFileA();
+  }
 
   function pureFn(uint x) public pure returns (uint){
     return x;
@@ -35,5 +41,11 @@ contract VariableCosts is Wallet {
   function methodThatThrows(bool err) public {
     require(!err);
     q = 5;
+  }
+
+  function otherContractMethod() public {
+    multi.hello(); // 20,000 gas (sets uint to 5 from zero)
+    multi.hello(); //  5,000 gas (sets existing storage)
+    multi.hello(); //  5,000 gas (sets existing storage)
   }
 }
