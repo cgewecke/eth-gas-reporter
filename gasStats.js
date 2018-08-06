@@ -343,7 +343,7 @@ function getContractNames(filePath){
  *   ....
  * ]
  */
-function mapMethodsToContracts (truffleArtifacts) {
+function mapMethodsToContracts (config, truffleArtifacts) {
   const methodMap = {}
   const deployMap = []
   const abis = []
@@ -351,7 +351,8 @@ function mapMethodsToContracts (truffleArtifacts) {
   const block = sync.getLatestBlock()
   blockLimit = parseInt(block.gasLimit, 16);
 
-  const files = shell.ls('./contracts/**/*.sol')
+  const workingDirectory = config.working_directory ? config.working_directory : './';
+  const files = shell.ls(path.join(workingDirectory, 'contracts/**/*.sol'))
 
   // For each file
   files.forEach(file => {
