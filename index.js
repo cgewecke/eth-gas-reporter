@@ -29,6 +29,9 @@ function Gas (runner, options) {
     config = reqCwd.silent('./.ethgas.js') || {}
   }
 
+  config.src = config.src || 'contracts'; // default contracts folder
+  // TODO grab the contract srcpath from truffle / truffle config ?
+
   // Start getting this data when the reporter loads.
   stats.getGasAndPriceRates(config);
 
@@ -94,7 +97,7 @@ function Gas (runner, options) {
 
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
-    ({ methodMap, deployMap } = stats.mapMethodsToContracts(artifacts))
+    ({ methodMap, deployMap } = stats.mapMethodsToContracts(artifacts, config.src))
   })
 
   runner.on('suite', suite => {
