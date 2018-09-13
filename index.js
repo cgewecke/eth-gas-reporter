@@ -10,7 +10,12 @@ const log = console.log
 // Based on the 'Spec' reporter
 function Gas (runner, options) {
 
-  Base.call(this, runner)
+  if (!(web3.currentProvider.connection || web3.currentProvider.host)) {
+    console.log('the provider use for the test does not support synchronous call but eth-gas-reporter requires it \n falling back on the Spec reporter');
+    mocha.reporters.Spec.call(this, runner);
+    return;
+  }
+  Base.call(this, runner);
 
   const self = this
   let indents = 0
