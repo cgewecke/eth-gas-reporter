@@ -87,12 +87,18 @@ function bytecodeToBytecodeRegex(bytecode) {
  * Prints a gas stats table to stdout. Based on Alan Lu's stats for Gnosis
  * @param  {Object} methodMap methods and their gas usage (from mapMethodToContracts)
  */
-function generateGasStatsReport (methodMap, deployMap) {
+function generateGasStatsReport (methodMap, deployMap, addressContractNameMap) {
   const methodRows = []
+
+  const deployedContracts = {};
+  for(const key of Object.keys(addressContractNameMap)) {
+    deployedContracts[addressContractNameMap[key]] = true;
+  }
 
   _.forEach(methodMap, (data, methodId) => {
     if (!data) return
 
+    if(!deployedContracts[data.contract]) return // skip contract that were not deployed
     let stats = {}
 
     if (data.gasData.length) {
@@ -352,6 +358,8 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
   const block = sync.getLatestBlock()
   blockLimit = parseInt(block.gasLimit, 16);
 
+  const networkId = sync.getNetworkId();
+
   const files = shell.ls('./' + srcPath + '/**/*.sol')
 
   // For each file
@@ -372,12 +380,15 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
         gasData: []
       }
       deployMap.push(contractInfo)
-      try{
-        addressContractNameMap[contract.address] = name;
-      } catch(e) {
-        // skip contract taht are not deployed
+
+      // report the gas used during initial truffle migration too :
+      const networkDeployment = contract.networks[networkId]
+      if (networkDeployment) {
+        addressContractNameMap[networkDeployment.address] = name;
+        const receipt = sync.getTransactionReceipt(networkDeployment.transactionHash);
+        contractInfo.gasData.push(parseInt(receipt.gasUsed, 16));
       }
-      
+
       abis.push(contract._json.abi)
 
       // Decode, getMethodIDs

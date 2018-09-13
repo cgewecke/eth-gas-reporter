@@ -9,6 +9,10 @@
 const syncRequest = require('sync-request');
 
 const sync = {
+  getNetworkId: () => {
+    return sync.request('net_version', []);
+  },
+
   getLatestBlock: () => {
     return sync.request('eth_getBlockByNumber', ['latest', false]);
   },
