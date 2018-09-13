@@ -25,6 +25,7 @@ function Gas (runner, options) {
   let deployStartBlock
   let methodMap
   let deployMap
+  let addressContractNameMap;
 
   // Load config / keep .ethgas.js for backward compatibility
   let config;
@@ -58,7 +59,8 @@ function Gas (runner, options) {
         methodMap && block.transactions.forEach(tx => {
           const transaction = sync.getTransactionByHash(tx);
           const receipt = sync.getTransactionReceipt(tx);
-          const id = stats.getMethodID(transaction.input)
+          const contractName = addressContractNameMap[transaction.to];
+          const id = stats.getMethodID(contractName, transaction.input)
 
           let threw = parseInt(receipt.status) === 0;
 
@@ -92,7 +94,10 @@ function Gas (runner, options) {
 
           if(matches && matches.length){
             const match = matches.find(item => item.binary !== '0x');
-            match && match.gasData.push(parseInt(receipt.gasUsed, 16))
+            match && match.gasData.push(parseInt(receipt.gasUsed, 16));
+            if (match) {
+              addressContractNameMap[receipt.contractAddress] = match.name;
+            }
           }
         }
       })
@@ -102,7 +107,7 @@ function Gas (runner, options) {
 
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
-    ({ methodMap, deployMap } = stats.mapMethodsToContracts(artifacts, config.src))
+    ({ methodMap, deployMap, addressContractNameMap } = stats.mapMethodsToContracts(artifacts, config.src))
   })
 
   runner.on('suite', suite => {
@@ -145,7 +150,7 @@ function Gas (runner, options) {
         consumptionString = ' (' + gasUsedString + ')'
         fmtArgs = [test.title, gasUsed]
       }
-      
+
       fmt = indent() +
       color('checkmark', '  ' + Base.symbols.ok) +
       color('pass', ' %s') +

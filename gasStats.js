@@ -60,8 +60,8 @@ function gasToPercentOfLimit (gasUsed) {
  * @param  {String} code hex data
  * @return {String}      method identifier (used by abi-decoder)
  */
-function getMethodID (code) {
-  return code.slice(2, 10)
+function getMethodID (contractName, code) {
+  return contractName + '_' +code.slice(2, 10)
 }
 
 /**
@@ -346,6 +346,7 @@ function getContractNames(filePath){
 function mapMethodsToContracts (truffleArtifacts, srcPath) {
   const methodMap = {}
   const deployMap = []
+  const addressContractNameMap = {}
   const abis = []
 
   const block = sync.getLatestBlock()
@@ -371,6 +372,12 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
         gasData: []
       }
       deployMap.push(contractInfo)
+      try{
+        addressContractNameMap[contract.address] = name;
+      } catch(e) {
+        // skip contract taht are not deployed
+      }
+      
       abis.push(contract._json.abi)
 
       // Decode, getMethodIDs
@@ -385,7 +392,7 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
         const hasName = methodIDs[key].name
 
         if (hasName && !isConstant && !isEvent && !isInterface) {
-          methodMap[key] = {
+          methodMap[name + '_' + key] = {
             contract: name,
             method: methodIDs[key].name,
             gasData: [],
@@ -400,7 +407,8 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
   abis.forEach(abi => abiDecoder.addABI(abi))
   return {
     methodMap: methodMap,
-    deployMap: deployMap
+    deployMap: deployMap,
+    addressContractNameMap: addressContractNameMap
   }
 }
 
