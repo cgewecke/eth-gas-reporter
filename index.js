@@ -3,6 +3,7 @@ const inherits = require('util').inherits
 const sync = require('./sync')
 const stats = require('./gasStats.js')
 const reqCwd = require('req-cwd')
+const sha1 = require('sha1')
 const Base = mocha.reporters.Base
 const color = Base.color
 const log = console.log
@@ -59,10 +60,12 @@ function Gas (runner, options) {
         methodMap && block.transactions.forEach(tx => {
           const transaction = sync.getTransactionByHash(tx);
           const receipt = sync.getTransactionReceipt(tx);
-          const contractName = addressContractNameMap[transaction.to];
+          const code = sync.getCode(transaction.to);
+          const hash = sha1(code);
+          const contractName = addressContractNameMap[hash];
           const id = stats.getMethodID(contractName, transaction.input)
 
-          let threw = parseInt(receipt.status) === 0;
+          let threw = parseInt(receipt.status) === 0 || receipt.status === false;
 
           if (methodMap[id] && !threw) {
             methodMap[id].gasData.push(parseInt(receipt.gasUsed, 16))
@@ -83,7 +86,7 @@ function Gas (runner, options) {
 
       block && block.transactions.forEach(tx => {
         const receipt = sync.getTransactionReceipt(tx);
-        const threw = parseInt(receipt.status) === 0;
+        const threw = parseInt(receipt.status) === 0 || receipt.status === false;
 
         if (receipt.contractAddress && !threw) {
           const transaction = sync.getTransactionByHash(tx)
@@ -94,9 +97,15 @@ function Gas (runner, options) {
 
           if(matches && matches.length){
             const match = matches.find(item => item.binary !== '0x');
-            match && match.gasData.push(parseInt(receipt.gasUsed, 16));
+
             if (match) {
-              addressContractNameMap[receipt.contractAddress] = match.name;
+              // We have to get code that might be linked here in
+              // in order to match correctly at the method ids
+              const code = sync.getCode(receipt.contractAddress);
+              const hash = sha1(code);
+
+              match.gasData.push(parseInt(receipt.gasUsed, 16));
+              addressContractNameMap[hash] = match.name;
             }
           }
         }

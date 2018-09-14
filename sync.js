@@ -13,6 +13,10 @@ const sync = {
     return sync.request('net_version', []);
   },
 
+  getCode: (address) => {
+    return sync.request('eth_getCode', [address, 'latest'])
+  },
+
   getLatestBlock: () => {
     return sync.request('eth_getBlockByNumber', ['latest', false]);
   },
