@@ -12,6 +12,7 @@ const Table = require('cli-table3')
 const abiDecoder = require('abi-decoder')
 const parser = require('solidity-parser-antlr');
 const sync = require('./sync');
+const sha1 = require('sha1')
 
 /**
  * We fetch these async from remote sources / config when the reporter loads because
@@ -87,12 +88,12 @@ function bytecodeToBytecodeRegex(bytecode) {
  * Prints a gas stats table to stdout. Based on Alan Lu's stats for Gnosis
  * @param  {Object} methodMap methods and their gas usage (from mapMethodToContracts)
  */
-function generateGasStatsReport (methodMap, deployMap, addressContractNameMap) {
+function generateGasStatsReport (methodMap, deployMap, contractNameFromCodeHash) {
   const methodRows = []
 
   const deployedContracts = {};
-  for(const key of Object.keys(addressContractNameMap)) {
-    deployedContracts[addressContractNameMap[key]] = true;
+  for(const key of Object.keys(contractNameFromCodeHash)) {
+    deployedContracts[contractNameFromCodeHash[key]] = true;
   }
 
   _.forEach(methodMap, (data, methodId) => {
@@ -352,7 +353,7 @@ function getContractNames(filePath){
 function mapMethodsToContracts (truffleArtifacts, srcPath) {
   const methodMap = {}
   const deployMap = []
-  const addressContractNameMap = {}
+  const contractNameFromCodeHash = {}
   const abis = []
 
   const block = sync.getLatestBlock()
@@ -384,7 +385,9 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
       // report the gas used during initial truffle migration too :
       const networkDeployment = contract.networks[networkId]
       if (networkDeployment) {
-        addressContractNameMap[networkDeployment.address] = name;
+        const code = sync.getCode(networkDeployment.address);
+        const hash = sha1(code);
+        contractNameFromCodeHash[hash] = name;
         const receipt = sync.getTransactionReceipt(networkDeployment.transactionHash);
         contractInfo.gasData.push(parseInt(receipt.gasUsed, 16));
       }
@@ -419,7 +422,7 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
   return {
     methodMap: methodMap,
     deployMap: deployMap,
-    addressContractNameMap: addressContractNameMap
+    contractNameFromCodeHash: contractNameFromCodeHash
   }
 }
 

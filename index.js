@@ -26,7 +26,7 @@ function Gas (runner, options) {
   let deployStartBlock
   let methodMap
   let deployMap
-  let addressContractNameMap;
+  let contractNameFromCodeHash;
 
   // Load config / keep .ethgas.js for backward compatibility
   let config;
@@ -62,7 +62,7 @@ function Gas (runner, options) {
           const receipt = sync.getTransactionReceipt(tx);
           const code = sync.getCode(transaction.to);
           const hash = sha1(code);
-          const contractName = addressContractNameMap[hash];
+          const contractName = contractNameFromCodeHash[hash];
           const id = stats.getMethodID(contractName, transaction.input)
 
           let threw = parseInt(receipt.status) === 0 || receipt.status === false;
@@ -105,7 +105,7 @@ function Gas (runner, options) {
               const hash = sha1(code);
 
               match.gasData.push(parseInt(receipt.gasUsed, 16));
-              addressContractNameMap[hash] = match.name;
+              contractNameFromCodeHash[hash] = match.name;
             }
           }
         }
@@ -116,7 +116,7 @@ function Gas (runner, options) {
 
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
-    ({ methodMap, deployMap, addressContractNameMap } = stats.mapMethodsToContracts(artifacts, config.src))
+    ({ methodMap, deployMap, contractNameFromCodeHash } = stats.mapMethodsToContracts(artifacts, config.src))
   })
 
   runner.on('suite', suite => {
@@ -189,7 +189,7 @@ function Gas (runner, options) {
   })
 
   runner.on('end', () => {
-    stats.generateGasStatsReport(methodMap, deployMap, addressContractNameMap)
+    stats.generateGasStatsReport(methodMap, deployMap, contractNameFromCodeHash)
     self.epilogue()
   });
 }
