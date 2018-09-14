@@ -12,7 +12,7 @@ module.exports = {
     reporterOptions: {
       currency: "chf",
       gasPrice: 21,
-      onlyCalledMethods: true,
+      onlyCalledMethods: false,
       noColors: true,
       rst: true,
       rstTitle: 'Gas Usage',

@@ -271,7 +271,7 @@ async function getGasAndPriceRates (config=null) {
   currency = config.currency || 'eur'
   ethPrice = config.ethPrice || null
   gasPrice = config.gasPrice || null
-  onlyCalledMethods = config.onlyCalledMethods || false
+  onlyCalledMethods = (config.onlyCalledMethods === false) ? false : true;
   outputFile = config.outputFile || null
   rst = config.rst || false
   rstTitle = config.rstTitle || '';
