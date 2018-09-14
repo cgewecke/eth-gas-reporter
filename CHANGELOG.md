@@ -1,6 +1,6 @@
 ## Changelog: eth-gas-reporter
 
-0.1.11 / 2018-09-13
+0.1.12 / 2018-09-14
 ===================
   * Allow contracts to share method signatures (contribution @wighawag)
   * Collect gas data for Migrations deployments (contribution @wighawag)
