@@ -42,7 +42,7 @@ module.exports = {
 | gasPrice | *Number* | (varies) | Denominated in `gwei`. Default is loaded at runtime from the `eth gas station` api |
 | outputFile | *String* | stdout | File path to write report output to |
 | noColors | *Boolean* | false | Suppress report color. Useful if you are printing to file b/c terminal colorization corrupts the text. |
-| onlyCalledMethods | *Boolean* | false | Omit methods that are never called from report. |
+| onlyCalledMethods | *Boolean* | true | Omit methods that are never called from report. |
 | rst | *Boolean* | false | Output with a reStructured text code-block directive. Useful if you want to include report in RTD |
 | rstTitle | *String* | "" | Title for reStructured text header (See Travis for example output) |
 | showTimeSpent | *Boolean* | false | Show the amount of time spent as well as the gas consumed |
@@ -56,17 +56,11 @@ module.exports = {
 ### Usage Notes
 + Requires Node >= 8.
 + Method calls that throw are filtered from the stats.
-+ Not currently shown in the `deployments` table:
-  + Contracts that never get instantiated within the tests (e.g: only deployed in migrations)
-  + Contracts that are only ever created by other contracts within Solidity.
-+ Your ethereum client has to be run in separate process (e.g. reporter will not work if you connect 
-  to `ganache` through a `provider` in your `truffle.js`). This because mocha's reporter is sync
-  and we have to collect gas data synchronously from the client as your tests run. Sync requests 
-  fail with an in memory provider because they block the thread and prevent a 
-  response. (Pro-tip courtesy of [@fosgate29](https://github.com/fosgate29)).
++ Contracts that are only ever created by other contracts within Solidity are not shown in the deployments table.
+
 
 ### Contributions
-Please feel free to open a PR (or an issue) for anything. The units are an integration test and one of them is expected to fail, verifying that the table prints at the end of a suite even when there are errors. If you're adding an option, you can vaildate it in CI by adding it to the mock options config located [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/mock/config-template.js#L13-L19). 
+Please feel free to open a PR (or an issue) for anything. The units are an integration test and one of them is expected to fail, verifying that the table prints at the end of a suite even when there are errors. If you're adding an option, you can vaildate it in CI by adding it to the mock options config located [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/mock/config-template.js#L13-L19).
 
 ### Credits
 All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
@@ -80,3 +74,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 + [@area](https://github.com/area)
 + [@ldub](https://github.com/ldub)
 + [@ben-kaufman](https://github.com/ben-kaufman)
++ [@wighawag](https://github.com/wighawag)

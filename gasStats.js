@@ -60,8 +60,8 @@ function gasToPercentOfLimit (gasUsed) {
  * @param  {String} code hex data
  * @return {String}      method identifier (used by abi-decoder)
  */
-function getMethodID (code) {
-  return code.slice(2, 10)
+function getMethodID (contractName, code) {
+  return contractName + '_' +code.slice(2, 10)
 }
 
 /**
@@ -87,12 +87,18 @@ function bytecodeToBytecodeRegex(bytecode) {
  * Prints a gas stats table to stdout. Based on Alan Lu's stats for Gnosis
  * @param  {Object} methodMap methods and their gas usage (from mapMethodToContracts)
  */
-function generateGasStatsReport (methodMap, deployMap) {
+function generateGasStatsReport (methodMap, deployMap, addressContractNameMap) {
   const methodRows = []
+
+  const deployedContracts = {};
+  for(const key of Object.keys(addressContractNameMap)) {
+    deployedContracts[addressContractNameMap[key]] = true;
+  }
 
   _.forEach(methodMap, (data, methodId) => {
     if (!data) return
 
+    if(!deployedContracts[data.contract]) return // skip contract that were not deployed
     let stats = {}
 
     if (data.gasData.length) {
@@ -265,7 +271,7 @@ async function getGasAndPriceRates (config=null) {
   currency = config.currency || 'eur'
   ethPrice = config.ethPrice || null
   gasPrice = config.gasPrice || null
-  onlyCalledMethods = config.onlyCalledMethods || false
+  onlyCalledMethods = (config.onlyCalledMethods === false) ? false : true;
   outputFile = config.outputFile || null
   rst = config.rst || false
   rstTitle = config.rstTitle || '';
@@ -346,10 +352,13 @@ function getContractNames(filePath){
 function mapMethodsToContracts (truffleArtifacts, srcPath) {
   const methodMap = {}
   const deployMap = []
+  const addressContractNameMap = {}
   const abis = []
 
   const block = sync.getLatestBlock()
   blockLimit = parseInt(block.gasLimit, 16);
+
+  const networkId = sync.getNetworkId();
 
   const files = shell.ls('./' + srcPath + '/**/*.sol')
 
@@ -371,6 +380,15 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
         gasData: []
       }
       deployMap.push(contractInfo)
+
+      // report the gas used during initial truffle migration too :
+      const networkDeployment = contract.networks[networkId]
+      if (networkDeployment) {
+        addressContractNameMap[networkDeployment.address] = name;
+        const receipt = sync.getTransactionReceipt(networkDeployment.transactionHash);
+        contractInfo.gasData.push(parseInt(receipt.gasUsed, 16));
+      }
+
       abis.push(contract._json.abi)
 
       // Decode, getMethodIDs
@@ -385,7 +403,7 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
         const hasName = methodIDs[key].name
 
         if (hasName && !isConstant && !isEvent && !isInterface) {
-          methodMap[key] = {
+          methodMap[name + '_' + key] = {
             contract: name,
             method: methodIDs[key].name,
             gasData: [],
@@ -400,7 +418,8 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
   abis.forEach(abi => abiDecoder.addABI(abi))
   return {
     methodMap: methodMap,
-    deployMap: deployMap
+    deployMap: deployMap,
+    addressContractNameMap: addressContractNameMap
   }
 }
 
