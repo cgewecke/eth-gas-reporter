@@ -33,6 +33,7 @@
     "req-cwd": "^2.0.0",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
+    "sha1": "^1.1.1",
     "shelljs": "^0.7.8",
     "solidity-parser-antlr": "^0.2.10",
     "sync-request": "^6.0.0"

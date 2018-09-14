@@ -1,12 +1,17 @@
 const VariableCosts = artifacts.require('./VariableCosts.sol')
+const Wallet = artifacts.require('./Wallet.sol')
 
 contract('VariableCosts', accounts => {
   const one = [1]
   const three = [2, 3, 4]
   const five = [5, 6, 7, 8, 9]
   let instance
+  let walletB
 
-  beforeEach(async () => instance = await VariableCosts.new())
+  beforeEach(async () => {
+    instance = await VariableCosts.new()
+    walletB = await Wallet.new();
+  })
 
   it('should add one', async () => {
     await instance.addToMap(one)
@@ -51,5 +56,22 @@ contract('VariableCosts', accounts => {
 
   it('prints a table at end of test suites with failures', async() => {
     assert(false);
+  })
+
+  // VariableCosts is Wallet. We also have Wallet tests. So we should see
+  // separate entries for `sendPayment` / `transferPayment` under VariableCosts
+  // and Wallet in the report
+  it('should allow contracts to have identically named methods', async () => {
+    await instance.sendTransaction({
+      value: 100, from: accounts[0]
+    })
+    await instance.sendPayment(50, walletB.address, {
+      from: accounts[0]
+    })
+    await instance.transferPayment(50, walletB.address, {
+      from: accounts[0]
+    })
+    const balance = await walletB.getBalance()
+    assert.equal(parseInt(balance.toString()), 100)
   })
 })

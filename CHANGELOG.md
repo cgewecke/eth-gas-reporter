@@ -1,5 +1,13 @@
 ## Changelog: eth-gas-reporter
 
+0.1.11 / 2018-09-13
+===================
+  * Allow contracts to share method signatures (contribution @wighawag)
+  * Collect gas data for Migrations deployments (contribution @wighawag)
+  * Add ability allow to specify a different src folder for contracts (contribution @wighawag)
+  * Handle in-memory provider error correctly / use spec reporter if sync calls impossible (contribution @wighawag)
+  * Default to only showing invoked methods in report
+
 0.1.10 / 2018-07-18
 ===================
   * Update mocha from 3.5.3 to 4.10.0 (contribution ldub)
