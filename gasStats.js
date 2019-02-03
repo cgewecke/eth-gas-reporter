@@ -264,7 +264,7 @@ function generateGasStatsReport (methodMap, deployMap, contractNameFromCodeHash)
  *   } = await getGasAndPriceRates()
  *
  */
-async function getGasAndPriceRates (config=null) {
+async function getGasAndPriceRates (config={}) {
 
   const defaultGasPrice = 5
 
