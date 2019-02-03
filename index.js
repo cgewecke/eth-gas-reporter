@@ -60,14 +60,27 @@ function Gas (runner, options) {
         methodMap && block.transactions.forEach(tx => {
           const transaction = sync.getTransactionByHash(tx);
           const receipt = sync.getTransactionReceipt(tx);
-          const code = sync.getCode(transaction.to);
-          const hash = sha1(code);
-          const contractName = contractNameFromCodeHash[hash];
-          const id = stats.getMethodID(contractName, transaction.input)
 
           let threw = parseInt(receipt.status) === 0 || receipt.status === false;
+          if (threw) return
 
-          if (methodMap[id] && !threw) {
+          const code = sync.getCode(transaction.to);
+          const hash = sha1(code);
+          let contractName = contractNameFromCodeHash[hash];
+          onlyCalledMethods = (config.onlyCalledMethods === false) ? false : true;
+
+          if (!contractName && config.includeUndeployedContracts) {
+            let key = transaction.input.slice(2, 10);
+            let matches = Object.values(methodMap).filter(el => el.key === key);
+
+            if (matches.length === 1) {
+              contractName = matches[0].contract;
+            }
+          }
+
+          const id = stats.getMethodID(contractName, transaction.input)
+
+          if (methodMap[id]) {
             methodMap[id].gasData.push(parseInt(receipt.gasUsed, 16))
             methodMap[id].numberOfCalls++
           }
