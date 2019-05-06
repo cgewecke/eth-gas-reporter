@@ -1,10 +1,10 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.5.0;
 
 import "./VariableCosts.sol";
 
 contract VariableConstructor is VariableCosts {
   string name;
-  constructor(string _name) public {
+  constructor(string memory _name) public {
     name = _name;
   }
 }
