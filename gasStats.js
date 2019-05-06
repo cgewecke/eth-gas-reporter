@@ -382,9 +382,9 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
       }
       deployMap.push(contractInfo)
 
-      // report the gas used during initial truffle migration too :
+      // Report the gas used during initial truffle migration too :
       const networkDeployment = contract.networks[networkId]
-      if (networkDeployment) {
+      if (networkDeployment && networkDeployment.transactionHash) {
         const code = sync.getCode(networkDeployment.address);
         const hash = sha1(code);
         contractNameFromCodeHash[hash] = name;
