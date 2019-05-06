@@ -1,15 +1,15 @@
-pragma solidity ^0.4.17;
+pragma solidity ^0.5.0;
 
 contract Wallet {
 
     event Deposit(address indexed _sender, uint _value);
 
-    function transferPayment(uint payment, address recipient) public {
-        recipient.transfer(payment);
+    function transferPayment(uint payment, address payable recipient) public {
+        address(recipient).transfer(payment);
     }
 
-    function sendPayment(uint payment, address recipient) public {
-        if (!recipient.send(payment))
+    function sendPayment(uint payment, address payable recipient) public {
+        if (!address(recipient).send(payment))
             revert();
     }
 
@@ -17,7 +17,7 @@ contract Wallet {
         return address(this).balance;
     }
 
-    function() public payable
+    function() external payable
     {
         if (msg.value > 0)
             emit Deposit(msg.sender, msg.value);
