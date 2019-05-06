@@ -1,6 +1,6 @@
 {
   "name": "eth-gas-reporter",
-  "version": "0.1.10",
+  "version": "0.1.12",
   "description": "Mocha reporter which shows gas used per unit test.",
   "main": "index.js",
   "scripts": {
@@ -25,21 +25,21 @@
   },
   "homepage": "https://github.com/cgewecke/eth-gas-reporter#readme",
   "dependencies": {
-    "abi-decoder": "^1.0.8",
+    "abi-decoder": "^1.2.0",
     "cli-table3": "^0.5.0",
     "colors": "^1.1.2",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.11",
     "mocha": "^4.1.0",
     "req-cwd": "^2.0.0",
-    "request": "^2.83.0",
+    "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "sha1": "^1.1.1",
     "shelljs": "^0.7.8",
-    "solidity-parser-antlr": "^0.2.10",
+    "solidity-parser-antlr": "^0.4.2",
     "sync-request": "^6.0.0"
   },
   "devDependencies": {
-    "ganache-cli": "6.1.0",
-    "truffle": "^5.0.0-next.3"
+    "ganache-cli": "^6.4.3",
+    "truffle": "^5.0.15"
   }
 }
