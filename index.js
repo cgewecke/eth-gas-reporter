@@ -61,15 +61,17 @@ function Gas (runner, options) {
           const transaction = sync.getTransactionByHash(tx);
           const receipt = sync.getTransactionReceipt(tx);
 
-          let threw = parseInt(receipt.status) === 0 || receipt.status === false;
+          // Don't count methods that throw
+          const threw = parseInt(receipt.status) === 0 || receipt.status === false;
           if (threw) return
 
           const code = sync.getCode(transaction.to);
           const hash = sha1(code);
-          let contractName = contractNameFromCodeHash[hash];
-          onlyCalledMethods = (config.onlyCalledMethods === false) ? false : true;
 
-          if (!contractName && config.includeUndeployedContracts) {
+          let contractName = contractNameFromCodeHash[hash];
+
+          // Handle cases where we don't have a deployment record for the contract
+          if (!contractName) {
             let key = transaction.input.slice(2, 10);
             let matches = Object.values(methodMap).filter(el => el.key === key);
 

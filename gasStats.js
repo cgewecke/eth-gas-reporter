@@ -22,7 +22,6 @@ let currency;
 let gasPrice;
 let ethPrice;
 let onlyCalledMethods;
-let includeUndeployedContracts;
 let outputFile;
 let rst;
 let rstTitle;
@@ -100,7 +99,6 @@ function generateGasStatsReport (methodMap, deployMap, contractNameFromCodeHash)
   _.forEach(methodMap, (data, methodId) => {
     if (!data) return
 
-    if(!deployedContracts[data.contract] && !includeUndeployedContracts) return // skip contract that were not deployed
     let stats = {}
 
     if (data.gasData.length) {
@@ -274,7 +272,6 @@ async function getGasAndPriceRates (config={}) {
   ethPrice = config.ethPrice || null
   gasPrice = config.gasPrice || null
   onlyCalledMethods = (config.onlyCalledMethods === false) ? false : true;
-  includeUndeployedContracts = (config.includeUndeployedContracts === true) ? true : false;
   outputFile = config.outputFile || null
   rst = config.rst || false
   rstTitle = config.rstTitle || '';
