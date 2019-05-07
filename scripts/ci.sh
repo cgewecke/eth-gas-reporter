@@ -13,7 +13,7 @@ elif [ "$TEST" = "colony" ]; then
   cd colonyNetwork || exit
   yarn
   yarn remove -W eth-gas-reporter --dev
-  yarn add -W https://github.com/cgewecke/eth-gas-reporter.git#$TRAVIS_BRANCH
+  yarn add -W https://github.com/cgewecke/eth-gas-reporter.git#$TRAVIS_PULL_REQUEST_BRANCH
   git submodule update --init
   yarn run provision:token:contracts
   yarn run test:contracts:gasCosts
