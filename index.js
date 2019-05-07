@@ -67,11 +67,20 @@ function Gas (runner, options) {
 
           const code = sync.getCode(transaction.to);
           const hash = sha1(code);
-
           let contractName = contractNameFromCodeHash[hash];
 
           // Handle cases where we don't have a deployment record for the contract
-          if (!contractName) {
+          // or where we *do* (from migrations) but tx actually interacts with a
+          // proxy / something doesn't match.
+          let isProxied = false;
+
+          if (contractName) {
+            let candidateId = stats.getMethodID(contractName, transaction.input)
+            isProxied = !methodMap[candidateId]
+          }
+
+          // If unfound, search by fnHash alone instead of contract_fnHash
+          if (!contractName || isProxied ) {
             let key = transaction.input.slice(2, 10);
             let matches = Object.values(methodMap).filter(el => el.key === key);
 
