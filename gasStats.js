@@ -91,15 +91,9 @@ function bytecodeToBytecodeRegex(bytecode) {
 function generateGasStatsReport (methodMap, deployMap, contractNameFromCodeHash) {
   const methodRows = []
 
-  const deployedContracts = {};
-  for(const key of Object.keys(contractNameFromCodeHash)) {
-    deployedContracts[contractNameFromCodeHash[key]] = true;
-  }
-
   _.forEach(methodMap, (data, methodId) => {
     if (!data) return
 
-    if(!deployedContracts[data.contract]) return // skip contract that were not deployed
     let stats = {}
 
     if (data.gasData.length) {
@@ -264,7 +258,7 @@ function generateGasStatsReport (methodMap, deployMap, contractNameFromCodeHash)
  *   } = await getGasAndPriceRates()
  *
  */
-async function getGasAndPriceRates (config=null) {
+async function getGasAndPriceRates (config={}) {
 
   const defaultGasPrice = 5
 
@@ -407,6 +401,7 @@ function mapMethodsToContracts (truffleArtifacts, srcPath) {
 
         if (hasName && !isConstant && !isEvent && !isInterface) {
           methodMap[name + '_' + key] = {
+            key: key,
             contract: name,
             method: methodIDs[key].name,
             gasData: [],

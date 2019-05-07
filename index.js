@@ -60,14 +60,38 @@ function Gas (runner, options) {
         methodMap && block.transactions.forEach(tx => {
           const transaction = sync.getTransactionByHash(tx);
           const receipt = sync.getTransactionReceipt(tx);
+
+          // Don't count methods that throw
+          const threw = parseInt(receipt.status) === 0 || receipt.status === false;
+          if (threw) return
+
           const code = sync.getCode(transaction.to);
           const hash = sha1(code);
-          const contractName = contractNameFromCodeHash[hash];
+          let contractName = contractNameFromCodeHash[hash];
+
+          // Handle cases where we don't have a deployment record for the contract
+          // or where we *do* (from migrations) but tx actually interacts with a
+          // proxy / something doesn't match.
+          let isProxied = false;
+
+          if (contractName) {
+            let candidateId = stats.getMethodID(contractName, transaction.input)
+            isProxied = !methodMap[candidateId]
+          }
+
+          // If unfound, search by fnHash alone instead of contract_fnHash
+          if (!contractName || isProxied ) {
+            let key = transaction.input.slice(2, 10);
+            let matches = Object.values(methodMap).filter(el => el.key === key);
+
+            if (matches.length >= 1) {
+              contractName = matches[0].contract;
+            }
+          }
+
           const id = stats.getMethodID(contractName, transaction.input)
 
-          let threw = parseInt(receipt.status) === 0 || receipt.status === false;
-
-          if (methodMap[id] && !threw) {
+          if (methodMap[id]) {
             methodMap[id].gasData.push(parseInt(receipt.gasUsed, 16))
             methodMap[id].numberOfCalls++
           }

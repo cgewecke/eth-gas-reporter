@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "geth": "./scripts/geth.sh",
-    "test": "./mock/test.sh"
+    "test": "./mock/test.sh",
+    "ci": "./scripts/ci.sh"
   },
   "repository": {
     "type": "git",
