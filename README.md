@@ -60,7 +60,7 @@ module.exports = {
 
 
 ### Contributions
-Please feel free to open a PR (or an issue) for anything. The units are an integration test and one of them is expected to fail, verifying that the table prints at the end of a suite even when there are errors. If you're adding an option, you can vaildate it in CI by adding it to the mock options config located [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/mock/config-template.js#L13-L19).
+Feel free to open PRs or issues. There is an integration test and one of the mock test cases is expected to fail. If you're adding an option, you can vaildate it in CI by adding it to the mock options config located [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/mock/config-template.js#L13-L19).
 
 ### Credits
 All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
@@ -75,3 +75,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 + [@ldub](https://github.com/ldub)
 + [@ben-kaufman](https://github.com/ben-kaufman)
 + [@wighawag](https://github.com/wighawag)
++ [@ItsNickBarry](https://github.com/ItsNickBarry)
