@@ -1,5 +1,12 @@
 ## Changelog: eth-gas-reporter
 
+0.2.0 / 2019-05-07
+==================
+  * Add E2E tests in CI
+  * Restore logic that matches tx signatures to contracts as a fallback when it's impossible to
+    be certain which contract was called (contribution @ItsNickBarry)
+  * Fix bug which crashed reporter when migrations linked un-deployed contracts
+
 0.1.12 / 2018-09-14
 ===================
   * Allow contracts to share method signatures (contribution @wighawag)
