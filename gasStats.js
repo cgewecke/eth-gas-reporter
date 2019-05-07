@@ -91,11 +91,6 @@ function bytecodeToBytecodeRegex(bytecode) {
 function generateGasStatsReport (methodMap, deployMap, contractNameFromCodeHash) {
   const methodRows = []
 
-  const deployedContracts = {};
-  for(const key of Object.keys(contractNameFromCodeHash)) {
-    deployedContracts[contractNameFromCodeHash[key]] = true;
-  }
-
   _.forEach(methodMap, (data, methodId) => {
     if (!data) return
 

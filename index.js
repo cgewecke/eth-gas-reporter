@@ -84,7 +84,7 @@ function Gas (runner, options) {
             let key = transaction.input.slice(2, 10);
             let matches = Object.values(methodMap).filter(el => el.key === key);
 
-            if (matches.length === 1) {
+            if (matches.length >= 1) {
               contractName = matches[0].contract;
             }
           }
