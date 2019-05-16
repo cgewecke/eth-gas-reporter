@@ -6,6 +6,13 @@ if [ "$TEST" = "integration" ]; then
 
   npm test
 
+elif [ "$TEST" = "geth" ]; then
+
+  source ./scripts/geth.sh
+  launch_geth
+  npm test
+  docker stop geth-client
+
 elif [ "$TEST" = "colony" ]; then
 
   npm install -g yarn

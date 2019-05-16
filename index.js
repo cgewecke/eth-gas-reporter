@@ -65,9 +65,16 @@ function Gas (runner, options) {
           const threw = parseInt(receipt.status) === 0 || receipt.status === false;
           if (threw) return
 
+          // If a tx is deployment, geth supplies `null` for the
+          // transaction.to field. TODO - see if we should just skip
+          // completely here.
+          let contractName;
           const code = sync.getCode(transaction.to);
-          const hash = sha1(code);
-          let contractName = contractNameFromCodeHash[hash];
+
+          if (code){
+            const hash = sha1(code);
+            contractName = contractNameFromCodeHash[hash];
+          }
 
           // Handle cases where we don't have a deployment record for the contract
           // or where we *do* (from migrations) but tx actually interacts with a
