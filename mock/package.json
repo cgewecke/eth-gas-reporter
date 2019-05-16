@@ -1,6 +1,6 @@
 {
   "name": "eth-gas-reporter",
-  "version": "0.1.12",
+  "version": "0.2.0",
   "description": "Mocha reporter which shows gas used per unit test.",
   "main": "index.js",
   "scripts": {
@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "ganache-cli": "^6.4.3",
+    "geth-dev-assistant": "0.0.1",
     "truffle": "^5.0.15"
   }
 }

@@ -38,9 +38,9 @@ cp ./../package.json node_modules/eth-gas-reporter/package.json
 
 # Start testrpc
 if testrpc_running; then
-  echo "Using existing testrpc instance"
+  echo "Using existing client instance"
 else
-  echo "Starting our own testrpc instance"
+  echo "Starting our own ganache-cli instance"
   start_testrpc
 fi
 
