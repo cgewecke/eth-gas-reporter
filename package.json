@@ -41,7 +41,7 @@
   },
   "devDependencies": {
     "ganache-cli": "^6.4.3",
-    "geth-dev-assistant": "0.0.1",
+    "geth-dev-assistant": "^0.0.3",
     "truffle": "^5.0.15"
   }
 }
