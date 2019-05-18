@@ -8,8 +8,13 @@ if [ "$TEST" = "integration" ]; then
 
 elif [ "$TEST" = "geth" ]; then
 
-  source ./scripts/geth.sh
-  launch_geth
+  npx geth-dev-assistant \
+    --launch \
+    --tag 'latest' \
+    --accounts 4 \
+    --balance 100 \
+    --gasLimit 8000000
+
   npm test
   docker stop geth-client
 
