@@ -11,7 +11,7 @@ const shell = require('shelljs')
 const Table = require('cli-table3')
 const abiDecoder = require('abi-decoder')
 const parser = require('solidity-parser-antlr');
-const sync = require('./sync');
+const sync = require('./lib/syncRequest');
 const sha1 = require('sha1')
 
 /**
@@ -62,7 +62,7 @@ function gasToPercentOfLimit (gasUsed) {
  * @return {String}      method identifier (used by abi-decoder)
  */
 function getMethodID (contractName, code) {
-  return contractName + '_' +code.slice(2, 10)
+  return contractName + '_' + code.slice(2, 10)
 }
 
 /**
@@ -78,7 +78,8 @@ function matchBinaries (input, binary) {
 function bytecodeToBytecodeRegex(bytecode) {
     const bytecodeRegex = bytecode.replace(/__.{38}/g, ".{40}").replace(/73f{40}/g, ".{42}");
 
-    // HACK: Node regexes can't be longer that 32767 characters. Contracts bytecode can. We just truncate the regexes. It's safe in practice.
+    // HACK: Node regexes can't be longer that 32767 characters.
+    // Contracts bytecode can. We just truncate the regexes. It's safe in practice.
     const MAX_REGEX_LENGTH = 32767;
     const truncatedBytecodeRegex = bytecodeRegex.slice(0, MAX_REGEX_LENGTH);
     return truncatedBytecodeRegex;
@@ -141,7 +142,10 @@ function generateGasStatsReport (methodMap, deployMap, contractNameFromCodeHash)
     const total = contract.gasData.reduce((acc, datum) => acc + datum, 0)
     stats.average = Math.round(total / contract.gasData.length)
     stats.percent = gasToPercentOfLimit(stats.average)
-    stats.cost = (ethPrice && gasPrice) ? gasToCost(stats.average, ethPrice, gasPrice) : colors.grey('-')
+
+    stats.cost = (ethPrice && gasPrice)
+      ? gasToCost(stats.average, ethPrice, gasPrice)
+      : colors.grey('-');
 
     const sortedData = contract.gasData.sort((a, b) => a - b)
     stats.min = sortedData[0]

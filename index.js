@@ -1,6 +1,6 @@
 const mocha = require('mocha')
 const inherits = require('util').inherits
-const sync = require('./sync')
+const sync = require('./lib/syncRequest');
 const stats = require('./gasStats.js')
 const reqCwd = require('req-cwd')
 const sha1 = require('sha1')
@@ -8,36 +8,42 @@ const Base = mocha.reporters.Base
 const color = Base.color
 const log = console.log
 
-// Based on the 'Spec' reporter
+/**
+ * Based on the Mocha 'Spec' reporter, this reporter watches an Ethereum test suite
+ * and collects data about method and deployment gas usage. Mocha executes the hooks
+ * in this module synchronously so any client calls here have to executed via the low-level
+ * RPC interface using sync-request.
+ * @param {Object} runner  mocha's runner
+ * @param {Object} options reporter.options (see README example usage)
+ */
 function Gas (runner, options) {
 
   if (!(web3.currentProvider.connection || web3.currentProvider.host)) {
-    console.log('the provider use for the test does not support synchronous call but eth-gas-reporter requires it \n falling back on the Spec reporter');
+    const message = `eth-gas-reporter was unable to resolve a client url ` +
+                    `from the provider injected into your test context. ` +
+                    `Defaulting to mocha spec reporter. `;
+
+    log(message);
     mocha.reporters.Spec.call(this, runner);
     return;
   }
+
+  // Spec reporter
   Base.call(this, runner);
 
   const self = this
   let indents = 0
   let n = 0
   let failed = false;
+
+  // Gas reporter
   let startBlock
   let deployStartBlock
   let methodMap
   let deployMap
   let contractNameFromCodeHash;
 
-  // Load config / keep .ethgas.js for backward compatibility
-  let config;
-  if (options && options.reporterOptions){
-    config = options.reporterOptions
-  } else {
-    config = reqCwd.silent('./.ethgas.js') || {}
-  }
-
   config.src = config.src || 'contracts'; // default contracts folder
-  // TODO grab the contract srcpath from truffle / truffle config ?
 
   // Start getting this data when the reporter loads.
   stats.getGasAndPriceRates(config);
@@ -147,7 +153,10 @@ function Gas (runner, options) {
 
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
-    ({ methodMap, deployMap, contractNameFromCodeHash } = stats.mapMethodsToContracts(artifacts, config.src))
+    ({
+      methodMap,
+      deployMap,
+      contractNameFromCodeHash } = stats.mapMethodsToContracts(artifacts, config.src))
   })
 
   runner.on('suite', suite => {
