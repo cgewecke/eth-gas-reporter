@@ -9,10 +9,10 @@ const color = Base.color
 const log = console.log
 
 /**
- * Based on the Mocha 'Spec' reporter, this reporter watches an Ethereum test suite
- * and collects data about method and deployment gas usage. Mocha executes the hooks
- * in this module synchronously so any client calls here have to executed via the low-level
- * RPC interface using sync-request.
+ * Based on the Mocha 'Spec' reporter. Watches an Ethereum test suite run
+ * and collects data about method / deployments gas usage. Mocha executes the hooks
+ * in this reporter synchronously so any client calls here have to be executed
+ * via the low-level RPC interface using sync-request.
  * @param {Object} runner  mocha's runner
  * @param {Object} options reporter.options (see README example usage)
  */
@@ -31,125 +31,25 @@ function Gas (runner, options) {
   // Spec reporter
   Base.call(this, runner);
 
-  const self = this
+  const self = this;
+
   let indents = 0
   let n = 0
   let failed = false;
+  let indent = () => Array(indents).join('  ')
 
   // Gas reporter
-  let startBlock
-  let deployStartBlock
   let methodMap
   let deployMap
   let contractNameFromCodeHash;
 
   config.src = config.src || 'contracts'; // default contracts folder
 
-  // Start getting this data when the reporter loads.
+  // Setup
   stats.getGasAndPriceRates(config);
-
+  const watch = new TransactionWatcher(config);
   // ------------------------------------  Helpers -------------------------------------------------
-  const indent = () => Array(indents).join('  ')
 
-  const methodAnalytics = (methodMap) => {
-    let gasUsed = 0
-    const endBlock = sync.blockNumber();
-
-    while (startBlock <= endBlock) {
-      let block = sync.getBlockByNumber(startBlock);
-
-      if (block) {
-        // Add to running tally for this test
-        gasUsed += parseInt(block.gasUsed, 16);
-
-        // Compile per method stats
-        methodMap && block.transactions.forEach(tx => {
-          const transaction = sync.getTransactionByHash(tx);
-          const receipt = sync.getTransactionReceipt(tx);
-
-          // Don't count methods that throw
-          const threw = parseInt(receipt.status) === 0 || receipt.status === false;
-          if (threw) return
-
-          // If a tx is deployment, geth supplies `null` for the
-          // transaction.to field. TODO - see if we should just skip
-          // completely here.
-          let contractName;
-          const code = sync.getCode(transaction.to);
-
-          if (code){
-            const hash = sha1(code);
-            contractName = contractNameFromCodeHash[hash];
-          }
-
-          // Handle cases where we don't have a deployment record for the contract
-          // or where we *do* (from migrations) but tx actually interacts with a
-          // proxy / something doesn't match.
-          let isProxied = false;
-
-          if (contractName) {
-            let candidateId = stats.getMethodID(contractName, transaction.input)
-            isProxied = !methodMap[candidateId]
-          }
-
-          // If unfound, search by fnHash alone instead of contract_fnHash
-          if (!contractName || isProxied ) {
-            let key = transaction.input.slice(2, 10);
-            let matches = Object.values(methodMap).filter(el => el.key === key);
-
-            if (matches.length >= 1) {
-              contractName = matches[0].contract;
-            }
-          }
-
-          const id = stats.getMethodID(contractName, transaction.input)
-
-          if (methodMap[id]) {
-            methodMap[id].gasData.push(parseInt(receipt.gasUsed, 16))
-            methodMap[id].numberOfCalls++
-          }
-        })
-      }
-      startBlock++
-    }
-    return gasUsed
-  }
-
-  const deployAnalytics = (deployMap) => {
-    const endBlock = sync.blockNumber();
-
-    while (deployStartBlock <= endBlock) {
-      let block = sync.getBlockByNumber(deployStartBlock);
-
-      block && block.transactions.forEach(tx => {
-        const receipt = sync.getTransactionReceipt(tx);
-        const threw = parseInt(receipt.status) === 0 || receipt.status === false;
-
-        if (receipt.contractAddress && !threw) {
-          const transaction = sync.getTransactionByHash(tx)
-
-          const matches = deployMap.filter(contract => {
-            return stats.matchBinaries(transaction.input, contract.binary);
-          })
-
-          if(matches && matches.length){
-            const match = matches.find(item => item.binary !== '0x');
-
-            if (match) {
-              // We have to get code that might be linked here in
-              // in order to match correctly at the method ids
-              const code = sync.getCode(receipt.contractAddress);
-              const hash = sha1(code);
-
-              match.gasData.push(parseInt(receipt.gasUsed, 16));
-              contractNameFromCodeHash[hash] = match.name;
-            }
-          }
-        }
-      })
-      deployStartBlock++
-    }
-  }
 
   // ------------------------------------  Runners -------------------------------------------------
   runner.on('start', () => {
@@ -176,9 +76,9 @@ function Gas (runner, options) {
     log(fmt, test.title)
   })
 
-  runner.on('test', () => { deployStartBlock = sync.blockNumber() })
+  runner.on('test', () => { watch.beforeStartBlock = sync.blockNumber() })
 
-  runner.on('hook end', () => { startBlock = sync.blockNumber() + 1 })
+  runner.on('hook end', () => { watch.itStartBlock = sync.blockNumber() + 1 })
 
   runner.on('pass', test => {
     let fmt
