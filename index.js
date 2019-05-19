@@ -6,7 +6,7 @@ const log = console.log
 const SyncRequest = require('./lib/syncRequest');
 const utils = require('./lib/utils');
 const Config = require('./lib/config');
-const TransactionWatcher = require('./lib/TransactionWatcher');
+const TransactionWatcher = require('./lib/transactionWatcher');
 const GasTable = require('./lib/gasTable');
 
 /**

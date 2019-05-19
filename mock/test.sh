@@ -31,7 +31,7 @@ if [ ! -e node_modules/eth-gas-reporter ]; then
   mkdir node_modules/eth-gas-reporter
 fi
 
-cp -r ./../lib node_modules/eth-gas-reporter/lib
+cp -r ./../lib node_modules/eth-gas-reporter
 cp ./../index.js node_modules/eth-gas-reporter/index.js
 cp ./../package.json node_modules/eth-gas-reporter/package.json
 

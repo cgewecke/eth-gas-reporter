@@ -40,8 +40,8 @@
     "sync-request": "^6.0.0"
   },
   "devDependencies": {
-    "ganache-cli": "^6.4.3",
+    "ganache-cli": "6.4.3",
     "geth-dev-assistant": "^0.0.3",
-    "truffle": "^5.0.15"
+    "truffle": "5.0.15"
   }
 }
