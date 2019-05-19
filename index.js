@@ -14,8 +14,8 @@ const GasTable = require('./lib/gasTable');
  * and collects data about method & deployments gas usage. Mocha executes the hooks
  * in this reporter synchronously so any client calls here should be executed
  * via low-level RPC interface using sync-request. (see /lib/syncRequest)
- * An exception is made for fetching current gas & currency price data
- * (we assume that single call will complete by the time the tests finish running)
+ * An exception is made for fetching gas & currency price data from coinmarketcap and
+ * ethgasstation (we hope that single call will complete by the time the tests finish running)
  *
  * @param {Object} runner  mocha's runner
  * @param {Object} options reporter.options (see README example usage)
@@ -36,7 +36,7 @@ function Gas (runner, options) {
   const watch = new TransactionWatcher(config);
   const table = new GasTable(config);
 
-  // This is async, calls the cloud. Start running it.
+  // This calls the cloud, start running it.
   utils.setGasAndPriceRates(config);
 
   // ------------------------------------  Runners -------------------------------------------------
@@ -77,8 +77,7 @@ function Gas (runner, options) {
     let consumptionString
     let timeSpentString = color(test.speed, '%dms')
 
-    const gasUsed = watch.methods();
-    watch.deployments();
+    const gasUsed = watch.blocks();
 
     if (gasUsed) {
       gasUsedString = color('checkmark', '%d gas')
