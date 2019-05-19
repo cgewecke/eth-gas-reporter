@@ -16,7 +16,8 @@ module.exports = {
       noColors: true,
       rst: true,
       rstTitle: 'Gas Usage',
-      showTimeSpent: true
+      showTimeSpent: true,
+      excludeContracts: ['Migrations'],
     }
   }
 }
