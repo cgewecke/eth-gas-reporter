@@ -24,7 +24,7 @@ start_testrpc() {
 
 # Copy over the package and install
 cp package.json mock/package.json
-cd mock && npm install
+cd mock && npx yarn
 
 # Copy over eth-gas-reporter
 if [ ! -e node_modules/eth-gas-reporter ]; then

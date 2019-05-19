@@ -60,5 +60,7 @@ typings/
 # dotenv environment variables file
 .env
 
+# Yarn lock in mocks
+yarn.lock
 
 
