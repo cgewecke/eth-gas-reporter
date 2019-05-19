@@ -4,6 +4,7 @@ module.exports = {
       host: 'localhost',
       port: 8545,
       network_id: '*',
+      websockets: (process.env.TEST === 'integration') ? true : false
     }
   },
   mocha: {

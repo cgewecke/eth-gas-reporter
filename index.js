@@ -3,11 +3,11 @@ const inherits = require('util').inherits
 const Base = mocha.reporters.Base
 const color = Base.color
 const log = console.log
-const SyncRequest = require('./lib/syncRequest');
 const utils = require('./lib/utils');
 const Config = require('./lib/config');
 const TransactionWatcher = require('./lib/transactionWatcher');
 const GasTable = require('./lib/gasTable');
+const SyncRequest = require('./lib/syncRequest');
 
 /**
  * Based on the Mocha 'Spec' reporter. Watches an Ethereum test suite run
