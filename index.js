@@ -3,11 +3,11 @@ const inherits = require('util').inherits
 const Base = mocha.reporters.Base
 const color = Base.color
 const log = console.log
-const sync = require('./lib/syncRequest');
+const SyncRequest = require('./lib/syncRequest');
 const utils = require('./lib/utils');
 const Config = require('./lib/config');
 const TransactionWatcher = require('./lib/TransactionWatcher');
-const Table = require('./lib/table');
+//const Table = require('./lib/table');
 
 /**
  * Based on the Mocha 'Spec' reporter. Watches an Ethereum test suite run
@@ -32,6 +32,7 @@ function Gas (runner, options) {
 
   // Gas reporter setup
   const config = new Config(options.reporterOptions);
+  const sync = new SyncRequest(config.url);
   const watch = new TransactionWatcher(config);
 
   // This is async, calls the cloud. Start running it.

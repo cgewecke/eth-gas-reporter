@@ -31,9 +31,8 @@ if [ ! -e node_modules/eth-gas-reporter ]; then
   mkdir node_modules/eth-gas-reporter
 fi
 
+cp -r ./../lib node_modules/eth-gas-reporter/lib
 cp ./../index.js node_modules/eth-gas-reporter/index.js
-cp ./../gasStats.js node_modules/eth-gas-reporter/gasStats.js
-cp ./../sync.js node_modules/eth-gas-reporter/sync.js
 cp ./../package.json node_modules/eth-gas-reporter/package.json
 
 # Start testrpc
@@ -49,9 +48,9 @@ echo "Visual test"
 node_modules/.bin/truffle test --network development "$@"
 
 # Run with config
-echo "Visual test with config"
-cp ./truffle.js ./safe_truffle.js
-cp ./config-template.js ./truffle.js
-node_modules/.bin/truffle test --network development "$@"
-cp ./safe_truffle.js ./truffle.js
-rm ./safe_truffle.js
+#echo "Visual test with config"
+#cp ./truffle.js ./safe_truffle.js
+#cp ./config-template.js ./truffle.js
+#node_modules/.bin/truffle test --network development "$@"
+#cp ./safe_truffle.js ./truffle.js
+#rm ./safe_truffle.js
