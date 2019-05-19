@@ -4,6 +4,7 @@ module.exports = {
       host: 'localhost',
       port: 8545,
       network_id: '*',
+      websockets: (process.env.TEST === 'integration') ? true : false
     }
   },
   mocha: {
@@ -15,7 +16,8 @@ module.exports = {
       noColors: true,
       rst: true,
       rstTitle: 'Gas Usage',
-      showTimeSpent: true
+      showTimeSpent: true,
+      excludeContracts: ['Migrations'],
     }
   }
 }

@@ -46,6 +46,7 @@ module.exports = {
 | rst | *Boolean* | false | Output with a reStructured text code-block directive. Useful if you want to include report in RTD |
 | rstTitle | *String* | "" | Title for reStructured text header (See Travis for example output) |
 | showTimeSpent | *Boolean* | false | Show the amount of time spent as well as the gas consumed |
+| excludeContracts | *String[]* | [] | Contract names to exclude from report. Ex: `['Migrations']` |
 | src | *String* | "contracts" | Folder in root directory to begin search for `.sol` files. This can also be a path to a subfolder relative to the root, e.g. "planets/annares/contracts" |
 
 

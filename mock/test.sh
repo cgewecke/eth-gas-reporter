@@ -24,16 +24,15 @@ start_testrpc() {
 
 # Copy over the package and install
 cp package.json mock/package.json
-cd mock && npm install
+cd mock && npx yarn
 
 # Copy over eth-gas-reporter
 if [ ! -e node_modules/eth-gas-reporter ]; then
   mkdir node_modules/eth-gas-reporter
 fi
 
+cp -r ./../lib node_modules/eth-gas-reporter
 cp ./../index.js node_modules/eth-gas-reporter/index.js
-cp ./../gasStats.js node_modules/eth-gas-reporter/gasStats.js
-cp ./../sync.js node_modules/eth-gas-reporter/sync.js
 cp ./../package.json node_modules/eth-gas-reporter/package.json
 
 # Start testrpc
