@@ -42,7 +42,7 @@ function Gas (runner, options) {
   // ------------------------------------  Runners -------------------------------------------------
 
   runner.on('start', () => {
-    watch.data.initialize(artifacts, config)
+    watch.data.initialize(config)
   })
 
   runner.on('suite', suite => {
