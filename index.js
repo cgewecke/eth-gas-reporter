@@ -1,36 +1,28 @@
 const mocha = require('mocha')
 const inherits = require('util').inherits
-const sync = require('./lib/syncRequest');
-const stats = require('./gasStats.js')
-const reqCwd = require('req-cwd')
-const sha1 = require('sha1')
 const Base = mocha.reporters.Base
 const color = Base.color
 const log = console.log
+const sync = require('./lib/syncRequest');
+const utils = require('./lib/utils');
+const Config = require('./lib/config');
+const TransactionWatcher = require('./lib/TransactionWatcher');
+const Table = require('./lib/table');
 
 /**
  * Based on the Mocha 'Spec' reporter. Watches an Ethereum test suite run
- * and collects data about method / deployments gas usage. Mocha executes the hooks
- * in this reporter synchronously so any client calls here have to be executed
- * via the low-level RPC interface using sync-request.
+ * and collects data about method & deployments gas usage. Mocha executes the hooks
+ * in this reporter synchronously so any client calls here should be executed
+ * via low-level RPC interface using sync-request. (see /lib/syncRequest)
+ * An exception is made for fetching current gas & currency price data
+ * (we assume that single call will complete by the time the tests finish running)
+ *
  * @param {Object} runner  mocha's runner
  * @param {Object} options reporter.options (see README example usage)
  */
 function Gas (runner, options) {
-
-  if (!(web3.currentProvider.connection || web3.currentProvider.host)) {
-    const message = `eth-gas-reporter was unable to resolve a client url ` +
-                    `from the provider injected into your test context. ` +
-                    `Defaulting to mocha spec reporter. `;
-
-    log(message);
-    mocha.reporters.Spec.call(this, runner);
-    return;
-  }
-
   // Spec reporter
   Base.call(this, runner);
-
   const self = this;
 
   let indents = 0
@@ -38,26 +30,16 @@ function Gas (runner, options) {
   let failed = false;
   let indent = () => Array(indents).join('  ')
 
-  // Gas reporter
-  let methodMap
-  let deployMap
-  let contractNameFromCodeHash;
-
-  config.src = config.src || 'contracts'; // default contracts folder
-
-  // Setup
-  stats.getGasAndPriceRates(config);
+  // Gas reporter setup
+  const config = new Config(options.reporterOptions);
   const watch = new TransactionWatcher(config);
-  // ------------------------------------  Helpers -------------------------------------------------
 
+  // This is async, calls the cloud. Start running it.
+  utils.setGasAndPriceRates(config);
 
   // ------------------------------------  Runners -------------------------------------------------
-  runner.on('start', () => {
-    ({
-      methodMap,
-      deployMap,
-      contractNameFromCodeHash } = stats.mapMethodsToContracts(artifacts, config.src))
-  })
+
+  runner.on('start', () => watch.data.initialize(artifacts, config))
 
   runner.on('suite', suite => {
     ++indents
@@ -76,19 +58,20 @@ function Gas (runner, options) {
     log(fmt, test.title)
   })
 
-  runner.on('test', () => { watch.beforeStartBlock = sync.blockNumber() })
+  runner.on('test', () => watch.beforeStartBlock = sync.blockNumber() )
 
-  runner.on('hook end', () => { watch.itStartBlock = sync.blockNumber() + 1 })
+  runner.on('hook end', () => watch.itStartBlock = sync.blockNumber() + 1 )
 
   runner.on('pass', test => {
     let fmt
     let fmtArgs
     let gasUsedString
-    deployAnalytics(deployMap)
-    let gasUsed = methodAnalytics(methodMap)
-    let showTimeSpent = config.showTimeSpent || false
-    let timeSpentString = color(test.speed, '%dms')
     let consumptionString
+    let timeSpentString = color(test.speed, '%dms')
+
+    const gasUsed = watch.methods();
+    watch.deployments();
+
     if (gasUsed) {
       gasUsedString = color('checkmark', '%d gas')
 
@@ -101,11 +84,12 @@ function Gas (runner, options) {
       }
 
       fmt = indent() +
-      color('checkmark', '  ' + Base.symbols.ok) +
-      color('pass', ' %s') +
-      consumptionString
+        color('checkmark', '  ' + Base.symbols.ok) +
+        color('pass', ' %s') +
+        consumptionString;
+
     } else {
-      if (showTimeSpent) {
+      if (config.showTimeSpent) {
         consumptionString = ' (' + timeSpentString + ')'
         fmtArgs = [test.title, test.duration]
       } else {
@@ -129,7 +113,7 @@ function Gas (runner, options) {
   })
 
   runner.on('end', () => {
-    stats.generateGasStatsReport(methodMap, deployMap, contractNameFromCodeHash)
+    table.generate(watch.data, config)
     self.epilogue()
   });
 }
