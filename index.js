@@ -7,7 +7,7 @@ const SyncRequest = require('./lib/syncRequest');
 const utils = require('./lib/utils');
 const Config = require('./lib/config');
 const TransactionWatcher = require('./lib/TransactionWatcher');
-//const Table = require('./lib/table');
+const GasTable = require('./lib/gasTable');
 
 /**
  * Based on the Mocha 'Spec' reporter. Watches an Ethereum test suite run
@@ -34,13 +34,16 @@ function Gas (runner, options) {
   const config = new Config(options.reporterOptions);
   const sync = new SyncRequest(config.url);
   const watch = new TransactionWatcher(config);
+  const table = new GasTable(config);
 
   // This is async, calls the cloud. Start running it.
   utils.setGasAndPriceRates(config);
 
   // ------------------------------------  Runners -------------------------------------------------
 
-  runner.on('start', () => watch.data.initialize(artifacts, config))
+  runner.on('start', () => {
+    watch.data.initialize(artifacts, config)
+  })
 
   runner.on('suite', suite => {
     ++indents
@@ -59,9 +62,13 @@ function Gas (runner, options) {
     log(fmt, test.title)
   })
 
-  runner.on('test', () => watch.beforeStartBlock = sync.blockNumber() )
+  runner.on('test', () => {
+    watch.beforeStartBlock = sync.blockNumber()
+  })
 
-  runner.on('hook end', () => watch.itStartBlock = sync.blockNumber() + 1 )
+  runner.on('hook end', () => {
+    watch.itStartBlock = sync.blockNumber() + 1
+  })
 
   runner.on('pass', test => {
     let fmt
@@ -76,7 +83,7 @@ function Gas (runner, options) {
     if (gasUsed) {
       gasUsedString = color('checkmark', '%d gas')
 
-      if (showTimeSpent) {
+      if (config.showTimeSpent) {
         consumptionString = ' (' + timeSpentString + ', ' + gasUsedString + ')'
         fmtArgs = [test.title, test.duration, gasUsed]
       } else {

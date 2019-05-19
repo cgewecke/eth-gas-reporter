@@ -1,6 +1,6 @@
 var MetaCoin = artifacts.require('./MetaCoin.sol')
 
-contract.only('MetaCoin', function (accounts) {
+contract('MetaCoin', function (accounts) {
   beforeEach(async function () {
     await MetaCoin.new()
     await MetaCoin.new()
