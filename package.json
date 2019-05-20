@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "geth": "./scripts/geth.sh",
-    "test": "./mock/test.sh",
+    "test": "./mock/scripts/test.sh",
     "ci": "./scripts/ci.sh"
   },
   "repository": {
@@ -41,11 +41,12 @@
   },
   "devDependencies": {
     "@nomiclabs/buidler": "^1.0.0-beta.7",
+    "@nomiclabs/buidler-truffle5": "^1.0.0-beta.7",
     "@nomiclabs/buidler-web3": "^1.0.0-beta.7",
     "ganache-cli": "6.4.3",
     "geth-dev-assistant": "^0.0.3",
     "truffle": "5.0.15",
-    "web3": "^1.0.0-beta.37",
+    "web3": "1.0.0-beta.37",
     "yarn": "^1.16.0"
   }
 }
