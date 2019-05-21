@@ -43,9 +43,12 @@ test_buildler_v5_plugin() {
   echo "-------------------------------------------------"
 
   mv ./test/metacoin.js ./metacoin.js
+  mv ./buidler-metacoinjs-template.js ./test/buidler-metacoinjs-template.js
   mv ./test/TestMetacoin.sol ./TestMetacoin.sol
+
   npx buidler test --network development
+
   mv ./TestMetacoin.sol ./test/TestMetacoin.sol
   mv ./metacoin.js ./test/metacoin.js
-
+  mv ./test/buidler-metacoinjs-template.js ./buidler-metacoinjs-template.js
 }
