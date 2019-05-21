@@ -4,10 +4,10 @@
 
 # Basic, no reporter options specified
 test_truffle_v5_basic() {
-  echo "-------------------------------------------------"
-  echo "> Visual inspection integration test (no options)"
+  echo "-----------------------------------------------------------"
+  echo "> Visual inspection integration test (Truffle - no options)"
   echo "> YOU MUST LOOK AT THIS TEST TO DETECT FAILURE"
-  echo "-------------------------------------------------"
+  echo "-----------------------------------------------------------"
 
   npx truffle test --network development "$@"
 
@@ -15,10 +15,10 @@ test_truffle_v5_basic() {
 
 # With options
 test_truffle_v5_with_options() {
-  echo "-------------------------------------------------"
-  echo "> Visual inspection integration test (options)"
+  echo "--------------------------------------------------------------------"
+  echo "> Visual inspection integration test (Truffle - reporter options)"
   echo "> YOU MUST LOOK AT THIS TEST TO DETECT FAILURE"
-  echo "-------------------------------------------------"
+  echo "--------------------------------------------------------------------"
 
   # Swap out no-options truffle.js for one with config
   cp ./truffle.js ./safe_truffle.js
@@ -37,10 +37,10 @@ test_truffle_v5_with_options() {
 # Basic, no reporter options specified
 # Swaps out TestMetacoin.sol because it throws a truffle/assert.sol not found error
 test_buildler_v5_plugin() {
-  echo "-------------------------------------------------"
-  echo "> Visual inspection integration test (no options)"
+  echo "-----------------------------------------------------------"
+  echo "> Visual inspection integration test (Buidler - no options)"
   echo "> YOU MUST LOOK AT THIS TEST TO DETECT FAILURE"
-  echo "-------------------------------------------------"
+  echo "-----------------------------------------------------------"
 
   mv ./test/metacoin.js ./metacoin.js
   mv ./buidler-metacoinjs-template.js ./test/buidler-metacoinjs-template.js
