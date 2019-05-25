@@ -9,14 +9,29 @@ contract("EtherRouter Proxy", accounts => {
   let versionA;
   let versionB;
 
-  before(async function() {
+  beforeEach(async function() {
     router = await EtherRouter.new();
-    resolver = await resolver.new();
-    versionA = await versionA.new();
-    versionB = await versionB.new();
+    resolver = await Resolver.new();
+    versionA = await VersionA.new();
+    versionB = await VersionB.new();
   });
 
-  it("Disambiguates methods routed through a proxy", async function() {
+  it("Resolves methods routed through an EtherRouter proxy", async function() {
+    let options = {
+      from: accounts[0],
+      gas: 4000000,
+      to: router.address,
+      gasPrice: 20000000000
+    };
+
     await router.setResolver(resolver.address);
+
+    await resolver.register("setValue()", versionA.address);
+    options.data = versionA.contract.methods.setValue().encodeABI();
+    await web3.eth.sendTransaction(options);
+
+    await resolver.register("setValue()", versionB.address);
+    options.data = versionB.contract.methods.setValue().encodeABI();
+    await web3.eth.sendTransaction(options);
   });
 });

@@ -54,7 +54,7 @@
     "husky": "^2.3.0",
     "prettier": "1.17.1",
     "pretty-quick": "^1.11.0",
-    "truffle": "5.0.15",
+    "truffle": "5.0.12",
     "web3": "1.0.0-beta.37",
     "yarn": "^1.16.0"
   }
