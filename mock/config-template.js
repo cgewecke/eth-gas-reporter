@@ -1,23 +1,24 @@
 module.exports = {
   networks: {
     development: {
-      host: 'localhost',
+      host: "localhost",
       port: 8545,
-      network_id: '*',
-      websockets: (process.env.TEST === 'integration') ? true : false
+      network_id: "*",
+      websockets: process.env.TEST === "integration" ? true : false
     }
   },
   mocha: {
-    reporter: 'eth-gas-reporter',
+    reporter: "eth-gas-reporter",
     reporterOptions: {
       currency: "chf",
       gasPrice: 21,
       onlyCalledMethods: false,
       noColors: true,
       rst: true,
-      rstTitle: 'Gas Usage',
+      rstTitle: "Gas Usage",
       showTimeSpent: true,
-      excludeContracts: ['Migrations'],
+      excludeContracts: ["Migrations"],
+      proxyResolver: "EtherRouter"
     }
   }
-}
+};
