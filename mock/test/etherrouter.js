@@ -1,19 +1,26 @@
 const EtherRouter = artifacts.require("EtherRouter");
 const Resolver = artifacts.require("Resolver");
+const Factory = artifacts.require("Factory");
 const VersionA = artifacts.require("VersionA");
 const VersionB = artifacts.require("VersionB");
 
 contract("EtherRouter Proxy", accounts => {
   let router;
   let resolver;
+  let factory;
   let versionA;
   let versionB;
 
   beforeEach(async function() {
     router = await EtherRouter.new();
     resolver = await Resolver.new();
+    factory = await Factory.new();
     versionA = await VersionA.new();
-    versionB = await VersionB.new();
+
+    // Emulate internal deployment
+    await factory.deployVersionB();
+    const versionBAddress = await factory.versionB();
+    versionB = await VersionB.at(versionBAddress);
   });
 
   it("Resolves methods routed through an EtherRouter proxy", async function() {

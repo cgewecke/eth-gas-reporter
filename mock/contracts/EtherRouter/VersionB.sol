@@ -7,4 +7,7 @@ contract VersionB {
 
   function setValue() public {
   }
+
+  function setAnotherValue() public {
+  }
 }
