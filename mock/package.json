@@ -8,6 +8,11 @@
     "test": "./mock/scripts/test.sh",
     "ci": "./scripts/ci.sh"
   },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cgewecke/eth-gas-reporter.git"
@@ -29,6 +34,7 @@
     "abi-decoder": "^1.2.0",
     "cli-table3": "^0.5.0",
     "colors": "^1.1.2",
+    "ethers": "^4.0.28",
     "lodash": "^4.17.11",
     "mocha": "^4.1.0",
     "req-cwd": "^2.0.0",
@@ -45,8 +51,10 @@
     "@nomiclabs/buidler-web3": "^1.0.0-beta.7",
     "ganache-cli": "6.4.3",
     "geth-dev-assistant": "^0.0.3",
+    "husky": "^2.3.0",
     "prettier": "1.17.1",
-    "truffle": "5.0.15",
+    "pretty-quick": "^1.11.0",
+    "truffle": "5.0.12",
     "web3": "1.0.0-beta.37",
     "yarn": "^1.16.0"
   }
