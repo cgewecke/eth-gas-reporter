@@ -52,6 +52,9 @@ module.exports = {
 | src               | _String_   | "contracts"                          | Folder in root directory to begin search for `.sol` files. This can also be a path to a subfolder relative to the root, e.g. "planets/annares/contracts"                                  |
 | url               | _String_   | value of `web3.currentProvider.host` | RPC client url (e.g. "http://localhost:8545")                                                                                                                                             |
 
+| proxyResolver | _Function_ | none | Custom method to resolve identity of methods managed
+by a contract proxy. |
+
 ### Examples
 
 - [gnosis/gnosis-contracts](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/gnosis.md)
