@@ -50,10 +50,8 @@ module.exports = {
 | showTimeSpent     | _Boolean_  | false                                | Show the amount of time spent as well as the gas consumed                                                                                                                                 |
 | excludeContracts  | _String[]_ | []                                   | Contract names to exclude from report. Ex: `['Migrations']`                                                                                                                               |
 | src               | _String_   | "contracts"                          | Folder in root directory to begin search for `.sol` files. This can also be a path to a subfolder relative to the root, e.g. "planets/annares/contracts"                                  |
-| url               | _String_   | value of `web3.currentProvider.host` | RPC client url (e.g. "http://localhost:8545")                                                                                                                                             |
-
-| proxyResolver | _Function_ | none | Custom method to resolve identity of methods managed
-by a contract proxy. |
+| url               | _String_   | value of `web3.currentProvider.host` | RPC client url (e.g. "http://localhost:8545") |
+| proxyResolver | _Function_ | none | Custom method to resolve identity of methods managed by a proxy contract. |
 
 ### Examples
 
