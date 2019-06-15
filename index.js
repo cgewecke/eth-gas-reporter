@@ -8,7 +8,7 @@ const Config = require("./lib/config");
 const TransactionWatcher = require("./lib/transactionWatcher");
 const GasTable = require("./lib/gasTable");
 const SyncRequest = require("./lib/syncRequest");
-const CodeChecksReport = require("./lib/codechecks");
+const CodeChecksReport = require("./lib/codechecksReport");
 /**
  * Based on the Mocha 'Spec' reporter. Watches an Ethereum test suite run
  * and collects data about method & deployments gas usage. Mocha executes the hooks
