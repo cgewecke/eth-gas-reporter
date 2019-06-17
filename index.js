@@ -8,7 +8,7 @@ const Config = require("./lib/config");
 const TransactionWatcher = require("./lib/transactionWatcher");
 const GasTable = require("./lib/gasTable");
 const SyncRequest = require("./lib/syncRequest");
-const CodeChecksReport = require("./lib/codechecksReport");
+
 /**
  * Based on the Mocha 'Spec' reporter. Watches an Ethereum test suite run
  * and collects data about method & deployments gas usage. Mocha executes the hooks
@@ -35,11 +35,9 @@ function Gas(runner, options) {
   const sync = new SyncRequest(config.url);
   const watch = new TransactionWatcher(config);
   const table = new GasTable(config);
-  const codechecks = new CodeChecksReport(config);
 
   // These call the cloud, start running them.
   utils.setGasAndPriceRates(config);
-  codechecks.loadData();
 
   // ------------------------------------  Runners -------------------------------------------------
 
@@ -124,7 +122,6 @@ function Gas(runner, options) {
 
   runner.on("end", () => {
     table.generate(watch.data);
-    codechecks.generate(watch.data);
     self.epilogue();
   });
 }
