@@ -1927,6 +1927,12 @@
       "integrity": "sha1-mMI9qxF1ZXuMBXPozszZGw/xjIQ=",
       "dev": true
     },
+    "fp-ts": {
+      "version": "1.19.0",
+      "resolved": "https://registry.npmjs.org/fp-ts/-/fp-ts-1.19.0.tgz",
+      "integrity": "sha512-8I22IXnAQbNzShKhrk506iHXftsJLDjyLMyaNYJwvY9jWhDUVghQZ0F9QX0XU9wRM1NzQpOCTYN39NBQq/2Gxw==",
+      "dev": true
+    },
     "fresh": {
       "version": "0.5.2",
       "resolved": "https://registry.npmjs.org/fresh/-/fresh-0.5.2.tgz",
