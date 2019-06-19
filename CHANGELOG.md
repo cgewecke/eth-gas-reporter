@@ -5,10 +5,9 @@
 - Upgrade mocha from 4.1.0 to 5.2.0
 - Report solc version and settings info
 - Add EtherRouter method resolver logic (as option and example)
-- Add proxyResolver option & support discover of delegated method calls identity
+- Add proxyResolver option & support discovery of delegated method calls identity
 - Add draft of 0x artifact handler
 - Add url option for non-truffle, non-buidler use
-- Add 0x artifact support
 - Add buidler truffle-v5 plugin support (preface to gas-reporter plugin in next release)
 - Completely reorganize and refactor
 
