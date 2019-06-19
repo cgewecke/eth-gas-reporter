@@ -18,7 +18,8 @@ module.exports = {
       rstTitle: "Gas Usage",
       showTimeSpent: true,
       excludeContracts: ["Migrations"],
-      proxyResolver: "EtherRouter"
+      proxyResolver: "EtherRouter",
+      codechecks: true
     }
   }
 };

@@ -36,7 +36,7 @@ function Gas(runner, options) {
   const watch = new TransactionWatcher(config);
   const table = new GasTable(config);
 
-  // This calls the cloud, start running it.
+  // These call the cloud, start running them.
   utils.setGasAndPriceRates(config);
 
   // ------------------------------------  Runners -------------------------------------------------
@@ -121,7 +121,7 @@ function Gas(runner, options) {
   });
 
   runner.on("end", () => {
-    table.generate(watch.data, config);
+    table.generate(watch.data);
     self.epilogue();
   });
 }
