@@ -9,6 +9,10 @@ module.exports = {
     }
   },
   mocha: {
-    reporter: "eth-gas-reporter"
+    reporter: "eth-gas-reporter",
+    reporterOptions: {
+      artifactType: "buidler-v1",
+      url: "http://localhost:8545"
+    }
   }
 };
