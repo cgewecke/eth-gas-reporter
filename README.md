@@ -3,11 +3,7 @@
 [![npm version](https://badge.fury.io/js/eth-gas-reporter.svg)](https://badge.fury.io/js/eth-gas-reporter)
 [![Build Status](https://travis-ci.org/cgewecke/eth-gas-reporter.svg?branch=master)](https://travis-ci.org/cgewecke/eth-gas-reporter)
 
-A mocha reporter for Ethereum test suites.
-
-- Gas usage per unit test.
-- Average gas usage per method call / contract deployment costs.
-- National currency costs of using and deploying your contract system.
+A mocha reporter which tracks gas usage for Ethereum test suites.
 
 ![Screen Shot 2019-06-24 at 4 54 47 PM](https://user-images.githubusercontent.com/7332026/60059336-fa502180-96a0-11e9-92b8-3dd436a9b2f1.png)
 
@@ -49,6 +45,13 @@ module.exports = {
   }
 };
 ```
+
+### Continuous Integration Reports (CircleCI)
+
+If you use CircleCI, `eth-gas-reporter` can be combined with [codechecks](http://codechecks.io) to generate CI reports which track gas usage variation between PRs. Codechecks is free for open source projects and maintained by MakerDao / Neufund engineer [@krzkaczor](https://github.com/krzkaczor). Complete [set-up guide here]().
+
+![Screen Shot 2019-06-18 at 12 25 49 PM](https://user-images.githubusercontent.com/7332026/59713894-47298900-91c5-11e9-8083-233572787cfa.png)
+
 
 ### Options
 
