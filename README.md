@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/eth-gas-reporter.svg)](https://badge.fury.io/js/eth-gas-reporter)
 [![Build Status](https://travis-ci.org/cgewecke/eth-gas-reporter.svg?branch=master)](https://travis-ci.org/cgewecke/eth-gas-reporter)
 
-A mocha reporter which tracks gas usage for Ethereum test suites.
+**A mocha reporter which tracks gas usage for Ethereum test suites.**
 
 ![Screen Shot 2019-06-24 at 4 54 47 PM](https://user-images.githubusercontent.com/7332026/60059336-fa502180-96a0-11e9-92b8-3dd436a9b2f1.png)
 
@@ -16,9 +16,7 @@ npm install --save-dev eth-gas-reporter
 ```javascript
 /* truffle-config.js */
 module.exports = {
-  networks: {
-    ...etc...
-  },
+  networks: {...},
   mocha: {
     reporter: 'eth-gas-reporter',
     reporterOptions : {
@@ -36,9 +34,7 @@ npm install --save-dev buidler-gas-reporter
 ```javascript
 /* buidler.config.js */
 module.exports = {
-  networks: {
-    ...etc...
-  },
+  networks: {...},
   gasReporter: {
     currency: 'CHF',
     gasPrice: 21,
@@ -46,7 +42,8 @@ module.exports = {
 };
 ```
 
-### Continuous Integration Reports (CircleCI)
+### Continuous Integration Reports (CircleCI)   ![Codechecks](https://raw.githubusercontent.com/codechecks/docs/master/images/badges/badge-default.svg?sanitize=true)
+
 
 If you use CircleCI, `eth-gas-reporter` can be combined with [codechecks](http://codechecks.io) to generate CI reports which track gas usage variation between PRs. Codechecks is free for open source projects and maintained by MakerDao / Neufund engineer [@krzkaczor](https://github.com/krzkaczor). Complete [set-up guide here]().
 
