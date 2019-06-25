@@ -3,25 +3,22 @@
 [![npm version](https://badge.fury.io/js/eth-gas-reporter.svg)](https://badge.fury.io/js/eth-gas-reporter)
 [![Build Status](https://travis-ci.org/cgewecke/eth-gas-reporter.svg?branch=master)](https://travis-ci.org/cgewecke/eth-gas-reporter)
 
-A mocha reporter for Truffle.
+A mocha reporter for Ethereum test suites.
 
 - Gas usage per unit test.
-- Average gas usage per method.
-- Contract deployment costs.
-- Real currency costs.
+- Average gas usage per method call / contract deployment costs.
+- National currency costs of using and deploying your contract system.
 
-![screen shot 2018-08-01 at 10 13 56 am](https://user-images.githubusercontent.com/7332026/43537357-f64f031e-9573-11e8-9348-315d9d4a8476.png)
-![screen shot 2018-08-01 at 10 13 34 am](https://user-images.githubusercontent.com/7332026/43537353-f1889f70-9573-11e8-82c3-f93d3901db64.png)
+![Screen Shot 2019-06-24 at 4 54 47 PM](https://user-images.githubusercontent.com/7332026/60059336-fa502180-96a0-11e9-92b8-3dd436a9b2f1.png)
 
-### Install
 
-```javascript
+### Truffle Installation and Config
+```
 npm install --save-dev eth-gas-reporter
 ```
 
-### Truffle config
-
 ```javascript
+/* truffle-config.js */
 module.exports = {
   networks: {
     ...etc...
@@ -30,8 +27,25 @@ module.exports = {
     reporter: 'eth-gas-reporter',
     reporterOptions : {
       currency: 'CHF',
-      gasPrice: 21
+      gasPrice: 21,
     }
+  }
+};
+```
+
+### Buidler Installation and Config
+```
+npm install --save-dev buidler-gas-reporter
+```
+```javascript
+/* buidler.config.js */
+module.exports = {
+  networks: {
+    ...etc...
+  },
+  gasReporter: {
+    currency: 'CHF',
+    gasPrice: 21,
   }
 };
 ```
