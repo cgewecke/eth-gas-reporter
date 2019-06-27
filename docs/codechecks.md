@@ -6,9 +6,9 @@ This reporter integrates with the [codechecks](http://codechecks.io) service to 
 
 ### Codechecks is in beta
 
-Codechecks is a new service and some of its kinks are still being worked out. We've had issues
+Codechecks is new and some of its quirks are still being worked out. We've had issues
 getting a CI report on the first commit of an open PR, although subsequent pushes always work as
-expected. You can also re-run your build from the CircleCI web app to generate the report if it goes missing. Additionally, CircleCI must be configured to run on commit/push
+expected. You can re-run your build from the CircleCI web app to generate the report if it goes missing. Additionally, CircleCI must be configured to run on commit/push
 (this is true by default, and will only be an issue if you've turned those builds off to save resources.)
 
 ### Setup
@@ -37,6 +37,8 @@ steps:
   - run: yarn test
   - run: yarn codechecks
 ```
+
+- You're done!
 
 ### Diff Report
 
@@ -115,5 +117,5 @@ by clicking on details link of your Gas Usage PR notification in the Github UI.
 
 ### Gas Reporter JSON output
 
-The gas reporter has now writes the data it collects as JSON to a file at `./gasReporterOutput.json` whenever the environment variable CI is set to true. You can see an example of this output [here]().
-You may find it useful as a base to generate more complex or long running gas analyses, develop CI integrations with, makes nicer tables, etc.
+The gas reporter now writes the data it collects as JSON to a file at `./gasReporterOutput.json` whenever the environment variable `CI` is set to true. You can see an example of this output [here]().
+You may find it useful as a base to generate more complex or long running gas analyses, develop CI integrations with, or make nicer tables.

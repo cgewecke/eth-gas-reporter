@@ -4,17 +4,21 @@
 [![Build Status](https://travis-ci.org/cgewecke/eth-gas-reporter.svg?branch=master)](https://travis-ci.org/cgewecke/eth-gas-reporter)
 ![Codechecks](https://raw.githubusercontent.com/codechecks/docs/master/images/badges/badge-default.svg?sanitize=true)
 
-**A Mocha reporter for Ethereum test suites. Reports: **
+**A Mocha reporter for Ethereum test suites:**
 
 - Gas usage per unit test.
-- Average gas usage per method call / contract deployment.
-- National currency costs of deploying and using your contract system.
+- Average gas usage per method call & contract deployment.
+- National currency costs of deploying & using your contract system.
+- CI integration with [codechecks](http://codechecks.io)<sup>beta</sup>
+- Simple installation for Truffle and Buidler
 
 ### Example output
 
 ![Screen Shot 2019-06-24 at 4 54 47 PM](https://user-images.githubusercontent.com/7332026/60059336-fa502180-96a0-11e9-92b8-3dd436a9b2f1.png)
 
-### Truffle Installation and Config
+### Installation and Config
+
+**[Truffle](https://www.trufflesuite.com/docs)**
 
 ```
 npm install --save-dev eth-gas-reporter
@@ -31,7 +35,7 @@ module.exports = {
 };
 ```
 
-### Buidler Installation and Config
+**[Buidler](https://buidler.dev)**
 
 ```
 npm install --save-dev buidler-gas-reporter
@@ -47,9 +51,15 @@ module.exports = {
 };
 ```
 
+**Other**
+
+This reporter is highly configurable and should work for any test pipeline that uses mocha and
+connects to an ethereum client running as a separate process. There's
+more info on advanced configuration [here]().
+
 ### Continuous Integration<sup>beta</sup> (in CircleCI)
 
-If you use CircleCI, this reporter can be combined with [codechecks](http://codechecks.io) to generate CI reports which track changes in gas consumption between PRs. Codechecks is free for open source projects and maintained by MakerDao engineer [@krzkaczor](https://github.com/krzkaczor). Complete [set-up guide here]() (it's easy!).
+If you use CircleCI, this reporter can be combined with [codechecks](http://codechecks.io) to generate CI reports which track changes in gas consumption between PRs. Codechecks is free for open source projects and maintained by MakerDao engineer [@krzkaczor](https://github.com/krzkaczor). Complete [set-up guide here]() (it's easy).
 
 ![Screen Shot 2019-06-18 at 12 25 49 PM](https://user-images.githubusercontent.com/7332026/59713894-47298900-91c5-11e9-8083-233572787cfa.png)
 
