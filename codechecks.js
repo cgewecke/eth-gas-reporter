@@ -13,7 +13,22 @@ const CodeChecksReport = require("eth-gas-reporter/lib/codechecksReport");
  * >
  */
 module.exports.default = async function gasReporter() {
-  const output = JSON.parse(fs.readFileSync("gasReporterOutput.json", "utf-8"));
+  let output;
+  let file = "gasReporterOutput.json";
+
+  // Load gas reporter output
+  try {
+    output = JSON.parse(fs.readFileSync(file, "utf-8"));
+  } catch (error) {
+    const message =
+      `Error: Couldn't load data from "${file}".\n` +
+      `If you're using codechecks locally make sure you set ` +
+      `the environment variable "CI" to "true" before running ` +
+      `your tests. ( ex: CI=true npm test )`;
+
+    console.err(message);
+    return;
+  }
 
   // Save new data on the merge commit / push build
   if (!codechecks.isPr()) {
