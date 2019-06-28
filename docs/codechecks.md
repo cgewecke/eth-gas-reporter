@@ -26,9 +26,9 @@ checks:
 ```yml
 steps:
   - checkout
-  - run: yarn install
-  - run: yarn test
-  - run: yarn codechecks
+  - run: npm install
+  - run: npm test
+  - run: npx codechecks
 ```
 
 - You're done! :elephant:
