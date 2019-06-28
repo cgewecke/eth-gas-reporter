@@ -4,14 +4,7 @@ This reporter integrates with the [codechecks](http://codechecks.io) service to 
 
 ![Screen Shot 2019-06-18 at 12 25 49 PM](https://user-images.githubusercontent.com/7332026/59713894-47298900-91c5-11e9-8083-233572787cfa.png)
 
-### Codechecks is in beta
-
-Codechecks is new and some of its quirks are still being worked out. We've had issues
-getting a CI report on the first commit of an open PR, although subsequent pushes always work as
-expected. You can re-run your build from the CircleCI web app to generate the report if it goes missing. Additionally, CircleCI must be configured to run on commit/push
-(this is true by default, and will only be an issue if you've turned those builds off to save resources.)
-
-### Setup
+## Setup
 
 - Enable your project on [codechecks.io](https://codechecks.io/).
 
@@ -38,12 +31,20 @@ steps:
   - run: yarn codechecks
 ```
 
-- You're done!
+- You're done! :elephant:
 
-### Diff Report
+### Codechecks is in beta :wrench:
 
-This will be displayed in the `checks` tab of your GitHub pull request. You can also reach it
-by clicking on details link of your Gas Usage PR notification in the Github UI.
+Codechecks is new and some of its quirks are still being ironed out. If a report seems to be
+missing from the initial CI build of a pull request, you can re-run it from the CircleCI app or push
+in another commit and everything should work as expected. Additionally, CircleCI must be configured
+to run on commit/push (this is true by default and will only be an issue if you've
+turned those builds off to save resources.)
+
+### Diff Report Example
+
+This will be displayed in the `checks` tab of your GitHub pull request. Increases in gas usage
+relative to the PR's target branch are highlighted in red, decreases are highlighted in green.
 
 ```diff
 ......................|..................................|.............|............................·
@@ -117,5 +118,5 @@ by clicking on details link of your Gas Usage PR notification in the Github UI.
 
 ### Gas Reporter JSON output
 
-The gas reporter now writes the data it collects as JSON to a file at `./gasReporterOutput.json` whenever the environment variable `CI` is set to true. You can see an example of this output [here]().
+The gas reporter now writes the data it collects as JSON to a file at `./gasReporterOutput.json` whenever the environment variable `CI` is set to true. You can see an example of this output [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/gasReporterOutput.md).
 You may find it useful as a base to generate more complex or long running gas analyses, develop CI integrations with, or make nicer tables.

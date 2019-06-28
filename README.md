@@ -7,9 +7,9 @@
 **A Mocha reporter for Ethereum test suites:**
 
 - Gas usage per unit test.
-- Average gas usage per method call & contract deployment.
-- National currency costs of deploying & using your contract system.
-- CI integration with [codechecks](http://codechecks.io)<sup>beta</sup>
+- Metrics for method calls and deployments.
+- National currency costs of deploying and using your contract system.
+- CI integration with [codechecks<sup>beta</sup>](http://codechecks.io)
 - Simple installation for Truffle and Buidler
 
 ### Example output
@@ -36,6 +36,7 @@ module.exports = {
 ```
 
 **[Buidler](https://buidler.dev)**
+(additional info at [buidler-gas-reporter](https://github.com/cgewecke/buidler-gas-reporter))
 
 ```
 npm install --save-dev buidler-gas-reporter
@@ -53,41 +54,44 @@ module.exports = {
 
 **Other**
 
-This reporter is highly configurable and should work for any test pipeline that uses mocha and
-connects to an ethereum client running as a separate process. There's
-more info on advanced configuration [here]().
+This reporter should work with any build pipeline that uses Mocha and
+connects to an Ethereum client running as a separate process. There's more on advanced use cases
+[here](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/advanced.md).
 
-### Continuous Integration<sup>beta</sup> (in CircleCI)
+### Continuous Integration (in CircleCI)
 
-If you use CircleCI, this reporter can be combined with [codechecks](http://codechecks.io) to generate CI reports which track changes in gas consumption between PRs. Codechecks is free for open source projects and maintained by MakerDao engineer [@krzkaczor](https://github.com/krzkaczor). Complete [set-up guide here]() (it's easy).
+If you use CircleCI, this reporter can be combined with [codechecks](http://codechecks.io) to track changes in gas consumption between PRs. Codechecks is free for open source and maintained by MakerDao engineer [@krzkaczor](https://github.com/krzkaczor).
+
+Complete [set-up guide here](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/codechecks.md) (it's easy).
 
 ![Screen Shot 2019-06-18 at 12 25 49 PM](https://user-images.githubusercontent.com/7332026/59713894-47298900-91c5-11e9-8083-233572787cfa.png)
 
 ### Options
 
-| Option            | Type       | Default                              | Description                                                                                                                                                                               |
-| ----------------- | ---------- | ------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| currency          | _String_   | 'EUR'                                | National currency to represent gas costs in. Exchange rates loaded at runtime from the `coinmarketcap` api. Available currency codes can be found [here](https://coinmarketcap.com/api/). |
-| gasPrice          | _Number_   | (varies)                             | Denominated in `gwei`. Default is loaded at runtime from the `eth gas station` api                                                                                                        |
-| outputFile        | _String_   | stdout                               | File path to write report output to                                                                                                                                                       |
-| noColors          | _Boolean_  | false                                | Suppress report color. Useful if you are printing to file b/c terminal colorization corrupts the text.                                                                                    |
-| onlyCalledMethods | _Boolean_  | true                                 | Omit methods that are never called from report.                                                                                                                                           |
-| rst               | _Boolean_  | false                                | Output with a reStructured text code-block directive. Useful if you want to include report in RTD                                                                                         |
-| rstTitle          | _String_   | ""                                   | Title for reStructured text header (See Travis for example output)                                                                                                                        |
-| showTimeSpent     | _Boolean_  | false                                | Show the amount of time spent as well as the gas consumed                                                                                                                                 |
-| excludeContracts  | _String[]_ | []                                   | Contract names to exclude from report. Ex: `['Migrations']`                                                                                                                               |
-| src               | _String_   | "contracts"                          | Folder in root directory to begin search for `.sol` files. This can also be a path to a subfolder relative to the root, e.g. "planets/annares/contracts"                                  |
-| url               | _String_   | value of `web3.currentProvider.host` | RPC client url (e.g. "http://localhost:8545")                                                                                                                                             |
-| proxyResolver     | _Function_ | none                                 | Custom method to resolve identity of methods managed by a proxy contract.                                                                                                                 |
+| Option            | Type                   | Default                     | Description                                                                                                                                                                               |
+| ----------------- | ---------------------- | --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| currency          | _String_               | 'EUR'                       | National currency to represent gas costs in. Exchange rates loaded at runtime from the `coinmarketcap` api. Available currency codes can be found [here](https://coinmarketcap.com/api/). |
+| gasPrice          | _Number_               | (varies)                    | Denominated in `gwei`. Default is loaded at runtime from the `eth gas station` api                                                                                                        |
+| outputFile        | _String_               | stdout                      | File path to write report output to                                                                                                                                                       |
+| noColors          | _Boolean_              | false                       | Suppress report color. Useful if you are printing to file b/c terminal colorization corrupts the text.                                                                                    |
+| onlyCalledMethods | _Boolean_              | true                        | Omit methods that are never called from report.                                                                                                                                           |
+| rst               | _Boolean_              | false                       | Output with a reStructured text code-block directive. Useful if you want to include report in RTD                                                                                         |
+| rstTitle          | _String_               | ""                          | Title for reStructured text header (See Travis for example output)                                                                                                                        |
+| showTimeSpent     | _Boolean_              | false                       | Show the amount of time spent as well as the gas consumed                                                                                                                                 |
+| excludeContracts  | _String[]_             | []                          | Contract names to exclude from report. Ex: `['Migrations']`                                                                                                                               |
+| src               | _String_               | "contracts"                 | Folder in root directory to begin search for `.sol` files. This can also be a path to a subfolder relative to the root, e.g. "planets/annares/contracts"                                  |
+| url               | _String_               | `web3.currentProvider.host` | RPC client url (ex: "http://localhost:8545")                                                                                                                                              |
+| proxyResolver     | _Function_             | none                        | Custom method to resolve identity of methods managed by a proxy contract.                                                                                                                 |
+| artifactType      | _Function_ or _String_ | "truffle-v5"                | Compilation artifact format to consume. (See [advanced use](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/advanced.md).)                                                  |
 
-### Advanced Use / FAQ
+### Advanced Use
 
-A guide to advanced use can be found [here](). Topics include:
+An advanced use guide is available [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/advanced.md). Topics include:
 
-- Getting gas data for projects that use proxy contract upgradeability strategies like EtherRouter or ZOS.
+- Getting accurate gas data when using proxy contracts like EtherRouter or ZeppelinOS.
 - Configuring the reporter to work with non-truffle, non-buidler projects.
 
-### Examples
+### Example Reports
 
 - [gnosis/gnosis-contracts](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/gnosis.md)
 - [windingtree/LifToken](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/lifToken.md)
