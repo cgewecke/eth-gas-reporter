@@ -6,7 +6,7 @@ This reporter integrates with the [codechecks](http://codechecks.io) service to 
 
 ## Setup
 
-- Enable your project on [codechecks.io](https://codechecks.io/).
+- Enable your project on [codechecks.io](https://codechecks.io/). Check out [getting started guide](https://github.com/codechecks/docs/blob/master/getting-started.md)
 
 - Install the codechecks client library as a dev dependency:
 
