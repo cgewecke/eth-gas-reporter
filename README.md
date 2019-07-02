@@ -99,6 +99,8 @@ An advanced use guide is available [here](https://github.com/cgewecke/eth-gas-re
 ### Usage Notes
 
 - Requires Node >= 8.
+- You cannot use `ganache-core` as an in-process provider for your test suite. The reporter makes sync RPC calls
+while collecting data and your tests will hang unless the client is launched as a separate process. 
 - Method calls that throw are filtered from the stats.
 - Contracts that are only ever created by other contracts within Solidity are not shown in the deployments table.
 
