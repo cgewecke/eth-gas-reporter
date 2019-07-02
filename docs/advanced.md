@@ -72,5 +72,5 @@ PRs are welcome if you have a proxy mechanism you'd like supported by default.
 
 ### Gas Reporter JSON output
 
-The gas reporter now writes the data it collects to a JSON file at `./gasReporterOutput.json` whenever the environment variable `CI` is set to true. An example of this output is [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/advanced.md).
+The gas reporter now writes the data it collects to a JSON file at `./gasReporterOutput.json` whenever the environment variable `CI` is set to true. An example of this output is [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/gasReporterOutput.md).
 You may find it useful as an input to more complex / long running gas analyses, better CI integrations, etc.
