@@ -30,18 +30,21 @@
     "url": "https://github.com/cgewecke/eth-gas-reporter/issues"
   },
   "homepage": "https://github.com/cgewecke/eth-gas-reporter#readme",
+  "peerDependencies": {
+    "@codechecks/client": "^0.1.0"
+  },
   "dependencies": {
     "abi-decoder": "^1.2.0",
     "cli-table3": "^0.5.0",
     "colors": "^1.1.2",
     "ethers": "^4.0.28",
+    "fs-readdir-recursive": "^1.1.0",
     "lodash": "^4.17.11",
     "mocha": "^5.2.0",
     "req-cwd": "^2.0.0",
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "sha1": "^1.1.1",
-    "shelljs": "^0.7.8",
     "solidity-parser-antlr": "^0.4.2",
     "sync-request": "^6.0.0"
   },
