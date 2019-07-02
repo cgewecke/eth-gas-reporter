@@ -123,3 +123,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 - [@ben-kaufman](https://github.com/ben-kaufman)
 - [@wighawag](https://github.com/wighawag)
 - [@ItsNickBarry](https://github.com/ItsNickBarry)
+- [@krzkaczor](https://github.com/krzkaczor)
