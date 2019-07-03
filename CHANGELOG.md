@@ -1,5 +1,13 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.2 / 2019-07-02
+
+- Add documentation about codechecks, buidler, advanced use cases.
+- Add artifactType option as a user defined function so people use with any compilation artifacts.
+- Add codechecks integration
+- Add buidler plugin integration
+- Remove shelljs due to GH security warning, execute ls command manually
+
 # 0.2.1 / 2019-06-19
 
 - Upgrade mocha from 4.1.0 to 5.2.0
