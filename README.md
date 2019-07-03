@@ -4,6 +4,7 @@
 [![Build Status](https://travis-ci.org/cgewecke/eth-gas-reporter.svg?branch=master)](https://travis-ci.org/cgewecke/eth-gas-reporter)
 [![Codechecks](https://raw.githubusercontent.com/codechecks/docs/master/images/badges/badge-default.svg?sanitize=true)](https://codechecks.io)
 
+
 **A Mocha reporter for Ethereum test suites:**
 
 - Gas usage per unit test.
@@ -36,7 +37,8 @@ module.exports = {
 ```
 
 **[Buidler](https://buidler.dev)**
-(additional info at [buidler-gas-reporter](https://github.com/cgewecke/buidler-gas-reporter))
+
+[![buidler](https://buidler.dev/buidler-plugin-badge.svg?1)](https://github.com/cgewecke/buidler-gas-reporter)
 
 ```
 npm install --save-dev buidler-gas-reporter
@@ -54,7 +56,7 @@ module.exports = {
 
 **Other**
 
-This reporter should work with any build pipeline that uses Mocha and
+This reporter should work with any build platform that uses Mocha and
 connects to an Ethereum client running as a separate process. There's more on advanced use cases
 [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/advanced.md).
 
