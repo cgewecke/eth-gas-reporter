@@ -1,5 +1,9 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.3 / 2019-07-04
+
+- Bug fix to invoke user defined artifactType methods correctly
+
 # 0.2.2 / 2019-07-02
 
 - Add documentation about codechecks, buidler, advanced use cases.
