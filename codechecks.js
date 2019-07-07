@@ -1,6 +1,5 @@
 const { join } = require("path");
 const fs = require("fs");
-const { codechecks } = require("cgewecke-cc-testing/dist");
 const CodeChecksReport = require("eth-gas-reporter/lib/codechecksReport");
 
 /**
@@ -14,8 +13,15 @@ const CodeChecksReport = require("eth-gas-reporter/lib/codechecksReport");
  */
 module.exports.default = async function gasReporter() {
   let output;
+  let codechecks;
   let file = "gasReporterOutput.json";
 
+  try {
+    codechecks = require("cgewecke-cc-testing/dist/index.js").codechecks;
+  } catch (err) {
+    console.log("Could not require codechecks correctly\n" + err);
+    return;
+  }
   // Load gas reporter output
   try {
     output = JSON.parse(fs.readFileSync(file, "utf-8"));
