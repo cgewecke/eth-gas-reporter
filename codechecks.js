@@ -1,6 +1,6 @@
 const { join } = require("path");
 const fs = require("fs");
-const { codechecks } = require("cgewecke-cc-testing");
+const { codechecks } = require("cgewecke-cc-testing/dist");
 const CodeChecksReport = require("eth-gas-reporter/lib/codechecksReport");
 
 /**
