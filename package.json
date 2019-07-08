@@ -34,7 +34,7 @@
     "@codechecks/client": "^0.1.0"
   },
   "dependencies": {
-    "abi-decoder": "^1.2.0",
+    "abi-decoder": "^2.0.1",
     "cli-table3": "^0.5.0",
     "colors": "^1.1.2",
     "ethers": "^4.0.28",
