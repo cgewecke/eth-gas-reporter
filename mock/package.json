@@ -1,6 +1,6 @@
 {
   "name": "eth-gas-reporter",
-  "version": "0.2.1",
+  "version": "0.2.3",
   "description": "Mocha reporter which shows gas used per unit test.",
   "main": "index.js",
   "scripts": {
@@ -34,7 +34,7 @@
     "@codechecks/client": "^0.1.0"
   },
   "dependencies": {
-    "abi-decoder": "^1.2.0",
+    "abi-decoder": "^2.0.1",
     "cli-table3": "^0.5.0",
     "colors": "^1.1.2",
     "ethers": "^4.0.28",
