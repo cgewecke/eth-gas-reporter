@@ -1,5 +1,9 @@
 ## Changelog: eth-gas-reporter
 
+0.2.4 / 2019-07-08
+
+- Update abi-decoder to 2.0.1 to fix npm installation bug with bignumber.js fork
+
 # 0.2.3 / 2019-07-04
 
 - Bug fix to invoke user defined artifactType methods correctly
