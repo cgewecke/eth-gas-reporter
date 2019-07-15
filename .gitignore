@@ -60,5 +60,12 @@ typings/
 # dotenv environment variables file
 .env
 
+# Mock debris
+mock/cache/
+mock/artifacts/
+mock/yarn.lock
+mock/codechecks.js
+mock/codechecksReport.json
+mock/cc.md
 
 

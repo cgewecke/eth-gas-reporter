@@ -1,11 +1,17 @@
 {
   "name": "eth-gas-reporter",
-  "version": "0.1.5",
+  "version": "0.2.4",
   "description": "Mocha reporter which shows gas used per unit test.",
   "main": "index.js",
   "scripts": {
     "geth": "./scripts/geth.sh",
-    "test": "./mock/test.sh"
+    "test": "./mock/scripts/test.sh",
+    "ci": "./scripts/ci.sh"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "pretty-quick --staged"
+    }
   },
   "repository": {
     "type": "git",
@@ -24,22 +30,36 @@
     "url": "https://github.com/cgewecke/eth-gas-reporter/issues"
   },
   "homepage": "https://github.com/cgewecke/eth-gas-reporter#readme",
+  "peerDependencies": {
+    "@codechecks/client": "^0.1.0"
+  },
   "dependencies": {
-    "abi-decoder": "^1.0.8",
-    "cli-table2": "^0.2.0",
+    "abi-decoder": "^2.0.1",
+    "cli-table3": "^0.5.0",
     "colors": "^1.1.2",
-    "lodash": "^4.17.4",
-    "mocha": "^3.5.3",
+    "ethers": "^4.0.28",
+    "fs-readdir-recursive": "^1.1.0",
+    "lodash": "^4.17.11",
+    "mocha": "^5.2.0",
     "req-cwd": "^2.0.0",
-    "request": "^2.83.0",
+    "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
-    "shelljs": "^0.7.8",
-    "solidity-parser-antlr": "^0.2.10",
+    "sha1": "^1.1.1",
+    "solidity-parser-antlr": "^0.4.2",
     "sync-request": "^6.0.0"
   },
   "devDependencies": {
-    "darq-truffle": "4.1.4-next.8",
-    "ganache-cli": "^6.1.0",
-    "truffle": "^4.1.7"
+    "@nomiclabs/buidler": "^1.0.0-beta.7",
+    "@nomiclabs/buidler-truffle5": "^1.0.0-beta.7",
+    "@nomiclabs/buidler-web3": "^1.0.0-beta.7",
+    "fp-ts": "^1.19.0",
+    "ganache-cli": "6.4.3",
+    "geth-dev-assistant": "^0.0.3",
+    "husky": "^2.3.0",
+    "prettier": "1.17.1",
+    "pretty-quick": "^1.11.0",
+    "truffle": "5.0.12",
+    "web3": "1.0.0-beta.37",
+    "yarn": "^1.16.0"
   }
 }
