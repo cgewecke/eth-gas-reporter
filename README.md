@@ -3,7 +3,7 @@
 [![npm version](https://badge.fury.io/js/eth-gas-reporter.svg)](https://badge.fury.io/js/eth-gas-reporter)
 [![Build Status](https://travis-ci.org/cgewecke/eth-gas-reporter.svg?branch=master)](https://travis-ci.org/cgewecke/eth-gas-reporter)
 [![Codechecks](https://raw.githubusercontent.com/codechecks/docs/master/images/badges/badge-default.svg?sanitize=true)](https://codechecks.io)
-
+[![buidler](https://buidler.dev/buidler-plugin-badge.svg?1)](https://github.com/cgewecke/buidler-gas-reporter)
 
 **A Mocha reporter for Ethereum test suites:**
 
@@ -37,8 +37,6 @@ module.exports = {
 ```
 
 **[Buidler](https://buidler.dev)**
-
-[![buidler](https://buidler.dev/buidler-plugin-badge.svg?1)](https://github.com/cgewecke/buidler-gas-reporter)
 
 ```
 npm install --save-dev buidler-gas-reporter
@@ -104,7 +102,7 @@ An advanced use guide is available [here](https://github.com/cgewecke/eth-gas-re
 
 - Requires Node >= 8.
 - You cannot use `ganache-core` as an in-process provider for your test suite. The reporter makes sync RPC calls
-while collecting data and your tests will hang unless the client is launched as a separate process.
+  while collecting data and your tests will hang unless the client is launched as a separate process.
 - Method calls that throw are filtered from the stats.
 - Contracts that are only ever created by other contracts within Solidity are not shown in the deployments table.
 
@@ -130,3 +128,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 - [@wighawag](https://github.com/wighawag)
 - [@ItsNickBarry](https://github.com/ItsNickBarry)
 - [@krzkaczor](https://github.com/krzkaczor)
+- [@ppoliani](https://github.com/@ppoliani)
