@@ -1,5 +1,10 @@
 ## Changelog: eth-gas-reporter
 
+0.2.6 / 2019-07-16
+
+- Stopped using npm-shrinkwrap, because it seemed to correlate w/ weird installation problems
+- Fix bug which caused outputFile option to crash due to misnamed variable
+
 # 0.2.5 / 2019-07-15
 
 - Upgrade lodash for because of vulnerability report (contribution @ppoliani)
