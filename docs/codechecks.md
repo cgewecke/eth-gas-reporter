@@ -1,12 +1,17 @@
 ## Guide to using Codechecks in CircleCI
 
-This reporter integrates with the [codechecks](http://codechecks.io) service to generate CI reports which track changes in gas consumption between PRs. It's like coveralls for gas. Codechecks is free for open source projects and maintained by MakerDao engineer [@krzkaczor](https://github.com/krzkaczor).
+This reporter comes with a [codechecks](http://codechecks.io) CI integration that
+displays a pull request's gas consumption changes relative to its target branch in the Github UI.
+It's like coveralls for gas. The codechecks service is free for open source and maintained by MakerDao engineer [@krzkaczor](https://github.com/krzkaczor).
 
 ![Screen Shot 2019-06-18 at 12 25 49 PM](https://user-images.githubusercontent.com/7332026/59713894-47298900-91c5-11e9-8083-233572787cfa.png)
 
 ## Setup
 
-- Enable your project on [codechecks.io](https://codechecks.io/). Check out [getting started guide](https://github.com/codechecks/docs/blob/master/getting-started.md)
+- Enable your project on [codechecks.io](https://codechecks.io/). Check out the
+[getting started guide](https://github.com/codechecks/docs/blob/master/getting-started.md). (All
+you really have to do is toggle your repo 'on' and copy-paste a token into your CI environment
+variables settings.)
 
 - Install the codechecks client library as a dev dependency:
 
@@ -21,30 +26,37 @@ checks:
   - name: eth-gas-reporter/codechecks
 ```
 
-- Run `codechecks` as a step in your CircleCI build
+- Run `codechecks` as a step in your build
 
 ```yml
+# CircleCI Example
 steps:
   - checkout
   - run: npm install
   - run: npm test
   - run: npx codechecks
+
+# Travis
+script:
+  - npm test
+  - npx codechecks
 ```
 
 - You're done! :elephant:
 
-### Codechecks is in beta :wrench:
+### Codechecks is new :wrench:
 
-Codechecks is new and some of its quirks are still being ironed out. If a report seems to be
-missing from the initial CI build of a pull request, you can re-run it from the CircleCI app or push
-in another commit and everything should work as expected. Additionally, CircleCI must be configured
-to run on commit/push (this is true by default and will only be an issue if you've
-turned those builds off to save resources.)
+Codechecks is new and some of its quirks are still being ironed out:
++ If you're using CircleCI and the report seems to be missing from the first
+build of a pull request, you can [configure your codechecks.yml's branch setting](https://github.com/codechecks/docs/blob/master/configuration.md#settings) to make it work as expected.
++ Both Travis and Circle must be configured to run on commit/push
+(this is true by default and will only be a problem if you've turned those builds off to save resources.)
 
 ### Diff Report Example
 
-This will be displayed in the `checks` tab of your GitHub pull request. Increases in gas usage
-relative to the PR's target branch are highlighted in red, decreases are highlighted in green.
+Something like this will be displayed in the `checks` tab of your GitHub pull request.
+Increases in gas usage relative to the PR's target branch are highlighted in red, decreases are
+highlighted in green.
 
 ```diff
 ......................|..................................|.............|............................·
