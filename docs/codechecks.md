@@ -1,4 +1,4 @@
-## Guide to using Codechecks in CircleCI
+## Guide to using Codechecks
 
 This reporter comes with a [codechecks](http://codechecks.io) CI integration that
 displays a pull request's gas consumption changes relative to its target branch in the Github UI.
