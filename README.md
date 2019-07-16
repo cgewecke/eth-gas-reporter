@@ -10,7 +10,7 @@
 - Gas usage per unit test.
 - Metrics for method calls and deployments.
 - National currency costs of deploying and using your contract system.
-- CI integration with [codechecks<sup>beta</sup>](http://codechecks.io)
+- CI integration with [codechecks](http://codechecks.io)
 - Simple installation for Truffle and Buidler
 
 ### Example output
@@ -60,9 +60,11 @@ This reporter should work with any build platform that uses Mocha and
 connects to an Ethereum client running as a separate process. There's more on advanced use cases
 [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/advanced.md).
 
-### Continuous Integration (in CircleCI)
+### Continuous Integration (Travis and CircleCI)
 
-If you use CircleCI, this reporter can be combined with [codechecks](http://codechecks.io) to track changes in gas consumption between PRs. Codechecks is free for open source and maintained by MakerDao engineer [@krzkaczor](https://github.com/krzkaczor).
+This reporter comes with a [codechecks](http://codechecks.io) CI integration that
+displays a pull request's gas consumption changes relative to its target branch in the Github UI.
+It's like coveralls for gas. The codechecks service is free for open source and maintained by MakerDao engineer [@krzkaczor](https://github.com/krzkaczor).
 
 Complete [set-up guide here](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/codechecks.md) (it's easy).
 
@@ -102,7 +104,7 @@ An advanced use guide is available [here](https://github.com/cgewecke/eth-gas-re
 
 - Requires Node >= 8.
 - You cannot use `ganache-core` as an in-process provider for your test suite. The reporter makes sync RPC calls
-while collecting data and your tests will hang unless the client is launched as a separate process. 
+while collecting data and your tests will hang unless the client is launched as a separate process.
 - Method calls that throw are filtered from the stats.
 - Contracts that are only ever created by other contracts within Solidity are not shown in the deployments table.
 
