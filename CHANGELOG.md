@@ -1,6 +1,10 @@
 ## Changelog: eth-gas-reporter
 
-0.2.4 / 2019-07-08
+# 0.2.5 / 2019-07-15
+
+- Upgrade lodash for because of vulnerability report (contribution @ppoliani)
+
+# 0.2.4 / 2019-07-08
 
 - Update abi-decoder to 2.0.1 to fix npm installation bug with bignumber.js fork
 
