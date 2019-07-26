@@ -25,7 +25,11 @@ test_truffle_v5_with_options() {
   cp ./config-template.js ./truffle.js
 
   # Test
-  npx truffle test --network development "$@"
+  DEBUG_CODECHECKS_TABLE=true npx truffle test --network development "$@"
+
+  if [ "$CI" = "true" ]; then
+    npx codechecks
+  fi
 
   # Swap in truffle.js
   cp ./safe_truffle.js ./truffle.js
