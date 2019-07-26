@@ -16,6 +16,7 @@ install_reporter() {
 
   cp -r ./../lib node_modules/eth-gas-reporter
   cp ./../index.js node_modules/eth-gas-reporter/index.js
+  cp ./../codechecks.js node_modules/eth-gas-reporter/codechecks.js
   cp ./../package.json node_modules/eth-gas-reporter/package.json
 
 }
