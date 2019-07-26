@@ -1,6 +1,6 @@
 {
   "name": "eth-gas-reporter",
-  "version": "0.2.3",
+  "version": "0.2.6",
   "description": "Mocha reporter which shows gas used per unit test.",
   "main": "index.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "colors": "^1.1.2",
     "ethers": "^4.0.28",
     "fs-readdir-recursive": "^1.1.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.14",
     "mocha": "^5.2.0",
     "req-cwd": "^2.0.0",
     "request": "^2.88.0",
@@ -49,6 +49,7 @@
     "sync-request": "^6.0.0"
   },
   "devDependencies": {
+    "@codechecks/client": "^0.1.5",
     "@nomiclabs/buidler": "^1.0.0-beta.7",
     "@nomiclabs/buidler-truffle5": "^1.0.0-beta.7",
     "@nomiclabs/buidler-web3": "^1.0.0-beta.7",
