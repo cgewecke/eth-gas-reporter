@@ -12,7 +12,7 @@ const CodeChecksReport = require("eth-gas-reporter/lib/codechecksReport");
  * > Source: krzkaczor/truffle-codechecks.
  * >
  */
-module.exports.default = async function gasReporter() {
+module.exports.default = async function gasReporter(options = {}) {
   let output;
   let file = "gasReporterOutput.json";
 
@@ -29,6 +29,11 @@ module.exports.default = async function gasReporter() {
     console.err(message);
     return;
   }
+
+  // Lets monorepo subcomponents individuate themselves
+  output.namespace = options.name
+    ? `${output.namespace}:${options.name}`
+    : output.namespace;
 
   // Save new data on the merge commit / push build
   if (!codechecks.isPr()) {
