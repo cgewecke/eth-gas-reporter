@@ -5,6 +5,7 @@ import "./MultiContractFile.sol";
 
 contract VariableCosts is Wallet {
   uint q;
+  string someString;
   mapping(uint => address) map;
   MultiContractFileA multi;
 
@@ -36,6 +37,10 @@ contract VariableCosts is Wallet {
 
   function unusedMethod(address a) public {
     map[1000] = a;
+  }
+
+  function setString(string memory _someString) public {
+    someString = _someString;
   }
 
   function methodThatThrows(bool err) public {
