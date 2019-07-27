@@ -1,6 +1,14 @@
 ## Changelog: eth-gas-reporter
 
-0.2.6 / 2019-07-16
+# 0.2.7 / 2019-07-27
+
+- Fix block limit basis bug
+- Fix bug affecting Truffle < v5.0.10 (crash because metadata not defined)
+- Add percentage diff columns to codechecks ci table / make table narrower
+- Slightly randomize gas consumption in tests
+- Begin running codechecks in CI for own tests
+
+# 0.2.6 / 2019-07-16
 
 - Stopped using npm-shrinkwrap, because it seemed to correlate w/ weird installation problems
 - Fix bug which caused outputFile option to crash due to misnamed variable
