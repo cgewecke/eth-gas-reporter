@@ -9,9 +9,9 @@ It's like coveralls for gas. The codechecks service is free for open source and 
 ## Setup
 
 - Enable your project on [codechecks.io](https://codechecks.io/). Check out the
-[getting started guide](https://github.com/codechecks/docs/blob/master/getting-started.md). (All
-you really have to do is toggle your repo 'on' and copy-paste a token into your CI environment
-variables settings.)
+  [getting started guide](https://github.com/codechecks/docs/blob/master/getting-started.md). (All
+  you really have to do is toggle your repo 'on' and copy-paste a token into your CI environment
+  variables settings.)
 
 - Install the codechecks client library as a dev dependency:
 
@@ -47,86 +47,76 @@ script:
 ### Codechecks is new :wrench:
 
 Codechecks is new and some of its quirks are still being ironed out:
-+ If you're using CircleCI and the report seems to be missing from the first
-build of a pull request, you can [configure your codechecks.yml's branch setting](https://github.com/codechecks/docs/blob/master/configuration.md#settings) to make it work as expected.
-+ Both Travis and Circle must be configured to run on commit/push
-(this is true by default and will only be a problem if you've turned those builds off to save resources.)
+
+- If you're using CircleCI and the report seems to be missing from the first
+  build of a pull request, you can [configure your codechecks.yml's branch setting](https://github.com/codechecks/docs/blob/master/configuration.md#settings) to make it work as expected.
+- Both Travis and Circle must be configured to run on commit/push
+  (this is true by default and will only be a problem if you've turned those builds off to save resources.)
 
 ### Diff Report Example
 
 Something like this will be displayed in the `checks` tab of your GitHub pull request.
-Increases in gas usage relative to the PR's target branch are highlighted in red, decreases are
-highlighted in green.
+Increases in gas usage relative to the PR's target branch are highlighted with a red cross, decreases are
+highlighted with a green check.
 
-```diff
-......................|..................................|.............|............................·
-    Solc: v0.5.0      ·        Optimized: false          ·  Runs: 200  ·    Block: 8000000 gas
-······················|··································|·············|·····························
-  METHODS             ·                  1 gwei/gas                    ·      237.80 eur/eth
-················|·····|·······················|··········|·············|··············|··············
-  Contract      ·     ·  Method               ·   Gas    ·    Diff     ·  # calls     ·  eur (avg)
-················|·····|·······················|··········|·············|··············|··············
-  EtherRouter         ·  setResolver          ·   43192  ·          0  ·           1  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  Factory             ·  deployVersionB       ·  107123  ·          0  ·           1  ·       0.03
-······················|·······················|··········|·············|··············|··············
-  MetaCoin            ·  sendCoin             ·   51019  ·          0  ·           1  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  Migrations          ·  setCompleted         ·   27034  ·          0  ·           6  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  MultiContractFileA  ·  hello                ·   41419  ·          0  ·           1  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  MultiContractFileB  ·  goodbye              ·   41419  ·          0  ·           1  ·       0.01
-······················|·······················|··········|·············|··············|··············
-- Resolver            ·  register             ·   37633  ·         32  ·           2  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  VariableCosts       ·  addToMap             ·   90341  ·          0  ·           7  ·       0.02
-······················|·······················|··········|·············|··············|··············
-  VariableCosts       ·  methodThatThrows     ·   41599  ·          0  ·           2  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  VariableCosts       ·  otherContractMethod  ·   57407  ·          0  ·           2  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  VariableCosts       ·  removeFromMap        ·   36481  ·          0  ·           8  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  VariableCosts       ·  sendPayment          ·   32335  ·          0  ·           1  ·       0.01
-······················|·······················|··········|·············|··············|··············
-- VariableCosts       ·  setString            ·   86198  ·        768  ·           2  ·       0.02
-······················|·······················|··········|·············|··············|··············
-  VariableCosts       ·  transferPayment      ·   32186  ·          0  ·           1  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  VersionA            ·  setValue             ·   25674  ·          0  ·           2  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  Wallet              ·  sendPayment          ·   32181  ·          0  ·           1  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  Wallet              ·  transferPayment      ·   32164  ·          0  ·           1  ·       0.01
-······················|·······················|··········|·············|··············|··············
-  DEPLOYMENTS         ·                                                ·  % of limit  ·
-······················|·······················|··········|·············|··············|··············
-  ConvertLib                                  ·  111791  ·          0  ·       1.7 %  ·       0.03
-··············································|··········|·············|··············|··············
-  EtherRouter                                 ·  278020  ·          0  ·       4.1 %  ·       0.07
-··············································|··········|·············|··············|··············
-  Factory                                     ·  324331  ·          0  ·       4.8 %  ·       0.08
-··············································|··········|·············|··············|··············
-+ MetaCoin                                    ·  358508  ·        -64  ·       5.3 %  ·       0.09
-··············································|··········|·············|··············|··············
-  Migrations                                  ·  284908  ·          0  ·       4.2 %  ·       0.07
-··············································|··········|·············|··············|··············
-  MultiContractFileA                          ·   90745  ·          0  ·       1.4 %  ·       0.02
-··············································|··········|·············|··············|··············
-  MultiContractFileB                          ·   90745  ·          0  ·       1.4 %  ·       0.02
-··············································|··········|·············|··············|··············
-  Resolver                                    ·  430644  ·          0  ·       6.4 %  ·       0.10
-··············································|··········|·············|··············|··············
-- VariableConstructor                         ·  987116  ·      14096  ·      14.7 %  ·       0.23
-··············································|··········|·············|··············|··············
-  VariableCosts                               ·  930528  ·          0  ·      13.8 %  ·       0.22
-··············································|··········|·············|··············|··············
-  VersionA                                    ·   88665  ·          0  ·       1.3 %  ·       0.02
-··············································|··········|·············|··············|··············
-  Wallet                                      ·  217795  ·          0  ·       3.2 %  ·       0.05
-..............................................|..........|.............|..............|.............·
-```
+## Deployments
+
+|                         |       Gas |                                                                      |            Diff | Diff % | Block % | chf avg cost |
+| :---------------------- | --------: | :------------------------------------------------------------------: | --------------: | -----: | ------: | -----------: |
+| **ConvertLib**          |   111,791 |                                                                      |               0 |      0 |   1.4 % |         0.48 |
+| **EtherRouter**         |   278,020 |                                                                      |               0 |      0 |   3.5 % |         1.20 |
+| **Factory**             |   324,331 | ![passed](https://travis-ci.com/images/stroke-icons/icon-passed.png) | [**-14,222**]() |     4% |   4.1 % |         1.40 |
+| **MetaCoin**            |   358,572 | ![failed](https://travis-ci.com/images/stroke-icons/icon-failed.png) | [**+73,534**]() |    26% |   4.5 % |         1.55 |
+| **MultiContractFileA**  |    90,745 |                                                                      |               0 |      0 |   1.1 % |         0.39 |
+| **MultiContractFileB**  |    90,745 |                                                                      |               0 |      0 |   1.1 % |         0.39 |
+| **Resolver**            |   430,580 |                                                                      |               0 |      0 |   5.4 % |         1.86 |
+| **VariableConstructor** | 1,001,890 |                                                                      |               0 |      0 |  12.5 % |         4.34 |
+| **VariableCosts**       |   930,528 |                                                                      |               0 |      0 |  11.6 % |         4.03 |
+| **VersionA**            |    88,665 |                                                                      |               0 |      0 |   1.1 % |         0.38 |
+| **Wallet**              |   217,795 |                                                                      |               0 |      0 |   2.7 % |         0.94 |
+
+## Methods
+
+|                              |     Gas |                                                                      |          Diff | Diff % | Calls | chf avg cost |
+| :--------------------------- | ------: | :------------------------------------------------------------------: | ------------: | -----: | ----: | -----------: |
+| **EtherRouter**              |         |                                                                      |               |        |       |              |
+|        *setResolver*         |  43,192 |                                                                      |             0 |      0 |     1 |         0.19 |
+| **Factory**                  |         |                                                                      |               |        |       |              |
+|        *deployVersionB*      | 107,123 |                                                                      |             0 |      0 |     1 |         0.46 |
+| **MetaCoin**                 |         |                                                                      |               |        |       |              |
+|        *sendCoin*            |  51,019 |                                                                      |             0 |      0 |     1 |         0.22 |
+| **MultiContractFileA**       |         |                                                                      |               |        |       |              |
+|        *hello*               |  41,419 |                                                                      |             0 |      0 |     1 |         0.18 |
+| **MultiContractFileB**       |         |                                                                      |               |        |       |              |
+|        *goodbye*             |  41,419 |                                                                      |             0 |      0 |     1 |         0.18 |
+| **Resolver**                 |         |                                                                      |               |        |       |              |
+|        *register*            |  37,633 |                                                                      |             0 |      0 |     2 |         0.16 |
+| **VariableCosts**            |         |                                                                      |               |        |       |              |
+|        *addToMap*            |  90,341 |                                                                      |             0 |      0 |     7 |         0.39 |
+|        *methodThatThrows*    |  41,599 |                                                                      |             0 |      0 |     2 |         0.18 |
+|        *otherContractMethod* |  57,407 |                                                                      |             0 |      0 |     1 |         0.25 |
+|        *removeFromMap*       |  36,481 |                                                                      |             0 |      0 |     8 |         0.16 |
+|        *sendPayment*         |  32,335 |                                                                      |             0 |      0 |     1 |         0.14 |
+|        *setString*           |  28,787 | ![passed](https://travis-ci.com/images/stroke-icons/icon-passed.png) | [**-2156**]() |     8% |     4 |         0.12 |
+|        *transferPayment*     |  32,186 |                                                                      |             0 |      0 |     1 |         0.14 |
+| **VersionA**                 |         |                                                                      |               |        |       |              |
+|        *setValue*            |  25,663 |                                                                      |             0 |      0 |     1 |         0.11 |
+| **VersionB**                 |         |                                                                      |               |        |       |              |
+|        *setValue*            |  25,685 |                                                                      |             0 |      0 |     1 |         0.11 |
+| **Wallet**                   |         |                                                                      |               |        |       |              |
+|        *sendPayment*         |  32,181 |                                                                      |             0 |      0 |     1 |         0.14 |
+|        *transferPayment*     |  32,164 |                                                                      |             0 |      0 |     1 |         0.14 |
+
+## Build Configuration
+
+| Option                 | Settings              |
+| ---------------------- | --------------------- |
+| solc: version          | 0.5.0+commit.1d4f565a |
+| solc: optimized        | false                 |
+| solc: runs             | 200                   |
+| gas: block limit       | 8,000,000             |
+| gas: price             | 21 gwei/gas           |
+| gas: currency/eth rate | 206.15 chf/eth        |
 
 ### Gas Reporter JSON output
 
