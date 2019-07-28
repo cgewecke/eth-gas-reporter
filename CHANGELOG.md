@@ -1,5 +1,9 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.8 / 2019-07-27
+
+- Render codechecks CI table as markdown
+
 # 0.2.7 / 2019-07-27
 
 - Fix block limit basis bug
