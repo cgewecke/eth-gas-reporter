@@ -64,6 +64,7 @@ function Gas(runner, options) {
 
   runner.on("test", () => {
     watch.beforeStartBlock = sync.blockNumber();
+    watch.data.resetAddressCache();
   });
 
   runner.on("hook end", () => {
