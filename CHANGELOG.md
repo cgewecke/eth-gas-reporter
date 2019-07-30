@@ -1,5 +1,10 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.9 / 2019-07-30
+
+- Optimize post-transaction data collection (reduce # of calls & cache addresses)
+- Catch codechecks server errors
+
 # 0.2.8 / 2019-07-27
 
 - Render codechecks CI table as markdown
