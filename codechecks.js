@@ -39,7 +39,19 @@ module.exports.default = async function gasReporter(options = {}) {
   if (!codechecks.isPr()) {
     const report = new CodeChecksReport(output.config);
     report.generate(output.info);
-    await codechecks.saveValue(output.namespace, report.newData);
+
+    try {
+      await codechecks.saveValue(output.namespace, report.newData);
+      console.log(`Successful save: output.namespace was: ${output.namespace}`);
+    } catch (err) {
+      console.log(
+        `If you have a chance, report this incident to the eth-gas-reporter github issues.`
+      );
+      console.log(`Codechecks errored running 'saveValue'...\n${err}\n`);
+      console.log(`output.namespace was: ${output.namespace}`);
+      console.log(`Saved gas-reporter data was: ${report.newData}`);
+    }
+
     return;
   }
 
@@ -52,9 +64,18 @@ module.exports.default = async function gasReporter(options = {}) {
   const shortDescription = report.getShortDescription();
 
   // Submit report
-  await codechecks.success({
-    name: "Gas Usage",
-    shortDescription: shortDescription,
-    longDescription: table
-  });
+  try {
+    await codechecks.success({
+      name: "Gas Usage",
+      shortDescription: shortDescription,
+      longDescription: table
+    });
+  } catch (err) {
+    console.log(
+      `If you have a chance, report this incident to the eth-gas-reporter github issues.`
+    );
+    console.log(`Codechecks errored running 'success'...\n${err}\n`);
+    console.log(`Short description was: ${shortDescription}`);
+    console.log(`Table was: ${table}`);
+  }
 };
