@@ -64,10 +64,13 @@ function Gas(runner, options) {
 
   runner.on("test", () => {
     watch.beforeStartBlock = sync.blockNumber();
+    watch.data.resetAddressCache();
   });
 
-  runner.on("hook end", () => {
-    watch.itStartBlock = sync.blockNumber() + 1;
+  runner.on("hook end", hook => {
+    if (hook.title.includes("before each")) {
+      watch.itStartBlock = sync.blockNumber() + 1;
+    }
   });
 
   runner.on("pass", test => {

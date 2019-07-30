@@ -26,11 +26,22 @@ elif [ "$TEST" = "colony" ]; then
   yarn
   yarn remove -W eth-gas-reporter --dev
 
+  SLUG="$TRAVIS_REPO_SLUG"
+  BRANCH="$TRAVIS_BRANCH"
+
+  if test -z "$TRAVIS_PULL_REQUEST_SLUG"; then
+    SLUG="$TRAVIS_PULL_REQUEST_SLUG"
+  fi
+
+  if test -z "$TRAVIS_PULL_REQUEST_BRANCH"; then
+    BRANCH="$TRAVIS_PULL_REQUEST_BRANCH"
+  fi
+
   echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
-  echo "TESTING BRANCH: https://github.com/$TRAVIS_PULL_REQUEST_SLUG.git#$TRAVIS_PULL_REQUEST_BRANCH"
+  echo "TESTING BRANCH: https://github.com/$SLUG.git#$BRANCH"
   echo ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>"
 
-  yarn add -W https://github.com/$TRAVIS_PULL_REQUEST_SLUG.git#$TRAVIS_PULL_REQUEST_BRANCH
+  yarn add -W https://github.com/"$SLUG".git#"$BRANCH"
   git submodule update --init
   yarn run provision:token:contracts
   DEBUG_CODECHECKS_TABLE=true yarn run test:contracts:gasCosts
