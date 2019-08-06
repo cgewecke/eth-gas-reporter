@@ -26,7 +26,7 @@ module.exports.default = async function gasReporter(options = {}) {
       `the environment variable "CI" to "true" before running ` +
       `your tests. ( ex: CI=true npm test )`;
 
-    console.err(message);
+    console.log(message);
     return;
   }
 

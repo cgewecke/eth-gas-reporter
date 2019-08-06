@@ -64,7 +64,7 @@
     "pretty-quick": "^1.11.0",
     "randomstring": "^1.1.5",
     "truffle": "5.0.12",
-    "web3": "1.0.0-beta.37",
+    "web3": "^1.2.0",
     "yarn": "^1.16.0"
   }
 }
