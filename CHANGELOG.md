@@ -1,5 +1,10 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.10 / 2019-08-08
+
+- Small codechecks table formatting improvements
+- Fix syntax error when codechecks errors on missing gas report
+
 # 0.2.9 / 2019-07-30
 
 - Optimize post-transaction data collection (reduce # of calls & cache addresses)
