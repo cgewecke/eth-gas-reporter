@@ -129,3 +129,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 - [@ItsNickBarry](https://github.com/ItsNickBarry)
 - [@krzkaczor](https://github.com/krzkaczor)
 - [@ppoliani](https://github.com/@ppoliani)
+- [@gnidan](https://github.com/gnidan)
