@@ -1,5 +1,11 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.11 / 2019-08-27
+
+- Fix syntax err on unresolved provider error msg (contribution: gnidan)
+- Add unlock-protocol funding ymls
+- Update abi-decoder deps / web3
+
 # 0.2.10 / 2019-08-08
 
 - Small codechecks table formatting improvements
