@@ -1,5 +1,10 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.12 / 2019-09-30
+
+- Add try/catch block for codechecks.getValue so it doesn't throw when server is down.
+- Pin parser-antlr to 0.4.7
+
 # 0.2.11 / 2019-08-27
 
 - Fix syntax err on unresolved provider error msg (contribution: gnidan)
