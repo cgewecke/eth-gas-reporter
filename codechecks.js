@@ -56,8 +56,15 @@ module.exports.default = async function gasReporter(options = {}) {
   }
 
   // Get historical data for each pr commit
-  output.config.previousData =
-    (await codechecks.getValue(output.namespace)) || null;
+  try {
+    output.config.previousData = await codechecks.getValue(output.namespace);
+  } catch (err) {
+    console.log(
+      `If you have a chance, report this incident to the eth-gas-reporter github issues.`
+    );
+    console.log(`Codechecks errored running 'getValue'...\n${err}\n`);
+    return;
+  }
 
   const report = new CodeChecksReport(output.config);
   const table = report.generate(output.info);
