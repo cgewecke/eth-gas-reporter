@@ -1,5 +1,9 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.13 / 2019-12-01
+
+- Add ABIEncoderV2 support by using ethers.js for fn sighashes
+
 # 0.2.12 / 2019-09-30
 
 - Add try/catch block for codechecks.getValue so it doesn't throw when server is down.
