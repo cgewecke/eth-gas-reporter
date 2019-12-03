@@ -14,7 +14,7 @@ contract("EncoderV2", function(accounts) {
       c: "wowshuxkluh"
     };
 
-    await instance.setAsset("44", asset);
+    await instance.setAsset44("44", asset);
     const _asset = await instance.getAsset();
 
     assert.equal(_asset.a, asset.a);

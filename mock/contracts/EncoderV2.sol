@@ -12,7 +12,7 @@ contract EncoderV2 {
 
   Asset a;
 
-  function setAsset(uint _id, Asset memory _a) public {
+  function setAsset44(uint _id, Asset memory _a) public {
     id = _id;
     a = _a;
   }
