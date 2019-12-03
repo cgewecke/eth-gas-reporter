@@ -34,9 +34,11 @@
     "@codechecks/client": "^0.1.0"
   },
   "dependencies": {
+    "@ethersproject/abi": "5.0.0-beta.142",
     "cli-table3": "^0.5.0",
     "colors": "^1.1.2",
-    "ethers": "^4.0.28",
+    "ethereumjs-util": "6.2.0",
+    "ethers": "^4.0.40",
     "fs-readdir-recursive": "^1.1.0",
     "lodash": "^4.17.14",
     "markdown-table": "^1.1.3",
