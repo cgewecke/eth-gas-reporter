@@ -26,6 +26,8 @@ elif [ "$TEST" = "colony" ]; then
   yarn
   yarn remove -W eth-gas-reporter --dev
 
+  env
+
   SLUG="$TRAVIS_REPO_SLUG"
   BRANCH="$TRAVIS_BRANCH"
 
