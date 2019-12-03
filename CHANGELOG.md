@@ -1,8 +1,8 @@
 ## Changelog: eth-gas-reporter
 
-# 0.2.13 / 2019-12-01
+# 0.2.14 / 2019-12-01
 
-- Add ABIEncoderV2 support by using ethers.js for fn sighashes
+- Add ABIEncoderV2 support by using @ethersproject/abi for ABI processing
 
 # 0.2.12 / 2019-09-30
 
