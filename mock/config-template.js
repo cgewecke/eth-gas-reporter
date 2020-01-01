@@ -19,7 +19,8 @@ module.exports = {
       showTimeSpent: true,
       excludeContracts: ["Migrations"],
       proxyResolver: "EtherRouter",
-      codechecks: true
+      codechecks: true,
+      showMethodSig: true
     }
   }
 };
