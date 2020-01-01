@@ -131,3 +131,25 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 - [@krzkaczor](https://github.com/krzkaczor)
 - [@ppoliani](https://github.com/@ppoliani)
 - [@gnidan](https://github.com/gnidan)
+  here](https://github.com/cgewecke/eth-gas-reporter/blob/master/mock/config-template.js#L13-L19).
+
+### Credits
+
+All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
+
+- [@maurelian](https://github.com/maurelian) - Mocha reporting gas instead of time is his idea.
+- [@cag](https://github.com/cag) - The table borrows from / is based his gas statistics work for the Gnosis contracts.
+- [Neufund](https://github.com/Neufund/ico-contracts) - Block limit size ratios for contract deployments and euro pricing are borrowed from their `ico-contracts` test suite.
+
+### Contributors
+
+- [@cgewecke](https://github.com/cgewecke)
+- [@rmuslimov](https://github.com/rmuslimov)
+- [@area](https://github.com/area)
+- [@ldub](https://github.com/ldub)
+- [@ben-kaufman](https://github.com/ben-kaufman)
+- [@wighawag](https://github.com/wighawag)
+- [@ItsNickBarry](https://github.com/ItsNickBarry)
+- [@krzkaczor](https://github.com/krzkaczor)
+- [@ppoliani](https://github.com/@ppoliani)
+- [@gnidan](https://github.com/gnidan)
