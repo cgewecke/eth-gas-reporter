@@ -85,6 +85,7 @@ Complete [set-up guide here](https://github.com/cgewecke/eth-gas-reporter/blob/m
 | url               | _String_               | `web3.currentProvider.host` | RPC client url (ex: "http://localhost:8545")                                                                                                                                              |
 | proxyResolver     | _Function_             | none                        | Custom method to resolve identity of methods managed by a proxy contract.                                                                                                                 |
 | artifactType      | _Function_ or _String_ | "truffle-v5"                | Compilation artifact format to consume. (See [advanced use](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/advanced.md).)                                                  |
+| showMethodSig     | _Boolean_              | false                       | Display complete method signatures. Useful when you have overloaded methods you can't tell apart.                                                                                                                                            |
 
 ### Advanced Use
 
