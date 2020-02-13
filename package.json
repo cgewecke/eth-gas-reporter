@@ -47,7 +47,7 @@
     "request": "^2.88.0",
     "request-promise-native": "^1.0.5",
     "sha1": "^1.1.1",
-    "solidity-parser-antlr": "0.4.7",
+    "solidity-parser-diligence": "^0.4.17",
     "sync-request": "^6.0.0"
   },
   "devDependencies": {
