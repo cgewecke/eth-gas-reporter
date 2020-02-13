@@ -1,5 +1,10 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.15 / 2020-02-12
+
+- Use parser-diligence to parse Solidity 0.6.x
+- Add option to show full method signature
+
 # 0.2.14 / 2019-12-01
 
 - Add ABIEncoderV2 support by using @ethersproject/abi for ABI processing
