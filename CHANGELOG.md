@@ -1,5 +1,10 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.16 / 2020-03-18
+
+- Use new coinmarketcap data API / make api key configurable. Old (un-gated) API has been taken offline.
+- Fix crashing when artifact transactionHash is stale after deleting previously migrated contracts
+
 # 0.2.15 / 2020-02-12
 
 - Use parser-diligence to parse Solidity 0.6.x
