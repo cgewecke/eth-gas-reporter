@@ -34,7 +34,7 @@
     "@codechecks/client": "^0.1.0"
   },
   "dependencies": {
-    "@ethersproject/abi": "5.0.0-beta.142",
+    "@ethersproject/abi": "^5.0.0-beta.146",
     "cli-table3": "^0.5.0",
     "colors": "^1.1.2",
     "ethereumjs-util": "6.2.0",
