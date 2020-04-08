@@ -8,6 +8,7 @@ const Config = require("./lib/config");
 const TransactionWatcher = require("./lib/transactionWatcher");
 const GasTable = require("./lib/gasTable");
 const SyncRequest = require("./lib/syncRequest");
+const mochaStats = require("./lib/mochaStats");
 
 /**
  * Based on the Mocha 'Spec' reporter. Watches an Ethereum test suite run
@@ -22,7 +23,14 @@ const SyncRequest = require("./lib/syncRequest");
  */
 function Gas(runner, options) {
   // Spec reporter
-  Base.call(this, runner);
+  Base.call(this, runner, options);
+
+  // Initialize stats for Mocha 6+ epilogue
+  if (!runner.stats) {
+    mochaStats(runner);
+    this.stats = runner.stats;
+  }
+
   const self = this;
 
   let indents = 0;
