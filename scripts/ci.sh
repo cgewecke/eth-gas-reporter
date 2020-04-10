@@ -31,11 +31,11 @@ elif [ "$TEST" = "colony" ]; then
   SLUG="$TRAVIS_REPO_SLUG"
   BRANCH="$TRAVIS_BRANCH"
 
-  if test -z "$TRAVIS_PULL_REQUEST_SLUG"; then
+  if [ -n "$TRAVIS_PULL_REQUEST_SLUG" ]; then
     SLUG="$TRAVIS_PULL_REQUEST_SLUG"
   fi
 
-  if test -z "$TRAVIS_PULL_REQUEST_BRANCH"; then
+  if [ -n "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
     BRANCH="$TRAVIS_PULL_REQUEST_BRANCH"
   fi
 
