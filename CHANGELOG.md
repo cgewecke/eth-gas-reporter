@@ -1,5 +1,12 @@
 ## Changelog: eth-gas-reporter
 
+0.2.17 / 2020-04-13
+
+- Use @solidity-parser/parser for better solc 0.6.x parsing
+- Upgrade Mocha to ^7.1.1 (to remove minimist vuln warning)
+- Stop crashing when parser or ABI Encoder fails
+- Update @ethersproject/abi to ^5.0.0-beta.146 (and unpin)
+
 # 0.2.16 / 2020-03-18
 
 - Use new coinmarketcap data API / make api key configurable. Old (un-gated) API has been taken offline.
