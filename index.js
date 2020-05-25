@@ -44,6 +44,8 @@ function Gas(runner, options) {
   const watch = new TransactionWatcher(config);
   const table = new GasTable(config);
 
+  options.recordTransaction = watch.transaction.bind(watch);
+
   // These call the cloud, start running them.
   utils.setGasAndPriceRates(config);
 
@@ -71,12 +73,14 @@ function Gas(runner, options) {
   });
 
   runner.on("test", () => {
-    watch.beforeStartBlock = sync.blockNumber();
+    if (!config.provider) {
+      watch.beforeStartBlock = sync.blockNumber();
+    }
     watch.data.resetAddressCache();
   });
 
   runner.on("hook end", hook => {
-    if (hook.title.includes("before each")) {
+    if (hook.title.includes("before each") && !config.provider) {
       watch.itStartBlock = sync.blockNumber() + 1;
     }
   });
@@ -87,8 +91,11 @@ function Gas(runner, options) {
     let gasUsedString;
     let consumptionString;
     let timeSpentString = color(test.speed, "%dms");
+    let gasUsed;
 
-    const gasUsed = watch.blocks();
+    if (!config.provider) {
+      gasUsed = watch.blocks();
+    }
 
     if (gasUsed) {
       gasUsedString = color("checkmark", "%d gas");
