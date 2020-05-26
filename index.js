@@ -44,7 +44,10 @@ function Gas(runner, options) {
   const watch = new TransactionWatcher(config);
   const table = new GasTable(config);
 
-  options.recordTransaction = watch.transaction.bind(watch);
+  // Expose internal methods to plugins
+  if (typeof options.attachments === "object") {
+    options.attachments.recordTransaction = watch.transaction.bind(watch);
+  }
 
   // These call the cloud, start running them.
   utils.setGasAndPriceRates(config);
