@@ -93,6 +93,8 @@ your own API key [here][55] and set it with the `coinmarketcap` option.
 | proxyResolver     | _Function_             | none                        | Custom method to resolve identity of methods managed by a proxy contract.                                                                                                                                                                    |
 | artifactType      | _Function_ or _String_ | "truffle-v5"                | Compilation artifact format to consume. (See [advanced use](https://github.com/cgewecke/eth-gas-reporter/blob/master/docs/advanced.md).)                                                                                                     |
 | showMethodSig     | _Boolean_              | false                       | Display complete method signatures. Useful when you have overloaded methods you can't tell apart.                                                                                                                                            |
+| maxMethodDiff     | _Number_               | undefined                   | Codechecks failure threshold, triggered when the % diff for any method is greater than `number` (integer)                                                                                                                                    |
+| maxDeploymentDiff | _Number_               | undefined                   | Codechecks failure threshold, triggered when the % diff for any deployment is greater than `number` (integer)                                                                                                                                |
 
 [55]: https://coinmarketcap.com/api/pricing/
 

@@ -44,6 +44,61 @@ script:
 
 - You're done! :elephant:
 
+### Multiple reports (for different CI jobs)
+
+For each report, create a codechecks.yml file, e.g
+
+```
+codechecks.testing.yml
+codechecks.production.yml
+```
+
+Use the `name` option in your `.yml` config to individuate the report:
+
+```yml
+# codechecks.production.yml
+checks:
+  - name: eth-gas-reporter/codechecks
+    options:
+      name: production
+```
+
+When running `codechecks` as a command in CI, specify the relevant codechecks config `.yml`
+
+```yml
+production:
+  docker:
+    - image: circleci/node:10.13.0
+  steps:
+    - checkout
+    - run: npm install
+    - run: npm test
+    - run: npx codechecks codechecks.production.yml
+```
+
+### Failure thresholds
+
+You can ask Codechecks to report the CI run as a failure by using the `maxMethodDiff` and
+`maxDeploymentDiff` reporter options. These set the integer percentage difference
+over which an increase in gas usage by any method (or deployment) is forbidden.
+
+**Examples**
+
+```js
+// truffle-config.js
+mocha: {
+  reporter: "eth-gas-reporter",
+  reporterOptions: {
+    maxMethodDiff: 25,
+  }
+}
+
+// buidler.config.js
+gasReporter: {
+  maxMethodDiff: 25,
+}
+```
+
 ### Codechecks is new :wrench:
 
 Codechecks is new and some of its quirks are still being ironed out:
