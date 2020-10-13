@@ -35,23 +35,23 @@ module.exports.default = async function gasReporter(options = {}) {
     ? `${output.namespace}:${options.name}`
     : output.namespace;
 
-  // Save new data on the merge commit / push build
+  let report = new CodeChecksReport(output.config);
+  report.generate(output.info);
+
+  try {
+    await codechecks.saveValue(output.namespace, report.newData);
+    console.log(`Successful save: output.namespace was: ${output.namespace}`);
+  } catch (err) {
+    console.log(
+      `If you have a chance, report this incident to the eth-gas-reporter github issues.`
+    );
+    console.log(`Codechecks errored running 'saveValue'...\n${err}\n`);
+    console.log(`output.namespace was: ${output.namespace}`);
+    console.log(`Saved gas-reporter data was: ${report.newData}`);
+  }
+
+  // Exit early on merge commit / push build
   if (!codechecks.isPr()) {
-    const report = new CodeChecksReport(output.config);
-    report.generate(output.info);
-
-    try {
-      await codechecks.saveValue(output.namespace, report.newData);
-      console.log(`Successful save: output.namespace was: ${output.namespace}`);
-    } catch (err) {
-      console.log(
-        `If you have a chance, report this incident to the eth-gas-reporter github issues.`
-      );
-      console.log(`Codechecks errored running 'saveValue'...\n${err}\n`);
-      console.log(`output.namespace was: ${output.namespace}`);
-      console.log(`Saved gas-reporter data was: ${report.newData}`);
-    }
-
     return;
   }
 
@@ -66,7 +66,7 @@ module.exports.default = async function gasReporter(options = {}) {
     return;
   }
 
-  const report = new CodeChecksReport(output.config);
+  report = new CodeChecksReport(output.config);
   const table = report.generate(output.info);
   const shortDescription = report.getShortDescription();
 
