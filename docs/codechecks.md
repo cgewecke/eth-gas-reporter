@@ -50,7 +50,7 @@ For each report, create a codechecks.yml file, e.g
 
 ```
 codechecks.testing.yml
-codechekcs.production.yml
+codechecks.production.yml
 ```
 
 Use the `name` option in your `.yml` config to individuate the report:
@@ -78,7 +78,7 @@ production:
 
 ### Failure thresholds
 
-You can tell Codechecks to report the CI run as a failure by using the `maxMethodDiff` and
+You can ask Codechecks to report the CI run as a failure by using the `maxMethodDiff` and
 `maxDeploymentDiff` reporter options. These set the integer percentage difference
 over which an increase in gas usage by any method (or deployment) is forbidden.
 
