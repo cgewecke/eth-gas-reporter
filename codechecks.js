@@ -75,16 +75,20 @@ module.exports.default = async function gasReporter(options = {}) {
 
   // Submit report
   try {
-    await codechecks.success({
+    const payload = {
       name: checkName,
       shortDescription: shortDescription,
       longDescription: table
-    });
+    };
+
+    report.success
+      ? await codechecks.success(payload)
+      : await codechecks.failure(payload);
   } catch (err) {
     console.log(
       `If you have a chance, report this incident to the eth-gas-reporter github issues.`
     );
-    console.log(`Codechecks errored running 'success'...\n${err}\n`);
+    console.log(`Codechecks errored running .success or .failure\n${err}\n`);
     console.log(`Short description was: ${shortDescription}`);
     console.log(`Table was: ${table}`);
   }
