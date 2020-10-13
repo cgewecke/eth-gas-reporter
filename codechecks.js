@@ -81,8 +81,6 @@ module.exports.default = async function gasReporter(options = {}) {
       longDescription: table
     };
 
-    console.log("Debugging --> report.success: " + report.success);
-
     report.success
       ? await codechecks.success(payload)
       : await codechecks.failure(payload);
