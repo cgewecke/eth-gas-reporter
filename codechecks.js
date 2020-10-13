@@ -70,10 +70,13 @@ module.exports.default = async function gasReporter(options = {}) {
   const table = report.generate(output.info);
   const shortDescription = report.getShortDescription();
 
+  // Support multiple reports
+  const checkName = options.name ? `Gas Usage: ${options.name}` : `Gas Usage`;
+
   // Submit report
   try {
     await codechecks.success({
-      name: "Gas Usage",
+      name: checkName,
       shortDescription: shortDescription,
       longDescription: table
     });
