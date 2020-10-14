@@ -143,3 +143,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 - [@ppoliani](https://github.com/@ppoliani)
 - [@gnidan](https://github.com/gnidan)
 - [@fodisi](https://github.com/fodisi)
+- [@vicnaum](https://github.com/vicnaum)
