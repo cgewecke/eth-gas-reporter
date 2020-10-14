@@ -1,6 +1,14 @@
 ## Changelog: eth-gas-reporter
 
-0.2.17 / 2020-04-13
+# 0.2.18 / 2020-10-13
+
+- Support multiple codechecks reports per CI run
+- Add CI error threshold options: maxMethodDiff, maxDeploymentDiff
+- Add async collection methods for BuidlerEVM
+- Update solidity-parser/parser to 0.8.0 (contribution: @vicnaum)
+- Update dev deps / use Node 12 in CI
+
+# 0.2.17 / 2020-04-13
 
 - Use @solidity-parser/parser for better solc 0.6.x parsing
 - Upgrade Mocha to ^7.1.1 (to remove minimist vuln warning)
