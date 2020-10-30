@@ -1,5 +1,9 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.18 / 2020-10-29
+
+- Delegate contract loading/parsing to artifactor & make optional (#227)
+
 # 0.2.18 / 2020-10-13
 
 - Support multiple codechecks reports per CI run
