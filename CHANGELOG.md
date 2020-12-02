@@ -1,6 +1,10 @@
 ## Changelog: eth-gas-reporter
 
-# 0.2.18 / 2020-10-29
+0.2.20 / 2020-12-01
+
+- Add support for remote contracts data pre-loading (hardhat-gas-reporter feature)
+
+# 0.2.19 / 2020-10-29
 
 - Delegate contract loading/parsing to artifactor & make optional (#227)
 
