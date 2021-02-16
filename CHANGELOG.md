@@ -1,6 +1,11 @@
 ## Changelog: eth-gas-reporter
 
-0.2.20 / 2020-12-01
+# 0.2.21 / 2021-02-16
+
+- Fix missing truffle migration deployments data (https://github.com/cgewecke/eth-gas-reporter/issues/240)
+- Upgrade solidity-parser/parser to 0.11.1 (https://github.com/cgewecke/eth-gas-reporter/issues/239)
+
+# 0.2.20 / 2020-12-01
 
 - Add support for remote contracts data pre-loading (hardhat-gas-reporter feature)
 
