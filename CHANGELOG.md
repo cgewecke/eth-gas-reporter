@@ -1,5 +1,9 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.22 / 2021-03-04
+
+- Update @solidity-parser/parser to ^0.12.0 (support Panic keyword in catch blocks) (https://github.com/cgewecke/eth-gas-reporter/issues/243)
+
 # 0.2.21 / 2021-02-16
 
 - Fix missing truffle migration deployments data (https://github.com/cgewecke/eth-gas-reporter/issues/240)
