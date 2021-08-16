@@ -79,7 +79,7 @@ your own API key [here][55] and set it with the `coinmarketcap` option.
 | Option            | Type                   | Default                     | Description                                                                                                                                                                                                                                  |
 | ----------------- | ---------------------- | --------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | currency          | _String_               | 'EUR'                       | National currency to represent gas costs in. Exchange rates loaded at runtime from the `coinmarketcap` api. Available currency codes can be found [here](https://coinmarketcap.com/api/documentation/v1/#section/Standards-and-Conventions). |
-| coinmarketcap     | _String_               | (unprotected API key)       | [API key][55] to use when fetching current market price data. (Use this if you stop seeing price data)                                                                                                                                       |
+| coinmarketcap     | _String_               | (unprotected API key)       | [API key][55] to use when fetching current market price data. For example: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx`                                                                                                                            |
 | gasPrice          | _Number_               | (varies)                    | Denominated in `gwei`. Default is loaded at runtime from the `eth gas station` api                                                                                                                                                           |
 | outputFile        | _String_               | stdout                      | File path to write report output to                                                                                                                                                                                                          |
 | noColors          | _Boolean_              | false                       | Suppress report color. Useful if you are printing to file b/c terminal colorization corrupts the text.                                                                                                                                       |
@@ -118,6 +118,10 @@ An advanced use guide is available [here](https://github.com/cgewecke/eth-gas-re
 - Method calls that throw are filtered from the stats.
 - Contracts that are only ever created by other contracts within Solidity are not shown in the deployments table.
 
+### Troubleshooting
+
+- [Missing price data](./docs/missingPriceData.md)
+
 ### Contributions
 
 Feel free to open PRs or issues. There is an integration test and one of the mock test cases is expected to fail. If you're adding an option, you can vaildate it in CI by adding it to the mock options config located [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/mock/config-template.js#L13-L19).
@@ -144,3 +148,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 - [@gnidan](https://github.com/gnidan)
 - [@fodisi](https://github.com/fodisi)
 - [@vicnaum](https://github.com/vicnaum)
+- [@markmiro](https://github.com/markmiro)
