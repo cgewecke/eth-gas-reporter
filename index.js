@@ -50,7 +50,10 @@ function Gas(runner, options) {
   }
 
   // These call the cloud, start running them.
-  utils.setGasAndPriceRates(config);
+  let didGetPriceData = false;
+  utils.setGasAndPriceRates(config).then(() => {
+    didGetPriceData = true;
+  });
 
   // ------------------------------------  Runners -------------------------------------------------
 
@@ -143,6 +146,9 @@ function Gas(runner, options) {
 
   runner.on("end", () => {
     table.generate(watch.data);
+    if (!didGetPriceData) {
+      console.log("Tests ran too quickly. Pricing data couldn't be fetched in time.");
+    }
     self.epilogue();
   });
 }
