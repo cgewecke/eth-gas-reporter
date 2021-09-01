@@ -33,6 +33,11 @@
   "peerDependencies": {
     "@codechecks/client": "^0.1.0"
   },
+  "peerDependenciesMeta": {
+    "@codechecks/client": {
+      "optional": true
+    },
+  },
   "dependencies": {
     "@ethersproject/abi": "^5.0.0-beta.146",
     "@solidity-parser/parser": "^0.12.0",
