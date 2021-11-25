@@ -12,6 +12,9 @@ module.exports = {
     reporterOptions: {
       currency: "chf",
       gasPrice: 21,
+      token: "ETH",
+      gasPriceApi:
+        "https://api.etherscan.io/api?module=proxy&action=eth_gasPrice&apikey=YourApiKeyToken",
       onlyCalledMethods: false,
       noColors: true,
       rst: true,
