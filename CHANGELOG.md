@@ -1,5 +1,11 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.23 / 2021-11-26
+
+- Add support for multiple gas price tokens (BNB, MATIC, AVAX, HR, MOVR) (https://github.com/cgewecke/eth-gas-reporter/pull/251)
+- Make @codechecks/client peer dep optional (https://github.com/cgewecke/eth-gas-reporter/pull/257)
+- Update @solidity-parser/parser to 0.14.0 (https://github.com/cgewecke/eth-gas-reporter/pull/261)
+
 # 0.2.22 / 2021-03-04
 
 - Update @solidity-parser/parser to ^0.12.0 (support Panic keyword in catch blocks) (https://github.com/cgewecke/eth-gas-reporter/issues/243)
