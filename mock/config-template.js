@@ -11,10 +11,10 @@ module.exports = {
     reporter: "eth-gas-reporter",
     reporterOptions: {
       currency: "chf",
-      gasPrice: 21,
       token: "ETH",
+      coinmarketcap: process.env.COINMARKETCAP_API_KEY || null,
       gasPriceApi:
-        "https://api.etherscan.io/api?module=proxy&action=eth_gasPrice&apikey=YourApiKeyToken",
+        "https://api.etherscan.io/api?module=proxy&action=eth_gasPrice",
       onlyCalledMethods: false,
       noColors: true,
       rst: true,
