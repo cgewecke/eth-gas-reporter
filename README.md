@@ -138,6 +138,10 @@ An advanced use guide is available [here](https://github.com/cgewecke/eth-gas-re
 - Method calls that throw are filtered from the stats.
 - Contracts that are only ever created by other contracts within Solidity are not shown in the deployments table.
 
+### Troubleshooting
+
+- [Missing price data](./docs/missingPriceData.md)
+
 ### Contributions
 
 Feel free to open PRs or issues. There is an integration test and one of the mock test cases is expected to fail. If you're adding an option, you can vaildate it in CI by adding it to the mock options config located [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/mock/config-template.js#L13-L19).
@@ -164,4 +168,5 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 - [@gnidan](https://github.com/gnidan)
 - [@fodisi](https://github.com/fodisi)
 - [@vicnaum](https://github.com/vicnaum)
+- [@markmiro](https://github.com/markmiro)
 - [@lucaperret](https://github.com/lucaperret)
