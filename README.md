@@ -79,6 +79,8 @@ your own API key [here][55] and set it with the `coinmarketcap` option.
 
 In order to retrieve the gas price of a particular blockchain, you can configure the `token` and `gasPriceApi` (API key rate limit may apply).
 
+**NOTE**: HardhatEVM and ganache-cli implement the Ethereum blockchain. To get accurate gas measurements for other chains you may need to run your tests against development clients developed specifically for those networks. 
+
 | Option            | Type                   | Default                                                                    | Description                                                                                                                                                                                                                                  |
 | ----------------- | ---------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | currency          | _String_               | 'EUR'                                                                      | National currency to represent gas costs in. Exchange rates loaded at runtime from the `coinmarketcap` api. Available currency codes can be found [here](https://coinmarketcap.com/api/documentation/v1/#section/Standards-and-Conventions). |
@@ -138,6 +140,10 @@ An advanced use guide is available [here](https://github.com/cgewecke/eth-gas-re
 - Method calls that throw are filtered from the stats.
 - Contracts that are only ever created by other contracts within Solidity are not shown in the deployments table.
 
+### Troubleshooting
+
+- [Missing price data](./docs/missingPriceData.md)
+
 ### Contributions
 
 Feel free to open PRs or issues. There is an integration test and one of the mock test cases is expected to fail. If you're adding an option, you can vaildate it in CI by adding it to the mock options config located [here](https://github.com/cgewecke/eth-gas-reporter/blob/master/mock/config-template.js#L13-L19).
@@ -164,4 +170,5 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 - [@gnidan](https://github.com/gnidan)
 - [@fodisi](https://github.com/fodisi)
 - [@vicnaum](https://github.com/vicnaum)
+- [@markmiro](https://github.com/markmiro)
 - [@lucaperret](https://github.com/lucaperret)
