@@ -2,6 +2,7 @@
 
 # 0.2.23 / 2021-11-26
 
+- Add notes to README about missing price data & remote data fetching race condition
 - Add support for multiple gas price tokens (BNB, MATIC, AVAX, HR, MOVR) (https://github.com/cgewecke/eth-gas-reporter/pull/251)
 - Make @codechecks/client peer dep optional (https://github.com/cgewecke/eth-gas-reporter/pull/257)
 - Update @solidity-parser/parser to 0.14.0 (https://github.com/cgewecke/eth-gas-reporter/pull/261)
