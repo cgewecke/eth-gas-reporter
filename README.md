@@ -79,6 +79,8 @@ your own API key [here][55] and set it with the `coinmarketcap` option.
 
 In order to retrieve the gas price of a particular blockchain, you can configure the `token` and `gasPriceApi` (API key rate limit may apply).
 
+**NOTE**: HardhatEVM and ganache-cli implement the Ethereum blockchain. To get accurate gas measurements for other chains you may need to run your tests against development clients developed specifically for those networks. 
+
 | Option            | Type                   | Default                                                                    | Description                                                                                                                                                                                                                                  |
 | ----------------- | ---------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | currency          | _String_               | 'EUR'                                                                      | National currency to represent gas costs in. Exchange rates loaded at runtime from the `coinmarketcap` api. Available currency codes can be found [here](https://coinmarketcap.com/api/documentation/v1/#section/Standards-and-Conventions). |
