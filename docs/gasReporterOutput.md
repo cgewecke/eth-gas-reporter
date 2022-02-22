@@ -14,9 +14,9 @@ CI integrations with it, make a nicer table, etc.
   "ethPrice": "316.615237512",
   "gasPrice": 2,
   "outputFile": null,
-  "rst": false,
+  "rst": true,
   "rstTitle": "",
-  "showTimeSpent": false,
+  "showTimeSpent": true,
   "srcPath": "contracts",
   "artifactType": "truffle-v5",
   "proxyResolver": null,
@@ -27,13 +27,13 @@ CI integrations with it, make a nicer table, etc.
    "settings": {
     "evmVersion": "byzantium",
     "optimizer": {
-     "enabled": false,
+     "enabled": true,
      "runs": 200
     },
    },
   },
   "excludeContracts": [],
-  "onlyCalledMethods": true,
+  "onlyCalledMethods": false,
   "url": "http://localhost:8545"
  },
  "info": {
