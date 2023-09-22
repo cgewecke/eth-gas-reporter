@@ -3,7 +3,7 @@ version: 2.1
 jobs:
   unit-test:
     docker:
-      - image: circleci/node:12
+      - image: cimg/node:18.18.0
     steps:
       - checkout
       - run:
