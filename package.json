@@ -61,7 +61,7 @@
     "@nomiclabs/buidler-truffle5": "^1.3.4",
     "@nomiclabs/buidler-web3": "^1.3.4",
     "fp-ts": "^1.19.0",
-    "ganache-cli": "6.4.3",
+    "ganache-cli": "^6.12.2",
     "geth-dev-assistant": "^0.1.7",
     "husky": "^2.3.0",
     "prettier": "1.17.1",
