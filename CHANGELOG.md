@@ -1,5 +1,9 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.27 / 2023-09-30
+
+- Remove @ethersproject/abi, use ethers.utils instead (https://github.com/cgewecke/eth-gas-reporter/issues/301)
+
 # 0.2.26 / 2023-09-29
 
 - Replace request-promise-native with axios / avoid default price API calls (https://github.com/cgewecke/eth-gas-reporter/issues/299)
