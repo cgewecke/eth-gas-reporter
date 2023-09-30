@@ -1,5 +1,12 @@
 ## Changelog: eth-gas-reporter
 
+# 0.2.26 / 2023-09-29
+
+- Replace request-promise-native with axios / avoid default price API calls (https://github.com/cgewecke/eth-gas-reporter/issues/299)
+- Remove request package (https://github.com/cgewecke/eth-gas-reporter/issues/297)
+- Bump ethers version (https://github.com/cgewecke/eth-gas-reporter/issues/296)
+- Update Mocha to v10 (https://github.com/cgewecke/eth-gas-reporter/issues/295)
+
 # 0.2.23 / 2021-11-26
 
 - Add notes to README about missing price data & remote data fetching race condition
