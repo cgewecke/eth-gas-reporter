@@ -172,3 +172,4 @@ All the ideas in this utility have been borrowed from elsewhere. Many thanks to:
 - [@vicnaum](https://github.com/vicnaum)
 - [@markmiro](https://github.com/markmiro)
 - [@lucaperret](https://github.com/lucaperret)
+- [@ChristopherDedominici](https://github.com/ChristopherDedominici)
